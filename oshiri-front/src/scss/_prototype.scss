@@ -1,0 +1,75 @@
+.proto-image {
+  width: 100%;
+  background: gray;
+  padding-top: 100%;
+  margin-bottom: 16px;
+}
+
+input {
+  box-sizing: border-box;
+}
+
+.proto-container {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 1000px;
+  padding: 24px;
+}
+
+.proto-settings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.proto-settings__name {
+  width: 100%;
+  height: 30px;
+  margin-bottom: 8px;
+}
+
+.proto-settings__color {
+  width: 100%;
+  height: 50px;
+  border-radius: 10px;
+  border: 2px solid black;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.proto-settings__tail {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.color-picker-component__cover {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+}
+
+.color-picker-component {
+  width: 100%;
+  position: relative;
+
+  .react-colorful {
+    position: absolute;
+    width: 100%;
+    height: 100px;
+  }
+}
+
+.proto-settings__size {
+  width: 100%;
+  margin-bottom: 16px;
+}
