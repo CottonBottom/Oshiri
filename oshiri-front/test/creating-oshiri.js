@@ -28,9 +28,9 @@ describe("Create Oshiri", function () {
         { value: newOshiriPrice.toString() }
       );
 
-    const createdOshiri = await oshiri.getOshiriStats(
-      oshiriCreatorAddress.address
-    );
+    const createdOshiri = await oshiri
+      .connect(oshiriCreatorAddress)
+      .getOshiriStats();
 
     const readableOshiri = {
       color: createdOshiri.color.toString(),

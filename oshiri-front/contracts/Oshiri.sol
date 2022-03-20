@@ -79,13 +79,9 @@ contract Oshiri is ReentrancyGuard {
         //Give Wrapping to msg.sender
     }
 
-    function getOshiriStats(address oshiriAddress)
-        public
-        view
-        returns (OshiriStats memory)
-    {
-        require(AllOshiri[oshiriAddress].color > 0, "Oshiri not existent");
-        return AllOshiri[oshiriAddress];
+    function getOshiriStats() public view returns (OshiriStats memory) {
+        require(AllOshiri[msg.sender].color > 0, "Oshiri not existent");
+        return AllOshiri[msg.sender];
     }
 
     function generateConsent() public {
