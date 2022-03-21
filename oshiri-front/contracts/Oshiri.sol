@@ -18,12 +18,25 @@ contract Oshiri is ReentrancyGuard {
         //0 to 10
         uint256 availableConsent;
         //1 to 7
+        uint256 lastDayAccessed;
+    }
+
+    struct Relationship {
+        uint256 currentConsent;
+        uint256 timesUsed;
+        uint256 lastTimeRedeemed;
     }
 
     mapping(address => OshiriStats) private AllOshiri;
 
+    mapping(address => mapping(address => Relationship)) private Relationships;
+    //Consentee => Receiver => Relationship info
+
     //TODO: Price for making new Oshiri
     uint256 newOshiriPrice = 0.025 ether;
+
+    //Handling generating consent
+    uint256 public yesterday;
 
     function getNewOshiriPrice() public view returns (uint256) {
         return newOshiriPrice;
@@ -62,7 +75,8 @@ contract Oshiri is ReentrancyGuard {
             name,
             tail,
             tailColor,
-            1
+            1,
+            block.timestamp
         );
         bool validOshiriStats = validateOshiriStats(oshiriStats);
         require(validOshiriStats == true, "Incorrect stats for Oshiri");
@@ -79,22 +93,54 @@ contract Oshiri is ReentrancyGuard {
         //Give Wrapping to msg.sender
     }
 
-    function getOshiriStats() public view returns (OshiriStats memory) {
+    function getMyOshiri() public view returns (OshiriStats memory) {
         require(AllOshiri[msg.sender].color > 0, "Oshiri not existent");
+        //generateConsent();
         return AllOshiri[msg.sender];
     }
 
     function generateConsent() public {
-        //Require today is greater than yesterday
-        //block.timestamp???
-        //Blockchain has no clock as it would mean sync of all the nodes and that would be almost impossible to achieve.
+        uint256 today = block.timestamp;
+        require(
+            today > AllOshiri[msg.sender].lastDayAccessed + 1 days,
+            "A day has not passed"
+        );
+        require(
+            AllOshiri[msg.sender].availableConsent < 7,
+            "Consent limit reached"
+        );
+        AllOshiri[msg.sender].availableConsent += 1;
+        AllOshiri[msg.sender].lastDayAccessed = today;
     }
 
-    //Generate Consent
-    //Give Consent
+    event ConsentGiven(address creator, address receiver);
+
+    function sendConsent(address receiver) public {
+        require(AllOshiri[msg.sender].color > 0, "Oshiri not existent");
+        require(
+            AllOshiri[msg.sender].availableConsent > 0,
+            "No consent available"
+        );
+        require(AllOshiri[receiver].color > 0, "Receiver Oshiri not existent");
+        AllOshiri[msg.sender].availableConsent -= 1;
+        Relationships[msg.sender][receiver].currentConsent += 1;
+        emit ConsentGiven(msg.sender, receiver);
+    }
+
+    function seeOshiri(address oshiri)
+        public
+        view
+        returns (OshiriStats memory, uint256)
+    {
+        require(AllOshiri[oshiri].color > 0, "Oshiri not existent");
+        require(AllOshiri[msg.sender].color > 0, "You do not have an Oshiri");
+        return (
+            AllOshiri[oshiri],
+            Relationships[oshiri][msg.sender].currentConsent
+        );
+    }
+
     //Smack
-    //Get Oshiri Info
-    //See Oshiri and Check Consent
     //Get all available Conssents
     //Calculate won OSH
 }
