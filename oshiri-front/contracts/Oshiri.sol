@@ -1,8 +1,8 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 contract Oshiri is ReentrancyGuard {
@@ -27,19 +27,36 @@ contract Oshiri is ReentrancyGuard {
         uint256 lastTimeRedeemed;
     }
 
-    mapping(address => OshiriStats) private AllOshiri;
+    struct Consenters {
+        address consenter;
+        uint256 currentConsent;
+    }
 
+    mapping(address => OshiriStats) private AllOshiri;
     mapping(address => mapping(address => Relationship)) private Relationships;
     //Consentee => Receiver => Relationship info
 
+    IERC20 public oshiriCurrency;
+
     //TODO: Price for making new Oshiri
     uint256 newOshiriPrice = 0.025 ether;
+    uint256 updateOshiriPrice = 0.001 ether;
 
     //Handling generating consent
     uint256 public yesterday;
 
+    /** 
+    constructor(address oshiriCurrencyAddress) {
+        oshiriCurrency = IERC20(oshiriCurrencyAddress);
+    }
+    */
+
     function getNewOshiriPrice() public view returns (uint256) {
         return newOshiriPrice;
+    }
+
+    function getUpdateOshiriPrice() public view returns (uint256) {
+        return updateOshiriPrice;
     }
 
     function validateOshiriStats(OshiriStats memory oshiriStats)
@@ -140,7 +157,69 @@ contract Oshiri is ReentrancyGuard {
         );
     }
 
-    //Smack
-    //Get all available Conssents
+    event Smacked(address smacker, address smacked);
+
+    //TODO: Tests after Token and NFT
+    /** 
+    function smack(address smacked, address smackedWrapping) public {
+        require(
+            Relationships[smacked][msg.sender].currentConsent > 0,
+            "No consent found, ask for Consent"
+        );
+
+        uint256 reward = calculateOSH(
+            smackedWrapping,
+            Relationships[smacked][msg.sender]
+        );
+
+        //Send to smacker and smacked
+        oshiriCurrency.transfer(msg.sender, reward);
+        oshiriCurrency.transfer(smacked, reward);
+
+        Relationships[smacked][msg.sender].currentConsent -= 1;
+        Relationships[smacked][msg.sender].timesUsed += 1;
+        Relationships[smacked][msg.sender].lastTimeRedeemed += block.timestamp;
+        emit Smacked(msg.sender, smacked);
+    }
+
     //Calculate won OSH
+    function calculateOSH(
+        address smackedWrapping,
+        Relationship memory relationship
+    ) private returns (uint256) {
+        //Todo: logic
+        //Calculate OSH depending on worn NFT and day
+        //Calculate OSH depending on new Relationship
+        return 10;
+    }
+    */
+
+    event OshiriUpdated(address creator, OshiriStats oshiriStats);
+
+    function updateOshiri(
+        uint256 color,
+        uint256 size,
+        string memory name,
+        uint256 tail,
+        uint256 tailColor
+    ) public payable nonReentrant {
+        require(AllOshiri[msg.sender].color > 0, "Oshiri not yet existent");
+        OshiriStats memory oshiriStats = OshiriStats(
+            color,
+            size,
+            name,
+            tail,
+            tailColor,
+            AllOshiri[msg.sender].availableConsent,
+            AllOshiri[msg.sender].lastDayAccessed
+        );
+        bool validOshiriStats = validateOshiriStats(oshiriStats);
+        require(validOshiriStats == true, "Incorrect stats for Oshiri");
+        require(msg.value == updateOshiriPrice, "Must pay new Oshiri Price");
+
+        AllOshiri[msg.sender] = oshiriStats;
+        emit OshiriUpdated(msg.sender, oshiriStats);
+    }
+
+    //Get all available Consents
 }

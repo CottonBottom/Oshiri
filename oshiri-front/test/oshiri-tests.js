@@ -167,3 +167,68 @@ describe("Give Consent", function () {
     expect(seeOshiriAfter[1].toString()).to.equal("1");
   });
 });
+
+describe("Update Oshiri", function () {
+  it("Should update a Oshiri after creation", async function () {
+    const Oshiri = await ethers.getContractFactory("Oshiri");
+    const oshiri = await Oshiri.deploy();
+    await oshiri.deployed();
+    const newOshiriPrice = await oshiri.getNewOshiriPrice();
+    const oshiriTest = {
+      color: 1,
+      size: 2,
+      name: "Cool Oshiri",
+      tail: 0,
+      tailColor: 0,
+    };
+
+    const [_, oshiriCreatorAddress] = await ethers.getSigners();
+
+    await oshiri
+      .connect(oshiriCreatorAddress)
+      .createOshiri(
+        oshiriTest.color,
+        oshiriTest.size,
+        oshiriTest.name,
+        oshiriTest.tail,
+        oshiriTest.tailColor,
+        { value: newOshiriPrice.toString() }
+      );
+
+    const createdOshiri = await oshiri
+      .connect(oshiriCreatorAddress)
+      .getMyOshiri();
+
+    const readableOshiri = getReadableOshiri(createdOshiri);
+    console.log("The created oshiri:", readableOshiri);
+
+    //Update
+    const updateOshiriPrice = await oshiri.getUpdateOshiriPrice();
+
+    const newOshiri = {
+      color: 4,
+      size: 10,
+      name: "The Coolest Oshiri",
+      tail: 2,
+      tailColor: 5,
+    };
+
+    await oshiri
+      .connect(oshiriCreatorAddress)
+      .updateOshiri(
+        newOshiri.color,
+        newOshiri.size,
+        newOshiri.name,
+        newOshiri.tail,
+        newOshiri.tailColor,
+        { value: updateOshiriPrice.toString() }
+      );
+
+    const updatedOshiri = await oshiri
+      .connect(oshiriCreatorAddress)
+      .getMyOshiri();
+
+    const readableUpdatedOshiri = getReadableOshiri(updatedOshiri);
+    console.log("The updated oshiri:", readableUpdatedOshiri);
+  });
+});
