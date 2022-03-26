@@ -3,32 +3,30 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/interfaces/IERC2981.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract OshiriWrappings is ERC721URIStorage {
-    // using Counters for Counters.Counter;
-    // Counters.Counter private _tokenIds;
-    //Incrementing value for each token
+contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
+    uint256 private wrappingId;
 
-    uint256 wrappingId;
+    uint256 private wTypeCurrent = 1;
+    uint256 private wSubTypeCurrent = 1;
+    uint256 private wVariationCurrent = 1;
+    uint256 private wBaseColorCurrent = 1;
+    uint256 private wVariationColorCurrent = 1;
+    uint256 private wSerialNumberCurrent = 1;
 
-    uint256 wTypeCurrent = 1;
-    uint256 wSubTypeCurrent = 1;
-    uint256 wVariationCurrent = 1;
-    uint256 wBaseColorCurrent = 1;
-    uint256 wVariationColorCurrent = 1;
+    uint256 private maxType = 6;
+    uint256 private maxSubType = 3;
+    uint256 private maxVariation = 4;
+    uint256 private maxBaseColor = 3;
+    uint256 private maxVariationColor = 6;
 
-    uint256 wSerialNumberCurrent = 1;
+    uint256 private totalCopiesPerPair;
 
-    uint256 maxType = 6;
-    uint256 maxSubType = 3;
-    uint256 maxVariation = 4;
-    uint256 maxBaseColor = 3;
-    uint256 maxVariationColor = 6;
-
-    uint256 totalCopiesPerPair;
-
-    address oshiriCurrencyAddress;
+    address private oshiriCurrencyAddress;
+    address private creator;
 
     struct WrappingStats {
         uint256 wType;
@@ -41,21 +39,65 @@ contract OshiriWrappings is ERC721URIStorage {
 
     mapping(uint256 => mapping(uint256 => mapping(uint256 => mapping(uint256 => mapping(uint256 => uint256)))))
         private CreatedWrappings;
-
     //wType => wSubType => wVariation => wBaseColor => wVariationColor => wSerialNumber
+
+    /** IERC2981 Royalties */
+    struct RoyaltyInfo {
+        address recipient;
+        uint24 amount;
+    }
+    RoyaltyInfo private royalties;
+
+    /** */
 
     constructor(uint256 copiesPerPair) ERC721("Oshiri Wrappings", "OSHWRAP") {
         totalCopiesPerPair = copiesPerPair;
+        setRoyalties(msg.sender, 1000);
+        //Start with 10%
     }
+
+    /** Royalties */
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        virtual
+        override(ERC721, IERC165)
+        returns (bool)
+    {
+        return
+            interfaceId == type(IERC2981).interfaceId ||
+            super.supportsInterface(interfaceId);
+    }
+
+    function setRoyalties(address recipient, uint256 value) public onlyOwner {
+        require(value <= 10000, "ERC2981Royalties: Too high");
+        royalties = RoyaltyInfo(recipient, uint24(value));
+    }
+
+    function royaltyInfo(uint256, uint256 value)
+        external
+        view
+        override
+        returns (address receiver, uint256 royaltyAmount)
+    {
+        RoyaltyInfo memory currentRoyalties = royalties;
+        receiver = currentRoyalties.recipient;
+        royaltyAmount = (value * currentRoyalties.amount) / 10000;
+    }
+
+    /** */
 
     event WrappingGenerated(WrappingStats newWrapping);
 
-    function createToken() public {
+    //Should be payable?? with OSH???
+    function createToken() external {
         require(
             wSerialNumberCurrent <= totalCopiesPerPair,
             "All wrappings have been discovered"
         );
+        //Require OSH amount
         WrappingStats memory newWrapping = getNextInProductionLine();
+        wrappingId += 1;
         // _tokenIds.increment();
         // uint256 newItemId = _tokenIds.current();
         // _mint(msg.sender, newItemId);
@@ -63,6 +105,16 @@ contract OshiriWrappings is ERC721URIStorage {
         //Gives the marketplace the approval to transact this token between users
         //from within another contract
         emit WrappingGenerated(newWrapping);
+    }
+
+    function checkAvailableWrappings() external view returns (uint256) {
+        uint256 total = maxType *
+            maxSubType *
+            maxVariation *
+            maxBaseColor *
+            maxVariationColor *
+            totalCopiesPerPair;
+        return total - wrappingId;
     }
 
     // returns wSerialNumberCurrent

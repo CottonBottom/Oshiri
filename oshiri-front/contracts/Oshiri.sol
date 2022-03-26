@@ -106,7 +106,8 @@ contract Oshiri is ReentrancyGuard {
         AllOshiri[msg.sender] = oshiriStats;
         emit NewOshiriCreated(msg.sender, oshiriStats);
 
-        //Create new Wrapping
+        //Give OSH to sender
+        //Create new Wrapping (use OSH given)
         //Give Wrapping to msg.sender
     }
 
