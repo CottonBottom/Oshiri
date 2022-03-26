@@ -6,30 +6,36 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
 contract OshiriWrappings is ERC721URIStorage {
-    using Counters for Counters.Counter;
-    Counters.Counter private _tokenIds;
+    // using Counters for Counters.Counter;
+    // Counters.Counter private _tokenIds;
     //Incrementing value for each token
 
-    uint256 wTypeCurrent;
-    uint256 wSubTypeCurrent;
-    uint256 wVariationCurrent;
-    uint256 wBaseColorCurrent;
-    uint256 wVariationColorCurrent;
-    uint256 wSerialNumberCurrent;
+    uint256 wrappingId;
+
+    uint256 wTypeCurrent = 1;
+    uint256 wSubTypeCurrent = 1;
+    uint256 wVariationCurrent = 1;
+    uint256 wBaseColorCurrent = 1;
+    uint256 wVariationColorCurrent = 1;
+
+    uint256 wSerialNumberCurrent = 1;
+
+    uint256 maxType = 6;
+    uint256 maxSubType = 3;
+    uint256 maxVariation = 4;
+    uint256 maxBaseColor = 3;
+    uint256 maxVariationColor = 6;
+
+    uint256 totalCopiesPerPair;
 
     address oshiriCurrencyAddress;
 
     struct WrappingStats {
         uint256 wType;
-        //1-6
         uint256 wSubType;
-        //1-3
         uint256 wVariation;
-        //1-4
         uint256 wBaseColor;
-        //1-3
         uint256 wVariationColor;
-        //1-6
         uint256 wSerialNumber;
     }
 
@@ -38,39 +44,66 @@ contract OshiriWrappings is ERC721URIStorage {
 
     //wType => wSubType => wVariation => wBaseColor => wVariationColor => wSerialNumber
 
-    constructor() ERC721("Oshiri Wrappings", "OSHWRAP") {}
+    constructor(uint256 copiesPerPair) ERC721("Oshiri Wrappings", "OSHWRAP") {
+        totalCopiesPerPair = copiesPerPair;
+    }
 
-    function createToken(string memory tokenURI) public returns (uint) {
-        getNextInLine();
-        _tokenIds.increment();
-        uint256 newItemId = _tokenIds.current();
-        _mint(msg.sender, newItemId);
-        _setTokenURI(newItemId, tokenURI);
+    event WrappingGenerated(WrappingStats newWrapping);
+
+    function createToken() public {
+        require(
+            wSerialNumberCurrent <= totalCopiesPerPair,
+            "All wrappings have been discovered"
+        );
+        WrappingStats memory newWrapping = getNextInProductionLine();
+        // _tokenIds.increment();
+        // uint256 newItemId = _tokenIds.current();
+        // _mint(msg.sender, newItemId);
+        // _setTokenURI(newItemId, tokenURI);
         //Gives the marketplace the approval to transact this token between users
         //from within another contract
-        return newItemId;
+        emit WrappingGenerated(newWrapping);
     }
 
     // returns wSerialNumberCurrent
-    function getNextInLine() private returns (WrappingStats memory) {
-        if (
-            CreatedWrappings[wTypeCurrent][wSubTypeCurrent][wVariationCurrent][
-                wBaseColorCurrent
-            ][wVariationColorCurrent] < 100
-        ) {
-            WrappingStats memory newWrapping = WrappingStats(
-                wTypeCurrent,
-                wSubTypeCurrent,
-                wVariationCurrent,
-                wBaseColorCurrent,
-                wVariationColorCurrent,
-                wSerialNumberCurrent
-            );
-            //Set first type += 1 if less than max, else go back to 0 and plus 1 to subType, do the same until colorCUrrent
-            return newWrapping;
+    function getNextInProductionLine() private returns (WrappingStats memory) {
+        //Build Current Set Wrapping Stats
+        WrappingStats memory newWrapping = WrappingStats(
+            wTypeCurrent,
+            wSubTypeCurrent,
+            wVariationCurrent,
+            wBaseColorCurrent,
+            wVariationColorCurrent,
+            wSerialNumberCurrent
+        );
+
+        //Update All Current Stats
+        if (wTypeCurrent < maxType) {
+            wTypeCurrent += 1;
         } else {
-            //NFT Finished
+            wTypeCurrent = 1;
+            if (wSubTypeCurrent < maxSubType) {
+                wSubTypeCurrent += 1;
+            } else {
+                wSubTypeCurrent = 1;
+                if (wVariationCurrent < maxVariation) {
+                    wVariationCurrent += 1;
+                } else {
+                    wVariationCurrent = 1;
+                    if (wBaseColorCurrent < maxBaseColor) {
+                        wBaseColorCurrent += 1;
+                    } else {
+                        wBaseColorCurrent = 1;
+                        if (wVariationColorCurrent < maxVariationColor) {
+                            wVariationColorCurrent += 1;
+                        } else {
+                            wVariationColorCurrent = 1;
+                            wSerialNumberCurrent += 1;
+                        }
+                    }
+                }
+            }
         }
+        return newWrapping;
     }
-    //Should go through all, if no available: NFT ENDED
 }

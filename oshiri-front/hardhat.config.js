@@ -35,4 +35,7 @@ module.exports = {
     },
   },
   solidity: "0.8.4",
+  mocha: {
+    timeout: 1000000,
+  },
 };
