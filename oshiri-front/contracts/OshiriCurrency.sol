@@ -12,7 +12,10 @@ contract OshiriCurrency is ERC20, Ownable {
         _mint(msg.sender, 69000000000000000000);
     }
 
-    function setOshiriGameAddress(address oshiriGameAddress) public onlyOwner {
+    function setOshiriGameAddress(address oshiriGameAddress)
+        external
+        onlyOwner
+    {
         oshiriGame = oshiriGameAddress;
     }
 
@@ -20,10 +23,9 @@ contract OshiriCurrency is ERC20, Ownable {
         uint256 amount,
         address recipientA,
         address recipientB
-    ) public {
-        require(msg.sender == oshiriGame);
-        uint256 amountToDecimals = (amount * 10) ^ 18;
-        _mint(recipientA, amountToDecimals);
-        _mint(recipientB, amountToDecimals);
+    ) external {
+        require(msg.sender == oshiriGame, "Can only be called from Oshiri");
+        _mint(recipientA, amount);
+        _mint(recipientB, amount);
     }
 }
