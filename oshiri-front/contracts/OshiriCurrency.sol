@@ -9,7 +9,7 @@ contract OshiriCurrency is ERC20, Ownable {
     address oshiriGame;
 
     constructor() ERC20("Oshiri", "OSH") {
-        _mint(msg.sender, 69000000000000000000);
+        _mint(msg.sender, 69);
     }
 
     function setOshiriGameAddress(address oshiriGameAddress)

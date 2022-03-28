@@ -168,7 +168,7 @@ contract Oshiri is ReentrancyGuard {
         emit Smacked(msg.sender, smacked);
     }
 
-    //TODO: Tests after Token and NFT
+    //TODO: Complete logic for smacking
     /** 
     function smack(address smacked, address smackedWrapping) public {
         require(
@@ -195,7 +195,7 @@ contract Oshiri is ReentrancyGuard {
     function calculateOSH(
         address smackedWrapping,
         Relationship memory relationship
-    ) private returns (uint256) {
+    ) internal returns (uint256) {
         //Todo: logic
         //Calculate OSH depending on worn NFT and day
         //Calculate OSH depending on new Relationship
