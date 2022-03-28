@@ -54,7 +54,7 @@ describe.skip("Discover All Wrappings", function () {
 });
 
 describe.skip("Return Available Wrappings", function () {
-  it.only("Should return available wrappings", async function () {
+  it("Should return available wrappings", async function () {
     const Wrappings = await ethers.getContractFactory("OshiriWrappings");
     const copiesPerPair = 100;
     const totalWrappings = 6 * 3 * 4 * 3 * 6 * copiesPerPair;
@@ -95,9 +95,8 @@ describe.skip("Return Available Wrappings", function () {
 });
 
 //TODO: Test transaction with Royalties management
-
-describe("Update Royalties", function () {
-  it.only("Should update Royalties from 10 to 3 percent", async function () {
+describe.skip("Update Royalties", function () {
+  it("Should update Royalties from 10 to 3 percent", async function () {
     const Wrappings = await ethers.getContractFactory("OshiriWrappings");
     const copiesPerPair = 100;
     const wrappings = await Wrappings.deploy(copiesPerPair);
@@ -108,8 +107,30 @@ describe("Update Royalties", function () {
       wrappingDiscoverer.address,
       300
     );
-
     const tx = await transaction.wait();
     console.log("THE TX", tx);
+  });
+});
+
+describe.skip("Update Types", function () {
+  it("Should update the types and return more available wrappings", async function () {
+    const Wrappings = await ethers.getContractFactory("OshiriWrappings");
+    const copiesPerPair = 100;
+    const wrappings = await Wrappings.deploy(copiesPerPair);
+    await wrappings.deployed();
+    const initialAvailableWrappings = await wrappings.checkAvailableWrappings();
+
+    console.log(
+      "The initial available wrappings",
+      parseInt(initialAvailableWrappings.toString())
+    );
+
+    await wrappings.addCombinations(0, 1, 0, 0, 0);
+    const newAvailableWrappings = await wrappings.checkAvailableWrappings();
+
+    console.log(
+      "The available wrappings",
+      parseInt(newAvailableWrappings.toString())
+    );
   });
 });

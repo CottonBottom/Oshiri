@@ -4,6 +4,7 @@ pragma solidity ^0.8.4;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "./OshiriCurrency.sol";
 
 contract Oshiri is ReentrancyGuard {
     struct OshiriStats {
@@ -36,7 +37,7 @@ contract Oshiri is ReentrancyGuard {
     mapping(address => mapping(address => Relationship)) private Relationships;
     //Consentee => Receiver => Relationship info
 
-    IERC20 public oshiriCurrency;
+    OshiriCurrency private oshiriCurrency;
 
     //TODO: Price for making new Oshiri
     uint256 newOshiriPrice = 0.025 ether;
@@ -45,11 +46,9 @@ contract Oshiri is ReentrancyGuard {
     //Handling generating consent
     uint256 public yesterday;
 
-    /** 
     constructor(address oshiriCurrencyAddress) {
-        oshiriCurrency = IERC20(oshiriCurrencyAddress);
+        oshiriCurrency = OshiriCurrency(oshiriCurrencyAddress);
     }
-    */
 
     function getNewOshiriPrice() public view returns (uint256) {
         return newOshiriPrice;
@@ -159,6 +158,15 @@ contract Oshiri is ReentrancyGuard {
     }
 
     event Smacked(address smacker, address smacked);
+
+    function smack(
+        uint256 amount,
+        address smacker,
+        address smacked
+    ) public {
+        oshiriCurrency.generateOshiriCurrency(amount, smacker, smacked);
+        emit Smacked(msg.sender, smacked);
+    }
 
     //TODO: Tests after Token and NFT
     /** 

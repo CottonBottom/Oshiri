@@ -26,7 +26,6 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
     uint256 private totalCopiesPerPair;
 
     address private oshiriCurrencyAddress;
-    address private creator;
 
     struct WrappingStats {
         uint256 wType;
@@ -115,6 +114,20 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
             maxVariationColor *
             totalCopiesPerPair;
         return total - wrappingId;
+    }
+
+    function addCombinations(
+        uint256 addType,
+        uint256 addSubType,
+        uint256 addVariation,
+        uint256 addBaseColor,
+        uint256 addVariationColor
+    ) external onlyOwner {
+        maxType += addType;
+        maxSubType += addSubType;
+        maxVariation += addVariation;
+        maxBaseColor += addBaseColor;
+        maxVariationColor += addVariationColor;
     }
 
     // returns wSerialNumberCurrent
