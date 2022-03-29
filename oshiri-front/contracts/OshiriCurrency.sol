@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract OshiriCurrency is ERC20, Ownable {
-    address oshiriGame;
+    address private oshiriGame;
 
     constructor() ERC20("Oshiri", "OSH") {
         _mint(msg.sender, 69);
@@ -27,5 +27,16 @@ contract OshiriCurrency is ERC20, Ownable {
         require(msg.sender == oshiriGame, "Can only be called from Oshiri");
         _mint(recipientA, amount);
         _mint(recipientB, amount);
+    }
+
+    function awardInitialOshiriCurrency(uint256 amount, address recipientA)
+        external
+    {
+        require(msg.sender == oshiriGame, "Can only be called from Oshiri");
+        _mint(recipientA, amount);
+    }
+
+    function spendOshiriCurrency(address spender, uint256 amount) public {
+        _burn(spender, amount);
     }
 }

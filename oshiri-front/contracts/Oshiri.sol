@@ -5,8 +5,11 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "./OshiriCurrency.sol";
+import "./OshiriWrappings.sol";
 
 contract Oshiri is ReentrancyGuard {
+    uint256 wrappingCost = 3;
+
     struct OshiriStats {
         uint256 color;
         //1 to 100
@@ -38,6 +41,7 @@ contract Oshiri is ReentrancyGuard {
     //Consentee => Receiver => Relationship info
 
     OshiriCurrency private oshiriCurrency;
+    OshiriWrappings private oshiriWrappings;
 
     //TODO: Price for making new Oshiri
     uint256 newOshiriPrice = 0.025 ether;
@@ -46,8 +50,9 @@ contract Oshiri is ReentrancyGuard {
     //Handling generating consent
     uint256 public yesterday;
 
-    constructor(address oshiriCurrencyAddress) {
+    constructor(address oshiriCurrencyAddress, address oshiriWrappingsAddress) {
         oshiriCurrency = OshiriCurrency(oshiriCurrencyAddress);
+        oshiriWrappings = OshiriWrappings(oshiriWrappingsAddress);
     }
 
     function getNewOshiriPrice() public view returns (uint256) {
@@ -103,24 +108,44 @@ contract Oshiri is ReentrancyGuard {
         require(msg.value == newOshiriPrice, "Must pay new Oshiri Price");
 
         AllOshiri[msg.sender] = oshiriStats;
-        emit NewOshiriCreated(msg.sender, oshiriStats);
+        oshiriCurrency.awardInitialOshiriCurrency(wrappingCost, msg.sender);
+        spendToCreateWrapping(msg.sender);
 
-        //Give OSH to sender
-        //Create new Wrapping (use OSH given)
-        //Give Wrapping to msg.sender
+        emit NewOshiriCreated(msg.sender, oshiriStats);
+    }
+
+    function spendToCreateWrapping(address spender) internal {
+        require(
+            oshiriCurrency.balanceOf(spender) >= wrappingCost,
+            "Not enough OSH to get wrapping"
+        );
+        oshiriWrappings.createToken(spender);
+        oshiriCurrency.spendOshiriCurrency(spender, wrappingCost);
     }
 
     function getMyOshiri() public view returns (OshiriStats memory) {
         require(AllOshiri[msg.sender].color > 0, "Oshiri not existent");
-        //generateConsent();
+        require(
+            oshiriWrappings.balanceOf(msg.sender) >= 1,
+            "You have lost your wrapping and cannot access"
+        );
+        // if (block.timestamp >= AllOshiri[msg.sender].lastDayAccessed + 1 days) {
+        //     generateConsent();
+        // }
+        //Needs to be view to return
         return AllOshiri[msg.sender];
     }
 
     function generateConsent() public {
+        require(AllOshiri[msg.sender].color > 0, "Oshiri not existent");
+        require(
+            oshiriWrappings.balanceOf(msg.sender) >= 1,
+            "You have lost your wrapping and cannot access"
+        );
         uint256 today = block.timestamp;
         require(
             today > AllOshiri[msg.sender].lastDayAccessed + 1 days,
-            "A day has not passed"
+            "A day has not yet passed"
         );
         require(
             AllOshiri[msg.sender].availableConsent < 7,
@@ -135,10 +160,18 @@ contract Oshiri is ReentrancyGuard {
     function sendConsent(address receiver) public {
         require(AllOshiri[msg.sender].color > 0, "Oshiri not existent");
         require(
+            oshiriWrappings.balanceOf(msg.sender) >= 1,
+            "You have lost your wrapping and cannot access"
+        );
+        require(
             AllOshiri[msg.sender].availableConsent > 0,
             "No consent available"
         );
         require(AllOshiri[receiver].color > 0, "Receiver Oshiri not existent");
+        require(
+            oshiriWrappings.balanceOf(receiver) >= 1,
+            "The other party hast lost their wrapping and cannot receive consent"
+        );
         AllOshiri[msg.sender].availableConsent -= 1;
         Relationships[msg.sender][receiver].currentConsent += 1;
         emit ConsentGiven(msg.sender, receiver);
@@ -150,7 +183,15 @@ contract Oshiri is ReentrancyGuard {
         returns (OshiriStats memory, uint256)
     {
         require(AllOshiri[oshiri].color > 0, "Oshiri not existent");
+        require(
+            oshiriWrappings.balanceOf(oshiri) >= 1,
+            "The other party hast lost their wrapping and cannot be accessed"
+        );
         require(AllOshiri[msg.sender].color > 0, "You do not have an Oshiri");
+        require(
+            oshiriWrappings.balanceOf(msg.sender) >= 1,
+            "You have lost your wrapping and cannot access"
+        );
         return (
             AllOshiri[oshiri],
             Relationships[oshiri][msg.sender].currentConsent
@@ -159,31 +200,29 @@ contract Oshiri is ReentrancyGuard {
 
     event Smacked(address smacker, address smacked);
 
-    function smack(
-        uint256 amount,
-        address smacker,
-        address smacked
-    ) public {
-        oshiriCurrency.generateOshiriCurrency(amount, smacker, smacked);
-        emit Smacked(msg.sender, smacked);
-    }
-
-    //TODO: Complete logic for smacking
-    /** 
     function smack(address smacked, address smackedWrapping) public {
+        /** Validation */
+        require(AllOshiri[smacked].color > 0, "Oshiri not existent");
+        require(
+            oshiriWrappings.balanceOf(smacked) >= 1,
+            "The other party hast lost their wrapping and cannot be accessed"
+        );
+        require(AllOshiri[msg.sender].color > 0, "You do not have an Oshiri");
+        require(
+            oshiriWrappings.balanceOf(msg.sender) >= 1,
+            "You have lost your wrapping and cannot access"
+        );
         require(
             Relationships[smacked][msg.sender].currentConsent > 0,
             "No consent found, ask for Consent"
         );
+        /** */
 
-        uint256 reward = calculateOSH(
-            smackedWrapping,
-            Relationships[smacked][msg.sender]
-        );
+        uint256 reward = calculateOSH();
+        // smackedWrapping,
+        // Relationships[smacked][msg.sender]
 
-        //Send to smacker and smacked
-        oshiriCurrency.transfer(msg.sender, reward);
-        oshiriCurrency.transfer(smacked, reward);
+        oshiriCurrency.generateOshiriCurrency(reward, msg.sender, smacked);
 
         Relationships[smacked][msg.sender].currentConsent -= 1;
         Relationships[smacked][msg.sender].timesUsed += 1;
@@ -192,16 +231,19 @@ contract Oshiri is ReentrancyGuard {
     }
 
     //Calculate won OSH
-    function calculateOSH(
-        address smackedWrapping,
-        Relationship memory relationship
-    ) internal returns (uint256) {
+    function calculateOSH()
+        internal
+        returns (
+            // address smackedWrapping,
+            // Relationship memory relationship
+            uint256
+        )
+    {
         //Todo: logic
         //Calculate OSH depending on worn NFT and day
         //Calculate OSH depending on new Relationship
         return 10;
     }
-    */
 
     event OshiriUpdated(address creator, OshiriStats oshiriStats);
 

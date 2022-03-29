@@ -26,6 +26,8 @@ describe.skip("Generate OSH and give to both parties from Oshiri Contract", func
       .connect(smacker)
       .smack(amount, smacker.address, smacked.address);
 
+    //Will fail because lacks consent
+
     const postBalance = await oshiriCurrency.balanceOf(smacker.address);
     console.log("post balance", postBalance);
 
@@ -33,8 +35,8 @@ describe.skip("Generate OSH and give to both parties from Oshiri Contract", func
   });
 });
 
-describe("Try to mint OSH from outside Oshiri", function () {
-  it.only("Should fail trying to mint outside Oshiri", async function () {
+describe.skip("Try to mint OSH from outside Oshiri", function () {
+  it("Should fail trying to mint outside Oshiri", async function () {
     //First deploy Oshiri Currency
     const OshiriCurrency = await ethers.getContractFactory("OshiriCurrency");
     const oshiriCurrency = await OshiriCurrency.deploy();

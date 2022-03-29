@@ -8,6 +8,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
+    address private oshiriGame;
     uint256 private wrappingId;
 
     uint256 private wTypeCurrent = 1;
@@ -55,6 +56,13 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
         //Start with 10%
     }
 
+    function setOshiriGameAddress(address oshiriGameAddress)
+        external
+        onlyOwner
+    {
+        oshiriGame = oshiriGameAddress;
+    }
+
     /** Royalties */
     function supportsInterface(bytes4 interfaceId)
         public
@@ -88,8 +96,9 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
 
     event WrappingGenerated(WrappingStats newWrapping);
 
-    //Should be payable?? with OSH???
-    function createToken() external {
+    //TODO: Create token with URI and metadata
+    function createToken(address receiver) external {
+        require(msg.sender == oshiriGame, "Can only be called from Oshiri");
         require(
             wSerialNumberCurrent <= totalCopiesPerPair,
             "All wrappings have been discovered"
@@ -99,8 +108,8 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
         wrappingId += 1;
         // _tokenIds.increment();
         // uint256 newItemId = _tokenIds.current();
-        // _mint(msg.sender, newItemId);
-        // _setTokenURI(newItemId, tokenURI);
+        _mint(receiver, wrappingId);
+        //_setTokenURI(newItemId, tokenURI);
         //Gives the marketplace the approval to transact this token between users
         //from within another contract
         emit WrappingGenerated(newWrapping);
