@@ -37,8 +37,7 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
         uint256 wSerialNumber;
     }
 
-    mapping(uint256 => mapping(uint256 => mapping(uint256 => mapping(uint256 => mapping(uint256 => uint256)))))
-        private CreatedWrappings;
+    mapping(uint256 => WrappingStats) private CreatedWrappings;
     //wType => wSubType => wVariation => wBaseColor => wVariationColor => wSerialNumber
 
     /** IERC2981 Royalties */
@@ -96,7 +95,7 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
 
     event WrappingGenerated(WrappingStats newWrapping);
 
-    //TODO: Create token with URI and metadata
+    //Get data from the event -> Make JSON and upload -> get URL and setTokenURI
     function createToken(address receiver) external {
         require(msg.sender == oshiriGame, "Can only be called from Oshiri");
         require(
@@ -105,14 +104,25 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
         );
         //Require OSH amount
         WrappingStats memory newWrapping = getNextInProductionLine();
-        wrappingId += 1;
-        // _tokenIds.increment();
-        // uint256 newItemId = _tokenIds.current();
+        CreatedWrappings[wrappingId] = newWrapping;
         _mint(receiver, wrappingId);
-        //_setTokenURI(newItemId, tokenURI);
-        //Gives the marketplace the approval to transact this token between users
-        //from within another contract
         emit WrappingGenerated(newWrapping);
+        wrappingId += 1;
+    }
+
+    function setTokenURI(uint256 tokenId, string memory tokenURI)
+        external
+        onlyOwner
+    {
+        _setTokenURI(tokenId, tokenURI);
+    }
+
+    function getWrapping(uint256 tokenId)
+        public
+        view
+        returns (WrappingStats memory)
+    {
+        return CreatedWrappings[tokenId];
     }
 
     function checkAvailableWrappings() external view returns (uint256) {

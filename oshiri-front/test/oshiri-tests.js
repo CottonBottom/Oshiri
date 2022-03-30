@@ -404,7 +404,13 @@ describe("Smacking", function () {
     console.log("starting balance", startingBalance);
 
     await oshiri.connect(consenter).sendConsent(receiver.address);
-    await oshiri.connect(receiver).smack(consenter.address, consenter.address);
+
+    //Get Smacked NFT
+    // const smackedWrappingId = await oshiriWrappings.balanceOf(
+    //   consenter.address
+    // );
+
+    await oshiri.connect(receiver).smack(consenter.address, 0);
 
     const lastBalance = await oshiriCurrency.balanceOf(receiver.address);
     console.log("last balance", lastBalance);

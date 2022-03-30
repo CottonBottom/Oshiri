@@ -4,6 +4,7 @@ pragma solidity ^0.8.4;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@quant-finance/solidity-datetime/contracts/DateTime.sol";
 import "./OshiriCurrency.sol";
 import "./OshiriWrappings.sol";
 
@@ -137,6 +138,7 @@ contract Oshiri is ReentrancyGuard {
     }
 
     function generateConsent() public {
+        /** Validation */
         require(AllOshiri[msg.sender].color > 0, "Oshiri not existent");
         require(
             oshiriWrappings.balanceOf(msg.sender) >= 1,
@@ -151,6 +153,7 @@ contract Oshiri is ReentrancyGuard {
             AllOshiri[msg.sender].availableConsent < 7,
             "Consent limit reached"
         );
+        /** */
         AllOshiri[msg.sender].availableConsent += 1;
         AllOshiri[msg.sender].lastDayAccessed = today;
     }
@@ -200,7 +203,7 @@ contract Oshiri is ReentrancyGuard {
 
     event Smacked(address smacker, address smacked);
 
-    function smack(address smacked, address smackedWrapping) public {
+    function smack(address smacked, uint256 wrappingId) external {
         /** Validation */
         require(AllOshiri[smacked].color > 0, "Oshiri not existent");
         require(
@@ -216,9 +219,13 @@ contract Oshiri is ReentrancyGuard {
             Relationships[smacked][msg.sender].currentConsent > 0,
             "No consent found, ask for Consent"
         );
+        require(
+            oshiriWrappings.ownerOf(wrappingId) == smacked,
+            "The other party is not the owner of the selected wrapping"
+        );
         /** */
 
-        uint256 reward = calculateOSH();
+        uint256 reward = calculateOSH(wrappingId, smacked);
         // smackedWrapping,
         // Relationships[smacked][msg.sender]
 
@@ -231,18 +238,22 @@ contract Oshiri is ReentrancyGuard {
     }
 
     //Calculate won OSH
-    function calculateOSH()
+    function calculateOSH(uint256 wrappingId, address smacked)
         internal
-        returns (
-            // address smackedWrapping,
-            // Relationship memory relationship
-            uint256
-        )
+        view
+        returns (uint256)
     {
-        //Todo: logic
-        //Calculate OSH depending on worn NFT and day
-        //Calculate OSH depending on new Relationship
-        return 10;
+        uint256 reward = 10;
+        uint256 day = DateTime.getDayOfWeek(block.timestamp);
+        if (oshiriWrappings.getWrapping(wrappingId).wType == day) {
+            //Day matches type reward
+            reward = reward * 2;
+        }
+        if (Relationships[smacked][msg.sender].timesUsed == 0) {
+            //New relationship reward
+            reward = reward * 2;
+        }
+        return reward;
     }
 
     event OshiriUpdated(address creator, OshiriStats oshiriStats);
@@ -272,5 +283,7 @@ contract Oshiri is ReentrancyGuard {
         emit OshiriUpdated(msg.sender, oshiriStats);
     }
 
-    //Get all available Consents
+    //TODO: Get all available Consents
+    //TODO: Refactor Contracts
+    //TODO: Refactor Tests and do Remaining Tests
 }
