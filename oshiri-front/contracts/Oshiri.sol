@@ -34,11 +34,6 @@ contract Oshiri is ReentrancyGuard {
         uint256 lastTimeRedeemed;
     }
 
-    struct Consenters {
-        address consenter;
-        uint256 currentConsent;
-    }
-
     mapping(address => OshiriStats) private AllOshiri;
     mapping(address => mapping(address => Relationship)) private Relationships;
     //Consentee => Receiver => Relationship info
@@ -290,7 +285,6 @@ contract Oshiri is ReentrancyGuard {
         emit OshiriUpdated(msg.sender, oshiriStats);
     }
 
-    //TODO: Get all available Consents
     //TODO: Refactor Contracts
     //TODO: Refactor Tests and do Remaining Tests
 }
