@@ -96,18 +96,20 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
     event WrappingGenerated(WrappingStats newWrapping);
 
     //Get data from the event -> Make JSON and upload -> get URL and setTokenURI
-    function createToken(address receiver) external {
+    function createToken(address receiver) external returns (uint256) {
         require(msg.sender == oshiriGame, "Can only be called from Oshiri");
         require(
             wSerialNumberCurrent <= totalCopiesPerPair,
             "All wrappings have been discovered"
         );
         //Require OSH amount
+        uint currentWrappingId = wrappingId;
         WrappingStats memory newWrapping = getNextInProductionLine();
         CreatedWrappings[wrappingId] = newWrapping;
         _mint(receiver, wrappingId);
         emit WrappingGenerated(newWrapping);
         wrappingId += 1;
+        return currentWrappingId;
     }
 
     function setTokenURI(uint256 tokenId, string memory tokenURI)

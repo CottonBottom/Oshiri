@@ -12,6 +12,7 @@ const getReadableOshiri = (createdOshiri) => {
     tailColor: createdOshiri.tailColor.toString(),
     availableConsent: createdOshiri.availableConsent.toString(),
     lastDayAccessed: formattedDate,
+    wornWrapping: createdOshiri.wornWrapping.toString(),
   };
 };
 
@@ -314,7 +315,7 @@ describe("Update Oshiri", function () {
 });
 
 describe("Smacking", function () {
-  it("Should spend consent to smack oshiri and recieve rewards", async function () {
+  it.only("Should spend consent to smack oshiri and recieve rewards", async function () {
     //First deploy Oshiri Currency
     const OshiriCurrency = await ethers.getContractFactory("OshiriCurrency");
     const oshiriCurrency = await OshiriCurrency.deploy();
@@ -410,7 +411,7 @@ describe("Smacking", function () {
     //   consenter.address
     // );
 
-    await oshiri.connect(receiver).smack(consenter.address, 0);
+    await oshiri.connect(receiver).smack(consenter.address);
 
     const lastBalance = await oshiriCurrency.balanceOf(receiver.address);
     console.log("last balance", lastBalance);
