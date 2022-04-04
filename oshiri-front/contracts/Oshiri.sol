@@ -9,14 +9,18 @@ import "./OshiriCurrency.sol";
 import "./OshiriWrappings.sol";
 
 contract Oshiri is ReentrancyGuard {
-    uint256 wrappingCost = 3;
+    //TODO: Decide price for making new Oshiri
+    uint256 public newOshiriPrice = 0.025 ether;
+    uint256 public updateOshiriPrice = 0.001 ether;
+    uint256 public wrappingCost = 3;
+    uint256 public yesterday;
 
-    uint256 maxColors = 100;
-    uint256 maxSizes = 100;
-    uint256 maxNameLength = 50;
-    uint256 maxTails = 5;
-    uint256 maxTailColors = 10;
-    uint256 maxAvailableConsent = 7;
+    uint256 private maxColors = 100;
+    uint256 private maxSizes = 100;
+    uint256 private maxNameLength = 50;
+    uint256 private maxTails = 5;
+    uint256 private maxTailColors = 10;
+    uint256 private maxAvailableConsent = 7;
 
     struct OshiriStats {
         uint256 color;
@@ -37,30 +41,72 @@ contract Oshiri is ReentrancyGuard {
 
     mapping(address => OshiriStats) private AllOshiri;
     mapping(address => mapping(address => Relationship)) private Relationships;
-    //Consentee => Receiver => Relationship info
+    //Consenter => Receiver => Relationship
 
     OshiriCurrency private oshiriCurrency;
     OshiriWrappings private oshiriWrappings;
-
-    //TODO: Price for making new Oshiri
-    uint256 newOshiriPrice = 0.025 ether;
-    uint256 updateOshiriPrice = 0.001 ether;
-
-    //Handling generating consent
-    uint256 public yesterday;
 
     constructor(address oshiriCurrencyAddress, address oshiriWrappingsAddress) {
         oshiriCurrency = OshiriCurrency(oshiriCurrencyAddress);
         oshiriWrappings = OshiriWrappings(oshiriWrappingsAddress);
     }
 
-    function getNewOshiriPrice() public view returns (uint256) {
+    /** External Viewable */
+    function getNewOshiriPrice() external view returns (uint256) {
         return newOshiriPrice;
     }
 
-    function getUpdateOshiriPrice() public view returns (uint256) {
+    function getUpdateOshiriPrice() external view returns (uint256) {
         return updateOshiriPrice;
     }
+
+    function getMyOshiri() external view returns (OshiriStats memory) {
+        /** Validation */
+        require(AllOshiri[msg.sender].color > 0, "Oshiri not existent");
+        require(
+            oshiriWrappings.balanceOf(msg.sender) >= 1,
+            "You have lost your wrapping and cannot access"
+        );
+        /** */
+        return AllOshiri[msg.sender];
+    }
+
+    function getOtherOshiri(address oshiri)
+        external
+        view
+        returns (OshiriStats memory, uint256)
+    {
+        /** Validation */
+        require(AllOshiri[oshiri].color > 0, "Oshiri not existent");
+        require(
+            oshiriWrappings.balanceOf(oshiri) >= 1,
+            "The other party hast lost their wrapping and cannot be accessed"
+        );
+        require(AllOshiri[msg.sender].color > 0, "You do not have an Oshiri");
+        require(
+            oshiriWrappings.balanceOf(msg.sender) >= 1,
+            "You have lost your wrapping and cannot access"
+        );
+        /** */
+        return (
+            AllOshiri[oshiri],
+            Relationships[oshiri][msg.sender].currentConsent
+        );
+    }
+
+    function getRelationship(address with)
+        external
+        view
+        returns (Relationship memory)
+    {
+        /** Validation */
+        require(AllOshiri[with].color > 0, "Oshiri not existent");
+        require(AllOshiri[msg.sender].color > 0, "You do not have an Oshiri");
+        /** */
+        return Relationships[msg.sender][with];
+    }
+
+    /** */
 
     function validateOshiriStats(OshiriStats memory oshiriStats)
         private
@@ -98,7 +144,7 @@ contract Oshiri is ReentrancyGuard {
         string memory name,
         uint256 tail,
         uint256 tailColor
-    ) public payable nonReentrant {
+    ) external payable nonReentrant {
         OshiriStats memory oshiriStats = OshiriStats(
             color,
             size,
@@ -142,17 +188,7 @@ contract Oshiri is ReentrancyGuard {
         return newWrappingId;
     }
 
-    function getMyOshiri() public view returns (OshiriStats memory) {
-        require(AllOshiri[msg.sender].color > 0, "Oshiri not existent");
-        require(
-            oshiriWrappings.balanceOf(msg.sender) >= 1,
-            "You have lost your wrapping and cannot access"
-        );
-        //Needs to be view to return
-        return AllOshiri[msg.sender];
-    }
-
-    function generateConsent() public {
+    function generateConsent() external {
         /** Validation */
         require(AllOshiri[msg.sender].color > 0, "Oshiri not existent");
         require(
@@ -175,7 +211,7 @@ contract Oshiri is ReentrancyGuard {
 
     event ConsentGiven(address creator, address receiver);
 
-    function sendConsent(address receiver) public {
+    function sendConsent(address receiver) external nonReentrant {
         require(AllOshiri[msg.sender].color > 0, "Oshiri not existent");
         require(
             oshiriWrappings.balanceOf(msg.sender) >= 1,
@@ -195,30 +231,9 @@ contract Oshiri is ReentrancyGuard {
         emit ConsentGiven(msg.sender, receiver);
     }
 
-    function seeOshiri(address oshiri)
-        public
-        view
-        returns (OshiriStats memory, uint256)
-    {
-        require(AllOshiri[oshiri].color > 0, "Oshiri not existent");
-        require(
-            oshiriWrappings.balanceOf(oshiri) >= 1,
-            "The other party hast lost their wrapping and cannot be accessed"
-        );
-        require(AllOshiri[msg.sender].color > 0, "You do not have an Oshiri");
-        require(
-            oshiriWrappings.balanceOf(msg.sender) >= 1,
-            "You have lost your wrapping and cannot access"
-        );
-        return (
-            AllOshiri[oshiri],
-            Relationships[oshiri][msg.sender].currentConsent
-        );
-    }
-
     event Smacked(address smacker, address smacked);
 
-    function smack(address smacked) external {
+    function smack(address smacked) external nonReentrant {
         /** Validation */
         require(AllOshiri[smacked].color > 0, "Oshiri not existent");
         require(

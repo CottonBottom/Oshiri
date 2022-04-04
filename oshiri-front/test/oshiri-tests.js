@@ -211,21 +211,21 @@ describe("Give Consent", function () {
     console.log("The consenter oshiri:", consenterReadableOshiri);
     console.log("The receiver oshiri:", receiverReadableOshiri);
 
-    const seeOshiriBefore = await oshiri
+    const otherOshiriBefore = await oshiri
       .connect(receiverAddress)
-      .seeOshiri(consenterAddress.address);
+      .getOtherOshiri(consenterAddress.address);
 
-    expect(seeOshiriBefore[0].availableConsent.toString()).to.equal("1");
-    expect(seeOshiriBefore[1].toString()).to.equal("0");
+    expect(otherOshiriBefore[0].availableConsent.toString()).to.equal("1");
+    expect(otherOshiriBefore[1].toString()).to.equal("0");
 
     await oshiri.connect(consenterAddress).sendConsent(receiverAddress.address);
 
-    const seeOshiriAfter = await oshiri
+    const otherOshiriAfter = await oshiri
       .connect(receiverAddress)
-      .seeOshiri(consenterAddress.address);
+      .getOtherOshiri(consenterAddress.address);
 
-    expect(seeOshiriAfter[0].availableConsent.toString()).to.equal("0");
-    expect(seeOshiriAfter[1].toString()).to.equal("1");
+    expect(otherOshiriAfter[0].availableConsent.toString()).to.equal("0");
+    expect(otherOshiriAfter[1].toString()).to.equal("1");
   });
 });
 
