@@ -2,11 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./scss/index.scss";
 import reportWebVitals from "./reportWebVitals";
-import Sandbox from "./sandbox/Sandbox";
+//import Sandbox from "./sandbox/Sandbox";
+import Customization from "./pages/Customization";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Sandbox />
+    <Customization />
   </React.StrictMode>,
   document.getElementById("root")
 );

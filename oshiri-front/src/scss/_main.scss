@@ -1,4 +1,22 @@
-.proto-image {
+.main-background {
+  width: 100%;
+  height: 100vh;
+  background: $gradient-auxiliar-light;
+  overflow: auto;
+}
+
+.main-container {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 768px;
+  padding: 24px;
+}
+
+.main-image {
+  //min-width: 300px;
   width: 100%;
   background: gray;
   padding-top: 100%;
@@ -9,17 +27,7 @@ input {
   box-sizing: border-box;
 }
 
-.proto-container {
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  max-width: 768px;
-  padding: 24px;
-}
-
-.proto-settings {
+.main-settings {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,13 +35,13 @@ input {
   width: 100%;
 }
 
-.proto-settings__name {
+.main-settings__name {
   width: 100%;
   height: 30px;
   margin-bottom: 8px;
 }
 
-.proto-settings__color {
+.main-settings__color {
   width: 100%;
   height: 50px;
   border-radius: 10px;
@@ -42,7 +50,7 @@ input {
   margin-bottom: 8px;
 }
 
-.proto-settings__tail {
+.main-settings__tail {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -69,7 +77,7 @@ input {
   }
 }
 
-.proto-settings__size {
+.main-settings__size {
   width: 100%;
   margin-bottom: 16px;
 }
