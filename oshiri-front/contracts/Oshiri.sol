@@ -108,6 +108,17 @@ contract Oshiri is ReentrancyGuard {
 
     /** */
 
+    /** Events */
+    event NewOshiriCreated(address creator, OshiriStats oshiriStats);
+    event OshiriUpdated(address creator, OshiriStats oshiriStats);
+    event ConsentGenerated(address reciever, uint256 currentConsent);
+    event SentConsent(address creator, address receiver);
+    event OshiriSmacked(address smacker, address smacked);
+    event wearingWrapping(address wearer, uint256 wrappingId);
+    event gotWrapping(address oshiri, uint256 wrappingId);
+
+    /** */
+
     function validateOshiriStats(OshiriStats memory oshiriStats)
         private
         view
@@ -136,8 +147,6 @@ contract Oshiri is ReentrancyGuard {
         return true;
     }
 
-    event NewOshiriCreated(address creator, OshiriStats oshiriStats);
-
     function createOshiri(
         uint256 color,
         uint256 size,
@@ -151,17 +160,20 @@ contract Oshiri is ReentrancyGuard {
             name,
             tail,
             tailColor,
+            //Initial Consent, Today, Zero wrapping
             1,
             block.timestamp,
             0
         );
         bool validOshiriStats = validateOshiriStats(oshiriStats);
+        /** Validation */
         require(validOshiriStats == true, "Incorrect stats for Oshiri");
         require(
             AllOshiri[msg.sender].color == 0,
             "Oshiri already exists for this account"
         );
         require(msg.value == newOshiriPrice, "Must pay new Oshiri Price");
+        /** */
 
         AllOshiri[msg.sender] = oshiriStats;
         oshiriCurrency.awardInitialOshiriCurrency(wrappingCost, msg.sender);
@@ -171,20 +183,26 @@ contract Oshiri is ReentrancyGuard {
     }
 
     function wearWrapping(uint256 wrappingId) public {
+        /** Validation */
         require(
             oshiriWrappings.ownerOf(wrappingId) == msg.sender,
             "You do not own this wrapping"
         );
+        /** */
         AllOshiri[msg.sender].wornWrapping = wrappingId;
+        emit wearingWrapping(msg.sender, wrappingId);
     }
 
     function spendToCreateWrapping(address spender) internal returns (uint256) {
+        /** Validation */
         require(
             oshiriCurrency.balanceOf(spender) >= wrappingCost,
             "Not enough OSH to get wrapping"
         );
+        /** */
         uint256 newWrappingId = oshiriWrappings.createToken(spender);
         oshiriCurrency.spendOshiriCurrency(spender, wrappingCost);
+        emit gotWrapping(msg.sender, newWrappingId);
         return newWrappingId;
     }
 
@@ -207,9 +225,11 @@ contract Oshiri is ReentrancyGuard {
         /** */
         AllOshiri[msg.sender].availableConsent += 1;
         AllOshiri[msg.sender].lastDayAccessed = today;
+        emit ConsentGenerated(
+            msg.sender,
+            AllOshiri[msg.sender].availableConsent
+        );
     }
-
-    event ConsentGiven(address creator, address receiver);
 
     function sendConsent(address receiver) external nonReentrant {
         require(AllOshiri[msg.sender].color > 0, "Oshiri not existent");
@@ -228,10 +248,8 @@ contract Oshiri is ReentrancyGuard {
         );
         AllOshiri[msg.sender].availableConsent -= 1;
         Relationships[msg.sender][receiver].currentConsent += 1;
-        emit ConsentGiven(msg.sender, receiver);
+        emit SentConsent(msg.sender, receiver);
     }
-
-    event Smacked(address smacker, address smacked);
 
     function smack(address smacked) external nonReentrant {
         /** Validation */
@@ -261,10 +279,10 @@ contract Oshiri is ReentrancyGuard {
         Relationships[smacked][msg.sender].currentConsent -= 1;
         Relationships[smacked][msg.sender].timesUsed += 1;
         Relationships[smacked][msg.sender].lastTimeRedeemed += block.timestamp;
-        emit Smacked(msg.sender, smacked);
+        emit OshiriSmacked(msg.sender, smacked);
     }
 
-    //Calculate won OSH
+    //TODO: Review numbers for rewards after testing
     function calculateOSH(uint256 wrappingId, address smacked)
         internal
         view
@@ -282,8 +300,6 @@ contract Oshiri is ReentrancyGuard {
         }
         return reward;
     }
-
-    event OshiriUpdated(address creator, OshiriStats oshiriStats);
 
     function updateOshiri(
         uint256 color,
@@ -310,7 +326,4 @@ contract Oshiri is ReentrancyGuard {
         AllOshiri[msg.sender] = oshiriStats;
         emit OshiriUpdated(msg.sender, oshiriStats);
     }
-
-    //TODO: Refactor Contracts
-    //TODO: Refactor Tests and do Remaining Tests
 }

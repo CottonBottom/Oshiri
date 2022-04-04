@@ -315,7 +315,7 @@ describe("Update Oshiri", function () {
 });
 
 describe("Smacking", function () {
-  it.only("Should spend consent to smack oshiri and recieve rewards", async function () {
+  it("Should spend consent to smack oshiri and recieve rewards", async function () {
     //First deploy Oshiri Currency
     const OshiriCurrency = await ethers.getContractFactory("OshiriCurrency");
     const oshiriCurrency = await OshiriCurrency.deploy();
@@ -401,21 +401,20 @@ describe("Smacking", function () {
     console.log("The consenter oshiri:", consenterReadableOshiri);
     console.log("The receiver oshiri:", receiverReadableOshiri);
 
+    //A->B
     const startingBalance = await oshiriCurrency.balanceOf(receiver.address);
     console.log("starting balance", startingBalance);
-
     await oshiri.connect(consenter).sendConsent(receiver.address);
-
-    //Get Smacked NFT
-    // const smackedWrappingId = await oshiriWrappings.balanceOf(
-    //   consenter.address
-    // );
-
     await oshiri.connect(receiver).smack(consenter.address);
-
     const lastBalance = await oshiriCurrency.balanceOf(receiver.address);
     console.log("last balance", lastBalance);
 
-    //TODO: Calculate the OSH according to logic of days vs NFT
+    //B->A
+    const startingBalanceB = await oshiriCurrency.balanceOf(consenter.address);
+    console.log("starting balance", startingBalanceB);
+    await oshiri.connect(receiver).sendConsent(consenter.address);
+    await oshiri.connect(consenter).smack(receiver.address);
+    const lastBalanceB = await oshiriCurrency.balanceOf(consenter.address);
+    console.log("last balance", lastBalanceB);
   });
 });
