@@ -46,9 +46,10 @@ contract Oshiri is ReentrancyGuard {
     OshiriCurrency private oshiriCurrency;
     OshiriWrappings private oshiriWrappings;
 
-    constructor(address oshiriCurrencyAddress, address oshiriWrappingsAddress) {
-        oshiriCurrency = OshiriCurrency(oshiriCurrencyAddress);
-        oshiriWrappings = OshiriWrappings(oshiriWrappingsAddress);
+    constructor(address oshiriCurrencyContract, address oshiriWrappingsContract)
+    {
+        oshiriCurrency = OshiriCurrency(oshiriCurrencyContract);
+        oshiriWrappings = OshiriWrappings(oshiriWrappingsContract);
     }
 
     /** External Viewable */

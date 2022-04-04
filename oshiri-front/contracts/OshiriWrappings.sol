@@ -9,6 +9,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
     address private oshiriGame;
+    address private oshiriCurrencyAddress;
     uint256 private wrappingId;
 
     uint256 private wTypeCurrent = 1;
@@ -18,15 +19,13 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
     uint256 private wVariationColorCurrent = 1;
     uint256 private wSerialNumberCurrent = 1;
 
-    uint256 private maxType = 6;
-    uint256 private maxSubType = 3;
-    uint256 private maxVariation = 4;
-    uint256 private maxBaseColor = 3;
-    uint256 private maxVariationColor = 6;
+    uint256 private maxTypes = 6;
+    uint256 private maxSubTypes = 3;
+    uint256 private maxVariations = 4;
+    uint256 private maxBaseColors = 3;
+    uint256 private maxVariationsColors = 6;
 
     uint256 private totalCopiesPerPair;
-
-    address private oshiriCurrencyAddress;
 
     struct WrappingStats {
         uint256 wType;
@@ -54,6 +53,27 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
         setRoyalties(msg.sender, 1000);
         //Start with 10%
     }
+
+    /** External Viewable */
+    function getWrapping(uint256 tokenId)
+        public
+        view
+        returns (WrappingStats memory)
+    {
+        return CreatedWrappings[tokenId];
+    }
+
+    function checkAvailableWrappings() external view returns (uint256) {
+        uint256 total = maxTypes *
+            maxSubTypes *
+            maxVariations *
+            maxBaseColors *
+            maxVariationsColors *
+            totalCopiesPerPair;
+        return total - wrappingId;
+    }
+
+    /** */
 
     function setOshiriGameAddress(address oshiriGameAddress)
         external
@@ -95,14 +115,13 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
 
     event WrappingGenerated(WrappingStats newWrapping);
 
-    //Get data from the event -> Make JSON and upload -> get URL and setTokenURI
+    //TODO: Get data from the event -> Make JSON and upload -> get URL and setTokenURI
     function createToken(address receiver) external returns (uint256) {
         require(msg.sender == oshiriGame, "Can only be called from Oshiri");
         require(
             wSerialNumberCurrent <= totalCopiesPerPair,
             "All wrappings have been discovered"
         );
-        //Require OSH amount
         uint currentWrappingId = wrappingId;
         WrappingStats memory newWrapping = getNextInProductionLine();
         CreatedWrappings[wrappingId] = newWrapping;
@@ -119,24 +138,6 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
         _setTokenURI(tokenId, tokenURI);
     }
 
-    function getWrapping(uint256 tokenId)
-        public
-        view
-        returns (WrappingStats memory)
-    {
-        return CreatedWrappings[tokenId];
-    }
-
-    function checkAvailableWrappings() external view returns (uint256) {
-        uint256 total = maxType *
-            maxSubType *
-            maxVariation *
-            maxBaseColor *
-            maxVariationColor *
-            totalCopiesPerPair;
-        return total - wrappingId;
-    }
-
     function addCombinations(
         uint256 addType,
         uint256 addSubType,
@@ -144,14 +145,13 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
         uint256 addBaseColor,
         uint256 addVariationColor
     ) external onlyOwner {
-        maxType += addType;
-        maxSubType += addSubType;
-        maxVariation += addVariation;
-        maxBaseColor += addBaseColor;
-        maxVariationColor += addVariationColor;
+        maxTypes += addType;
+        maxSubTypes += addSubType;
+        maxVariations += addVariation;
+        maxBaseColors += addBaseColor;
+        maxVariationsColors += addVariationColor;
     }
 
-    // returns wSerialNumberCurrent
     function getNextInProductionLine() private returns (WrappingStats memory) {
         //Build Current Set Wrapping Stats
         WrappingStats memory newWrapping = WrappingStats(
@@ -164,23 +164,23 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
         );
 
         //Update All Current Stats
-        if (wTypeCurrent < maxType) {
+        if (wTypeCurrent < maxTypes) {
             wTypeCurrent += 1;
         } else {
             wTypeCurrent = 1;
-            if (wSubTypeCurrent < maxSubType) {
+            if (wSubTypeCurrent < maxSubTypes) {
                 wSubTypeCurrent += 1;
             } else {
                 wSubTypeCurrent = 1;
-                if (wVariationCurrent < maxVariation) {
+                if (wVariationCurrent < maxVariations) {
                     wVariationCurrent += 1;
                 } else {
                     wVariationCurrent = 1;
-                    if (wBaseColorCurrent < maxBaseColor) {
+                    if (wBaseColorCurrent < maxBaseColors) {
                         wBaseColorCurrent += 1;
                     } else {
                         wBaseColorCurrent = 1;
-                        if (wVariationColorCurrent < maxVariationColor) {
+                        if (wVariationColorCurrent < maxVariationsColors) {
                             wVariationColorCurrent += 1;
                         } else {
                             wVariationColorCurrent = 1;
@@ -191,5 +191,19 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
             }
         }
         return newWrapping;
+    }
+
+    function createTokenTestOnly(address receiver) external returns (uint256) {
+        require(
+            wSerialNumberCurrent <= totalCopiesPerPair,
+            "All wrappings have been discovered"
+        );
+        uint currentWrappingId = wrappingId;
+        WrappingStats memory newWrapping = getNextInProductionLine();
+        CreatedWrappings[wrappingId] = newWrapping;
+        _mint(receiver, wrappingId);
+        emit WrappingGenerated(newWrapping);
+        wrappingId += 1;
+        return currentWrappingId;
     }
 }

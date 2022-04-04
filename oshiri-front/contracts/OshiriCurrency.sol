@@ -12,6 +12,15 @@ contract OshiriCurrency is ERC20, Ownable {
         _mint(msg.sender, 69);
     }
 
+    /** Events */
+    event CurrencyGenerated(
+        uint256 amount,
+        address recipientA,
+        address recipientB
+    );
+
+    /** */
+
     function setOshiriGameAddress(address oshiriGameAddress)
         external
         onlyOwner
@@ -27,16 +36,17 @@ contract OshiriCurrency is ERC20, Ownable {
         require(msg.sender == oshiriGame, "Can only be called from Oshiri");
         _mint(recipientA, amount);
         _mint(recipientB, amount);
+        emit CurrencyGenerated(amount, recipientA, recipientB);
     }
 
-    function awardInitialOshiriCurrency(uint256 amount, address recipientA)
+    function awardInitialOshiriCurrency(uint256 amount, address oshiri)
         external
     {
         require(msg.sender == oshiriGame, "Can only be called from Oshiri");
-        _mint(recipientA, amount);
+        _mint(oshiri, amount);
     }
 
-    function spendOshiriCurrency(address spender, uint256 amount) public {
+    function spendOshiriCurrency(address spender, uint256 amount) external {
         _burn(spender, amount);
     }
 }

@@ -16,7 +16,6 @@ const getSimplyfiedWrapping = (newWrapping) => {
   return `${newWrapping.wType.toString()}-${newWrapping.wSubType.toString()}-${newWrapping.wVariation.toString()}-${newWrapping.wBaseColor.toString()}-${newWrapping.wVariationColor.toString()}-${newWrapping.wSerialNumber.toString()}`;
 };
 
-//Skipping for now
 describe.skip("Discover All Wrappings", function () {
   it("Should discover all wrappings and stop when all are finished", async function () {
     const Wrappings = await ethers.getContractFactory("OshiriWrappings");
@@ -36,14 +35,16 @@ describe.skip("Discover All Wrappings", function () {
 
       if (counter > totalWrappings) {
         await expect(
-          wrappings.connect(wrappingDiscoverer).createToken()
+          wrappings
+            .connect(wrappingDiscoverer)
+            .createTokenTestOnly(wrappingDiscoverer.address)
         ).to.be.revertedWith("All wrappings have been discovered");
       } else {
         const transaction = await wrappings
           .connect(wrappingDiscoverer)
-          .createToken();
+          .createTokenTestOnly(wrappingDiscoverer.address);
         const tx = await transaction.wait();
-        const event = tx.events[0];
+        const event = tx.events[1];
         const value = event.args[0];
         const readableWrapping = getSimplyfiedWrapping(value);
         console.log("The Generated Wrapping", readableWrapping);
@@ -53,7 +54,7 @@ describe.skip("Discover All Wrappings", function () {
   });
 });
 
-describe.skip("Return Available Wrappings", function () {
+describe("Return Available Wrappings", function () {
   it("Should return available wrappings", async function () {
     const Wrappings = await ethers.getContractFactory("OshiriWrappings");
     const copiesPerPair = 100;
@@ -71,9 +72,9 @@ describe.skip("Return Available Wrappings", function () {
       console.log("Current counter:", counter);
       const transaction = await wrappings
         .connect(wrappingDiscoverer)
-        .createToken();
+        .createTokenTestOnly(wrappingDiscoverer.address);
       const tx = await transaction.wait();
-      const event = tx.events[0];
+      const event = tx.events[1];
       const value = event.args[0];
       const readableWrapping = getSimplyfiedWrapping(value);
       console.log("The Generated Wrapping", readableWrapping);
@@ -95,7 +96,7 @@ describe.skip("Return Available Wrappings", function () {
 });
 
 //TODO: Test transaction with Royalties management
-describe.skip("Update Royalties", function () {
+describe("Update Royalties", function () {
   it("Should update Royalties from 10 to 3 percent", async function () {
     const Wrappings = await ethers.getContractFactory("OshiriWrappings");
     const copiesPerPair = 100;
@@ -112,7 +113,7 @@ describe.skip("Update Royalties", function () {
   });
 });
 
-describe.skip("Update Types", function () {
+describe("Update Types", function () {
   it("Should update the types and return more available wrappings", async function () {
     const Wrappings = await ethers.getContractFactory("OshiriWrappings");
     const copiesPerPair = 100;
