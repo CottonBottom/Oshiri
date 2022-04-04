@@ -11,20 +11,21 @@ import "./OshiriWrappings.sol";
 contract Oshiri is ReentrancyGuard {
     uint256 wrappingCost = 3;
 
+    uint256 maxColors = 100;
+    uint256 maxSizes = 100;
+    uint256 maxNameLength = 50;
+    uint256 maxTails = 5;
+    uint256 maxTailColors = 10;
+    uint256 maxAvailableConsent = 7;
+
     struct OshiriStats {
         uint256 color;
-        //1 to 100
         uint256 size;
-        //1 to 100
         string name;
         uint256 tail;
-        //0 to 5
         uint256 tailColor;
-        //0 to 10
         uint256 availableConsent;
-        //1 to 7
         uint256 lastDayAccessed;
-        //Wrapping Id
         uint256 wornWrapping;
     }
 
@@ -63,16 +64,26 @@ contract Oshiri is ReentrancyGuard {
 
     function validateOshiriStats(OshiriStats memory oshiriStats)
         private
-        pure
+        view
         returns (bool)
     {
         bytes memory oshiriName = bytes(oshiriStats.name);
         if (
-            oshiriStats.color == 0 ||
-            oshiriStats.size == 0 ||
+            //No zero and no more than max
+            oshiriStats.color <= 0 ||
+            oshiriStats.color > maxColors ||
+            oshiriStats.size <= 0 ||
+            oshiriStats.size > maxSizes ||
             oshiriName.length == 0 ||
-            (oshiriStats.tail > 0 && oshiriStats.tailColor == 0) ||
-            (oshiriStats.tail == 0 && oshiriStats.tailColor > 0)
+            oshiriName.length > maxNameLength ||
+            //No less than zero and no more than max
+            oshiriStats.tail < 0 ||
+            oshiriStats.tail > maxTails ||
+            oshiriStats.tailColor < 0 ||
+            oshiriStats.tailColor > maxTailColors ||
+            //If tail, require tailColor, if tailColor, require tail
+            (oshiriStats.tail > 0 && oshiriStats.tailColor <= 0) ||
+            (oshiriStats.tail <= 0 && oshiriStats.tailColor > 0)
         ) {
             return false;
         }
