@@ -26,10 +26,6 @@
   background-size: auto 150%;
 }
 
-input {
-  box-sizing: border-box;
-}
-
 .main-settings {
   display: flex;
   flex-direction: column;
@@ -51,10 +47,10 @@ input {
   background: $secondary-light;
   outline: none;
   margin-bottom: 12px;
-}
-.main-settings__name-input::placeholder {
-  color: $secondary;
-  opacity: 1;
+  &::placeholder {
+    color: $secondary;
+    opacity: 1;
+  }
 }
 
 .main-settings__stats {
@@ -66,43 +62,39 @@ input {
   border-radius: 5px;
 }
 
-.main-settings__color {
+.main-settings__size-slider-container {
   width: 100%;
-  height: 50px;
-  border-radius: 10px;
-  border: 2px solid black;
-  cursor: pointer;
-  margin-bottom: 8px;
-}
-
-.main-settings__tail {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-bottom: 16px;
 }
-
-.color-picker-component__cover {
-  height: 100vh;
-  width: 100vw;
-  position: fixed;
-  top: 0px;
-  left: 0px;
-}
-
-.color-picker-component {
+.main-settings__size-slider {
+  -webkit-appearance: none;
   width: 100%;
-  position: relative;
+  height: 5px;
+  border-radius: 5px;
+  background: $secondary-dark;
+  outline: none;
 
-  .react-colorful {
-    position: absolute;
-    width: 100%;
-    height: 100px;
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: solid 5px $secondary;
+    box-sizing: border-box;
+    background: $secondary-light;
+    cursor: pointer;
   }
-}
 
-.main-settings__size {
-  width: 100%;
-  margin-bottom: 16px;
+  &::-moz-range-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: solid 5px $secondary;
+    box-sizing: border-box;
+    background: $secondary-light;
+    cursor: pointer;
+  }
 }

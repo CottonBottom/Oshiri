@@ -3,13 +3,30 @@
   height: 30px;
   border: none;
   border-radius: 10px;
-  border: 1px solid $secondary;
+  border: 2px solid $secondary;
   box-shadow: $short-shadow;
   cursor: pointer;
+  &--selected {
+    box-shadow: none;
+    border-color: $primary;
+  }
+  &:disabled {
+    box-shadow: none;
+    opacity: 0.5;
+    cursor: default;
+  }
+  &:active:enabled {
+    transform: scale(0.95);
+    box-shadow: none;
+    border: 1px solid $primary;
+  }
 }
 
-.option-button:active {
-  transform: scale(0.95);
-  box-shadow: none;
-  border: 1px solid $primary;
+.option-buttons-container {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  width: 100%;
+  gap: 8px;
+  justify-items: center;
+  margin: 8px 0px;
 }
