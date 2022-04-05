@@ -1,0 +1,15 @@
+.option-button {
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 10px;
+  border: 1px solid $secondary;
+  box-shadow: $short-shadow;
+  cursor: pointer;
+}
+
+.option-button:active {
+  transform: scale(0.95);
+  box-shadow: none;
+  border: 1px solid $primary;
+}
