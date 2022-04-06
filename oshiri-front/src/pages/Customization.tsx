@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import spiral from "../assets/images/spiral.svg";
+import left from "../assets/oshiri/left.png";
+import right from "../assets/oshiri/right.png";
+import base from "../assets/oshiri/base.png";
 import OptionButton from "../components/OptionButton";
 
 type Props = {};
 
 const Customization: React.FC<Props> = (props: Props) => {
-  const [selectedSkin, setSelectedSkin] = useState<string>("#ffffff");
+  const [selectedSkin, setSelectedSkin] = useState<string>("salmon");
   const [selectedTail, setSelectedTail] = useState<string>("#ffffff");
   const [selectedTailColor, setSelectedTailColor] = useState<string>("#ffffff");
   const [selectedSize, setSelectedSize] = useState<string>("1");
+  const [oshiriSize, setOshiriSize] = useState<string>("0.98,0.98");
 
   const skinOptions = () => {
     const totalButtons = [
@@ -74,14 +78,52 @@ const Customization: React.FC<Props> = (props: Props) => {
     ));
   };
 
+  const updateOshiriSize = (size: string) => {
+    console.log("size", size);
+    setSelectedSize(size);
+  };
+
+  const makeOshiri = () => {
+    const oshiriParts = [
+      { url: base, name: "base" },
+      { url: right, name: "right" },
+      { url: left, name: "left" },
+    ];
+
+    return oshiriParts.map((part) => {
+      const size = part.name == "base" ? 1 : oshiriSize;
+      return (
+        <>
+          <img
+            className="oshiri"
+            src={part.url}
+            alt=""
+            style={{
+              transform: `scale(${size})`,
+            }}
+          />
+          <div
+            className={`oshiri-color oshiri-color--${part.name}`}
+            style={{
+              mask: `url(${part.url}) -25px -5px / 110% 110%`,
+              WebkitMask: `url(${part.url}) -25px -5px / 110% 110%`,
+              backgroundColor: selectedSkin,
+              transform: `scale(${size})`,
+            }}
+          />
+        </>
+      );
+    });
+  };
+
   return (
     <div className="main-background">
       <div className="main-container">
         <div
-          className="main-image"
+          className="oshiri-background"
           style={{ backgroundImage: `url(${spiral})` }}
         >
-          {/* <img className="main-image__background" src={spiral} alt="spiral" /> */}
+          {makeOshiri()}
         </div>
         <div className="main-settings">
           <input
@@ -100,7 +142,7 @@ const Customization: React.FC<Props> = (props: Props) => {
                 min="1"
                 max="10"
                 value={selectedSize}
-                onChange={(e) => setSelectedSize(e.target.value)}
+                onChange={(e) => updateOshiriSize(e.target.value)}
               ></input>
             </div>
             <h1>Tail</h1>
