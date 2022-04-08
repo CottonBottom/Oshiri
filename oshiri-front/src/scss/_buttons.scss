@@ -15,10 +15,12 @@
     opacity: 0.5;
     cursor: default;
   }
-  &:active:enabled {
-    transform: scale(0.95);
+  &:hover:enabled {
+    transform: scale(1.03);
+  }
+  &:hover:enabled:active {
+    transform: scale(0.97);
     box-shadow: none;
-    border: 1px solid $primary;
   }
 }
 
@@ -29,4 +31,40 @@
   gap: 8px;
   justify-items: center;
   margin: 8px 0px;
+}
+
+.button {
+  font-family: "Titan One";
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+  color: white;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  padding: 16px;
+  cursor: pointer;
+
+  &:disabled {
+    background: linear-gradient(180deg, $aux-light 0%, $aux 100%);
+    border: 1px solid $aux-dark;
+    cursor: default;
+    box-shadow: none;
+  }
+  &:hover:enabled {
+    transform: scale(1.03);
+  }
+  &:hover:enabled:active {
+    transform: scale(0.97);
+    box-shadow: none;
+  }
+}
+
+.button--primary {
+  background: $gradient-primary;
+  border: 1px solid $primary-dark;
+}
+
+.button--secondary {
+  background: $gradient-background;
+  border: 1px solid $background-dark;
 }

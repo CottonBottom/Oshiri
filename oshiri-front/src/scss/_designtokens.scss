@@ -1,12 +1,32 @@
 //Colors
-$gradient-auxiliar-light: linear-gradient(180deg, #ffffff 0%, #d2d6fd 100%);
-
 $secondary: #8fe6fa;
 $secondary-light: #e1f8fe;
 $secondary-dark: #73baca;
 
+$aux: #babffc;
+$aux-light: #d2d6fd;
 $aux-dark: #656788;
 
 $primary: #f683ff;
+$primary-light: #fbc8ff;
+$primary-dark: #944f9a;
 
+$background-light: #f8f1ff;
+$background: #bf83ff;
+$background-dark: #714d97;
+
+$background-scale-1: #ab75e5;
+$background-scale-2: #9164c2;
+$background-scale-3: #8057aa;
+
+//Gradients
+$gradient-aux-light: linear-gradient(180deg, white 0%, $aux-light 100%);
+$gradient-primary: linear-gradient(180deg, $primary-light 0%, $primary 100%);
+$gradient-background: linear-gradient(
+  180deg,
+  $background-scale-1 0%,
+  $background-scale-3 100%
+);
+
+//Shadows
 $short-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);

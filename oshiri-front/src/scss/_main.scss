@@ -1,7 +1,7 @@
 .main-background {
   width: 100%;
   height: 100vh;
-  background: $gradient-auxiliar-light;
+  background: $gradient-aux-light;
   overflow: auto;
 }
 
@@ -21,6 +21,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  margin-bottom: 12px;
 }
 
 .main-settings__name-input {

@@ -5,35 +5,20 @@ import left from "../assets/oshiri/left.png";
 import right from "../assets/oshiri/right.png";
 import base from "../assets/oshiri/base.png";
 import OptionButton from "../components/OptionButton";
+import { skinTones, tailTones } from "../utils/constants";
+import Button from "../components/Button";
 
 type Props = {};
 
 const Customization: React.FC<Props> = (props: Props) => {
-  const [selectedSkin, setSelectedSkin] = useState<string>("salmon");
+  const [selectedSkin, setSelectedSkin] = useState<string>(skinTones[1]);
   const [selectedTail, setSelectedTail] = useState<string>("#ffffff");
   const [selectedTailColor, setSelectedTailColor] = useState<string>("#ffffff");
   const [selectedSize, setSelectedSize] = useState<string>("1");
-  const [oshiriSize, setOshiriSize] = useState<string>("0.98,0.98");
+  const [oshiriSize, setOshiriSize] = useState<string>("0.95,0.95");
 
   const skinOptions = () => {
-    const totalButtons = [
-      "blue",
-      "red",
-      "green",
-      "white",
-      "salmon",
-      "lime",
-      "cyan",
-      "crimson",
-      "gray",
-      "aquamarine",
-      "azure",
-      "bisque",
-      "beige",
-      "blueviolet",
-      "brown",
-      "chartreuse",
-    ];
+    const totalButtons = skinTones;
 
     return totalButtons.map((button) => (
       <OptionButton
@@ -45,6 +30,7 @@ const Customization: React.FC<Props> = (props: Props) => {
   };
 
   const tailOptions = () => {
+    //TODO: thumbnails for tails
     const totalButtons = ["black", "red", "green", "white", "salmon"];
 
     return totalButtons.map((button) => (
@@ -57,17 +43,7 @@ const Customization: React.FC<Props> = (props: Props) => {
   };
 
   const tailColors = () => {
-    const totalButtons = [
-      "blue",
-      "red",
-      "green",
-      "white",
-      "salmon",
-      "lime",
-      "cyan",
-      "crimson",
-    ];
-
+    const totalButtons = tailTones;
     return totalButtons.map((button) => (
       <OptionButton
         color={button}
@@ -80,7 +56,12 @@ const Customization: React.FC<Props> = (props: Props) => {
 
   const updateOshiriSize = (size: string) => {
     console.log("size", size);
+    //Max 10-> 1.05,1.00
+    //Min 1-> 0.95,0.95
+    const scaledX = ((1.05 - 0.95) * (parseInt(size) - 1)) / (10 - 1) + 0.95;
+    const scaledY = ((1.0 - 0.95) * (parseInt(size) - 1)) / (10 - 1) + 0.95;
     setSelectedSize(size);
+    setOshiriSize(`${scaledX.toFixed(2)}, ${scaledY.toFixed(2)}`);
   };
 
   const makeOshiri = () => {
@@ -105,8 +86,9 @@ const Customization: React.FC<Props> = (props: Props) => {
           <div
             className={`oshiri-color oshiri-color--${part.name}`}
             style={{
-              mask: `url(${part.url}) -25px -5px / 110% 110%`,
-              WebkitMask: `url(${part.url}) -25px -5px / 110% 110%`,
+              mask: `url(${part.url}) 0px 0px / cover`,
+              WebkitMask: `url(${part.url}) 0px 0px / cover`,
+              maskRepeat: "repeat",
               backgroundColor: selectedSkin,
               transform: `scale(${size})`,
             }}
@@ -151,6 +133,14 @@ const Customization: React.FC<Props> = (props: Props) => {
             <div className="option-buttons-container">{tailColors()}</div>
           </div>
         </div>
+        <Button
+          type="primary"
+          onClick={() => {
+            console.log("Make Oshiri!");
+          }}
+        >
+          Make Oshiri!
+        </Button>
       </div>
     </div>
   );
