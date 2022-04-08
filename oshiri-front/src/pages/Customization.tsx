@@ -7,6 +7,7 @@ import base from "../assets/oshiri/base.png";
 import OptionButton from "../components/OptionButton";
 import { skinTones, tailTones } from "../utils/constants";
 import Button from "../components/Button";
+import SmallButton from "../components/SmallButton";
 
 type Props = {};
 
@@ -101,6 +102,30 @@ const Customization: React.FC<Props> = (props: Props) => {
   return (
     <div className="main-background">
       <div className="main-container">
+        <div className="main-top">
+          <SmallButton
+            onClick={() => {
+              console.log("English");
+            }}
+            isDisabled
+          >
+            EN
+          </SmallButton>
+          <SmallButton
+            onClick={() => {
+              console.log("Japanese");
+            }}
+          >
+            JP
+          </SmallButton>
+          <SmallButton
+            onClick={() => {
+              console.log("Spanish");
+            }}
+          >
+            ES
+          </SmallButton>
+        </div>
         <div
           className="oshiri-background"
           style={{ backgroundImage: `url(${spiral})` }}

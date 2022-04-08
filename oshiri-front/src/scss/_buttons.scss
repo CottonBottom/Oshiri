@@ -39,7 +39,7 @@
   font-size: 14px;
   line-height: 16px;
   color: white;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: $long-shadow;
   border-radius: 10px;
   padding: 16px;
   cursor: pointer;
@@ -67,4 +67,32 @@
 .button--secondary {
   background: $gradient-background;
   border: 1px solid $background-dark;
+}
+
+.small-button {
+  font-family: "Titan One";
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14px;
+  color: white;
+  box-shadow: $short-shadow;
+  border-radius: 10px;
+  padding: 6px;
+  background: $gradient-secondary;
+  border: 1px solid $secondary-dark;
+  cursor: pointer;
+
+  &:disabled {
+    background: linear-gradient(180deg, $aux-light 0%, $aux 100%);
+    border: 1px solid $aux-dark;
+    cursor: default;
+    box-shadow: none;
+  }
+  &:hover:enabled {
+    transform: scale(1.03);
+  }
+  &:hover:enabled:active {
+    transform: scale(0.97);
+    box-shadow: none;
+  }
 }
