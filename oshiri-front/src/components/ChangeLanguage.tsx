@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 type Props = {};
 
-const ChangeLanguage: React.FC<Props> = ({}: Props) => {
+const ChangeLanguage: React.FC<Props> = (Props) => {
   const { i18n } = useTranslation();
   return (
     <div className="change-language">

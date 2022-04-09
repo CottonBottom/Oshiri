@@ -1,19 +1,16 @@
 import React, { useState } from "react";
-import { HexColorPicker } from "react-colorful";
-import spiral from "../assets/images/spiral.svg";
-import left from "../assets/oshiri/left.png";
-import right from "../assets/oshiri/right.png";
-import base from "../assets/oshiri/base.png";
+//import { HexColorPicker } from "react-colorful";
 import OptionButton from "../components/OptionButton";
 import { skinTones, tailTones } from "../utils/constants";
 import Button from "../components/Button";
 import { useTranslation } from "react-i18next";
 import ChangeLanguage from "../components/ChangeLanguage";
+import Oshiri from "../components/Oshiri";
 
 type Props = {};
 
 const Customization: React.FC<Props> = (props: Props) => {
-  const [selectedSkin, setSelectedSkin] = useState<string>(skinTones[1]);
+  const [oshiriSkin, setOshiriSkin] = useState<string>(skinTones[1]);
   const [selectedTail, setSelectedTail] = useState<string>("#ffffff");
   const [selectedTailColor, setSelectedTailColor] = useState<string>("#ffffff");
   const [selectedSize, setSelectedSize] = useState<string>("1");
@@ -27,8 +24,8 @@ const Customization: React.FC<Props> = (props: Props) => {
     return totalButtons.map((button) => (
       <OptionButton
         color={button}
-        isSelected={button === selectedSkin}
-        onClick={() => setSelectedSkin(button)}
+        isSelected={button === oshiriSkin}
+        onClick={() => setOshiriSkin(button)}
       ></OptionButton>
     ));
   };
@@ -68,50 +65,11 @@ const Customization: React.FC<Props> = (props: Props) => {
     setOshiriSize(`${scaledX.toFixed(2)}, ${scaledY.toFixed(2)}`);
   };
 
-  const makeOshiri = () => {
-    const oshiriParts = [
-      { url: base, name: "base" },
-      { url: right, name: "right" },
-      { url: left, name: "left" },
-    ];
-
-    return oshiriParts.map((part) => {
-      const size = part.name == "base" ? 1 : oshiriSize;
-      return (
-        <>
-          <img
-            className="oshiri"
-            src={part.url}
-            alt=""
-            style={{
-              transform: `scale(${size})`,
-            }}
-          />
-          <div
-            className={`oshiri-color oshiri-color--${part.name}`}
-            style={{
-              mask: `url(${part.url}) 0px 0px / cover`,
-              WebkitMask: `url(${part.url}) 0px 0px / cover`,
-              maskRepeat: "repeat",
-              backgroundColor: selectedSkin,
-              transform: `scale(${size})`,
-            }}
-          />
-        </>
-      );
-    });
-  };
-
   return (
     <div className="main-background">
       <div className="main-container">
         <ChangeLanguage />
-        <div
-          className="oshiri-background"
-          style={{ backgroundImage: `url(${spiral})` }}
-        >
-          {makeOshiri()}
-        </div>
+        <Oshiri oshiriSize={oshiriSize} oshiriSkin={oshiriSkin}></Oshiri>
         <div className="main-settings">
           <input
             className="main-settings__name-input"
