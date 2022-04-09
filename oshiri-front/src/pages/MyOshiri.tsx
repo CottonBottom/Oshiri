@@ -30,10 +30,7 @@ const MyOshiri: React.FC<Props> = (props: Props) => {
           <div className="main-display__name">{oshiriName}</div>
           <div className="main-display__wrapping">{wrappingName}</div>
           <div className="main-display__options">
-            <IconButton
-              icon="change_circle"
-              onClick={() => console.log("Clicked")}
-            >
+            <IconButton icon="inventory" onClick={() => console.log("Clicked")}>
               Drawer
             </IconButton>
             <IconButton
@@ -42,10 +39,7 @@ const MyOshiri: React.FC<Props> = (props: Props) => {
             >
               Change
             </IconButton>
-            <IconButton
-              icon="change_circle"
-              onClick={() => console.log("Clicked")}
-            >
+            <IconButton icon="help" onClick={() => console.log("Clicked")}>
               Tutorial
             </IconButton>
           </div>
