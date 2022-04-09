@@ -3,6 +3,21 @@
   color: $aux-dark;
   caret-color: $primary;
   box-sizing: border-box;
+  button {
+    font-family: "Titan One", sans-serif;
+  }
+}
+
+.japanese-fonts {
+  * {
+    font-family: "Kosugi Maru", sans-serif;
+  }
+  .small-button {
+    font-family: "Titan One", sans-serif;
+  }
+  button {
+    font-family: "Mochiy Pop One", sans-serif;
+  }
 }
 
 h1 {
