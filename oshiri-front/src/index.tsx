@@ -4,6 +4,7 @@ import "./scss/index.scss";
 import reportWebVitals from "./reportWebVitals";
 //import Sandbox from "./sandbox/Sandbox";
 import Customization from "./pages/Customization";
+import "./i18n";
 
 ReactDOM.render(
   <React.StrictMode>

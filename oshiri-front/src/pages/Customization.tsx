@@ -8,6 +8,7 @@ import OptionButton from "../components/OptionButton";
 import { skinTones, tailTones } from "../utils/constants";
 import Button from "../components/Button";
 import SmallButton from "../components/SmallButton";
+import { useTranslation, Trans } from "react-i18next";
 
 type Props = {};
 
@@ -17,6 +18,8 @@ const Customization: React.FC<Props> = (props: Props) => {
   const [selectedTailColor, setSelectedTailColor] = useState<string>("#ffffff");
   const [selectedSize, setSelectedSize] = useState<string>("1");
   const [oshiriSize, setOshiriSize] = useState<string>("0.95,0.95");
+
+  const { t, i18n } = useTranslation();
 
   const skinOptions = () => {
     const totalButtons = skinTones;
@@ -104,24 +107,20 @@ const Customization: React.FC<Props> = (props: Props) => {
       <div className="main-container">
         <div className="main-top">
           <SmallButton
-            onClick={() => {
-              console.log("English");
-            }}
-            isDisabled
+            onClick={() => i18n.changeLanguage("en")}
+            isDisabled={i18n.resolvedLanguage === "en"}
           >
             EN
           </SmallButton>
           <SmallButton
-            onClick={() => {
-              console.log("Japanese");
-            }}
+            onClick={() => i18n.changeLanguage("jp")}
+            isDisabled={i18n.resolvedLanguage === "jp"}
           >
             JP
           </SmallButton>
           <SmallButton
-            onClick={() => {
-              console.log("Spanish");
-            }}
+            onClick={() => i18n.changeLanguage("es")}
+            isDisabled={i18n.resolvedLanguage === "es"}
           >
             ES
           </SmallButton>
@@ -136,12 +135,12 @@ const Customization: React.FC<Props> = (props: Props) => {
           <input
             className="main-settings__name-input"
             maxLength={50}
-            placeholder="Name"
+            placeholder={t("name")}
           ></input>
           <div className="main-settings__stats">
-            <h1>Skin Tone</h1>
+            <h1>{t("skinTone")}</h1>
             <div className="option-buttons-container">{skinOptions()}</div>
-            <h1>Size</h1>
+            <h1>{t("size")}</h1>
             <div className="main-settings__size-slider-container">
               <input
                 className="main-settings__size-slider"
@@ -152,9 +151,9 @@ const Customization: React.FC<Props> = (props: Props) => {
                 onChange={(e) => updateOshiriSize(e.target.value)}
               ></input>
             </div>
-            <h1>Tail</h1>
+            <h1>{t("tail")}</h1>
             <div className="option-buttons-container">{tailOptions()}</div>
-            <h1>Tail Color</h1>
+            <h1>{t("tailColor")}</h1>
             <div className="option-buttons-container">{tailColors()}</div>
           </div>
         </div>
@@ -164,7 +163,7 @@ const Customization: React.FC<Props> = (props: Props) => {
             console.log("Make Oshiri!");
           }}
         >
-          Make Oshiri!
+          {t("makeOshiri")}
         </Button>
       </div>
     </div>
