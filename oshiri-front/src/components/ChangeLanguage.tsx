@@ -1,5 +1,5 @@
 import React from "react";
-import SmallButton from "./SmallButton";
+import SmallButton from "./buttons/SmallButton";
 
 import { useTranslation } from "react-i18next";
 

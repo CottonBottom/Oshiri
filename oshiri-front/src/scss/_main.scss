@@ -15,6 +15,7 @@
   padding: 12px 24px 24px 24px;
 }
 
+/** Customization */
 .main-settings {
   display: flex;
   flex-direction: column;
@@ -87,4 +88,83 @@
     background: $secondary-light;
     cursor: pointer;
   }
+}
+/** */
+
+/** MyOshiri */
+.main-display {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.main-display__name {
+  font-style: italic;
+  font-weight: 900;
+  font-size: 36px;
+  line-height: 49px;
+}
+
+.main-display__wrapping {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 22px;
+  color: $background-scale-1;
+}
+
+.main-display__options {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin: 16px 0px 0px 0px;
+}
+
+.main-actions-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  background: $aux;
+  bottom: 0;
+}
+.main-actions-container {
+  display: flex;
+  width: 100%;
+  max-width: 500px;
+  justify-content: space-between;
+  padding: 16px 24px;
+}
+
+.main-actions__set {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main-actions__value-container {
+  margin-top: 16px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.main-actions__value {
+  background: $aux-light;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 25px;
+  padding: 4px;
+  border-radius: 5px;
+}
+
+.main-actions__currency {
+  font-style: italic;
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 33px;
+  color: white;
 }

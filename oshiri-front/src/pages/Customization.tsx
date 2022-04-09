@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 //import { HexColorPicker } from "react-colorful";
-import OptionButton from "../components/OptionButton";
+import OptionButton from "../components/buttons/OptionButton";
 import { skinTones, tailTones } from "../utils/constants";
-import Button from "../components/Button";
+import Button from "../components/buttons/Button";
 import { useTranslation } from "react-i18next";
 import ChangeLanguage from "../components/ChangeLanguage";
 import Oshiri from "../components/Oshiri";

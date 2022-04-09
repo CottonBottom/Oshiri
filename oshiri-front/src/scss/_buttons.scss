@@ -105,3 +105,39 @@
     margin-right: 4px;
   }
 }
+
+.icon-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: $gradient-background;
+  border: 1px solid $background-dark;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 95%;
+  color: white;
+  box-shadow: $long-shadow;
+  border-radius: 10px;
+  padding: 8px;
+  cursor: pointer;
+
+  .material-icons {
+    color: white;
+    font-size: 24px;
+    margin-bottom: 4px;
+  }
+
+  &:disabled {
+    background: linear-gradient(180deg, $aux-light 0%, $aux 100%);
+    border: 1px solid $aux-dark;
+    cursor: default;
+    box-shadow: none;
+  }
+  &:hover:enabled {
+    transform: scale(1.03);
+  }
+  &:hover:enabled:active {
+    transform: scale(0.97);
+    box-shadow: none;
+  }
+}
