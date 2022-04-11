@@ -3,6 +3,7 @@ import spiral from "../assets/images/spiral.svg";
 import left from "../assets/oshiri/left.png";
 import right from "../assets/oshiri/right.png";
 import base from "../assets/oshiri/base.png";
+import Wrapping from "./Wrapping";
 
 type Props = {
   oshiriSize: string;
@@ -34,7 +35,6 @@ const Oshiri = ({ oshiriSize, oshiriSkin }: Props) => {
             style={{
               mask: `url(${part.url}) 0px 0px / cover`,
               WebkitMask: `url(${part.url}) 0px 0px / cover`,
-              maskRepeat: "repeat",
               backgroundColor: oshiriSkin,
               transform: `scale(${size})`,
             }}
@@ -49,6 +49,7 @@ const Oshiri = ({ oshiriSize, oshiriSkin }: Props) => {
       style={{ backgroundImage: `url(${spiral})` }}
     >
       {makeOshiri()}
+      <Wrapping></Wrapping>
     </div>
   );
 };
