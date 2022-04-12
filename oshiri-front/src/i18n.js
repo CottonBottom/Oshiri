@@ -19,12 +19,21 @@ i18n
     resources: {
       en: {
         translation: {
+          //Customization
           name: "Name",
           skinTone: "Skin Tone",
           size: "Skin Tone",
           tail: "Tail",
           tailColor: "Skin Tone",
           makeOshiri: "Make Oshiri!",
+          //MyOshiri
+          drawer: "Drawer",
+          change: "Change",
+          tutorial: "Tutorial",
+          getWrappings: "Get Wrappings",
+          sendConsent: "Send Consent",
+          OSH: "OSH",
+          Consent: "Consent",
         },
       },
       jp: {

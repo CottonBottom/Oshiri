@@ -7,11 +7,12 @@ import { useTranslation } from "react-i18next";
 import ChangeLanguage from "../components/ChangeLanguage";
 import Oshiri from "../components/Oshiri";
 import IconButton from "../components/buttons/IconButton";
+import { oshiriSizeDigitToScale } from "../utils/conversions";
 
 type Props = {};
 
 const MyOshiri: React.FC<Props> = (props: Props) => {
-  const oshiriSize = "0.95,0.95";
+  const oshiriSize = oshiriSizeDigitToScale(5);
   const oshiriSkin = skinTones[1];
   const oshiriName = "MyOshiri";
   const wrappingName = "Description of current worn Wrapping";
@@ -31,16 +32,16 @@ const MyOshiri: React.FC<Props> = (props: Props) => {
           <div className="main-display__wrapping">{wrappingName}</div>
           <div className="main-display__options">
             <IconButton icon="inventory" onClick={() => console.log("Clicked")}>
-              Drawer
+              {t("drawer")}
             </IconButton>
             <IconButton
               icon="change_circle"
               onClick={() => console.log("Clicked")}
             >
-              Change
+              {t("change")}
             </IconButton>
             <IconButton icon="help" onClick={() => console.log("Clicked")}>
-              Tutorial
+              {t("tutorial")}
             </IconButton>
           </div>
         </div>
@@ -54,12 +55,11 @@ const MyOshiri: React.FC<Props> = (props: Props) => {
                 console.log("Get Wrappings");
               }}
             >
-              {/* {t("makeOshiri")} */}
-              Get Wrappings
+              {t("getWrappings")}
             </Button>
             <div className="main-actions__value-container">
               <div className="main-actions__value">{totalOSH}</div>
-              <div className="main-actions__currency">OSH</div>
+              <div className="main-actions__currency">{t("OSH")}</div>
             </div>
           </div>
           <div className="main-actions__set">
@@ -69,12 +69,11 @@ const MyOshiri: React.FC<Props> = (props: Props) => {
                 console.log("Get Wrappings");
               }}
             >
-              {/* {t("makeOshiri")} */}
-              Send Consent
+              {t("Send Consent")}
             </Button>
             <div className="main-actions__value-container">
               <div className="main-actions__value">{totalConsent}</div>
-              <div className="main-actions__currency">Consent</div>
+              <div className="main-actions__currency">{t("Consent")}</div>
             </div>
           </div>
         </div>

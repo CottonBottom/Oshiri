@@ -6,6 +6,7 @@ import Button from "../components/buttons/Button";
 import { useTranslation } from "react-i18next";
 import ChangeLanguage from "../components/ChangeLanguage";
 import Oshiri from "../components/Oshiri";
+import { oshiriSizeDigitToScale } from "../utils/conversions";
 
 type Props = {};
 
@@ -14,7 +15,7 @@ const Customization: React.FC<Props> = (props: Props) => {
   const [selectedTail, setSelectedTail] = useState<string>("#ffffff");
   const [selectedTailColor, setSelectedTailColor] = useState<string>("#ffffff");
   const [selectedSize, setSelectedSize] = useState<string>("1");
-  const [oshiriSize, setOshiriSize] = useState<string>("0.95,0.95");
+  const [oshiriSize, setOshiriSize] = useState<string>("0.95,1.0");
 
   const { t } = useTranslation();
 
@@ -57,12 +58,7 @@ const Customization: React.FC<Props> = (props: Props) => {
 
   const updateOshiriSize = (size: string) => {
     console.log("size", size);
-    //Max 10-> 1.05,1.00
-    //Min 1-> 0.95,0.95
-    const scaledX = ((1.05 - 0.95) * (parseInt(size) - 1)) / (10 - 1) + 0.95;
-    const scaledY = ((1.0 - 0.95) * (parseInt(size) - 1)) / (10 - 1) + 0.95;
-    setSelectedSize(size);
-    setOshiriSize(`${scaledX.toFixed(2)}, ${scaledY.toFixed(2)}`);
+    setOshiriSize(oshiriSizeDigitToScale(parseInt(size)));
   };
 
   return (

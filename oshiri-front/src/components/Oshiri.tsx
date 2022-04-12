@@ -19,7 +19,7 @@ const Oshiri = ({ oshiriSize, oshiriSkin }: Props) => {
     ];
 
     return oshiriParts.map((part) => {
-      const size = part.name === "base" ? 1 : oshiriSize;
+      const size = oshiriSize;
       return (
         <>
           <img
@@ -49,7 +49,7 @@ const Oshiri = ({ oshiriSize, oshiriSkin }: Props) => {
       style={{ backgroundImage: `url(${spiral})` }}
     >
       {makeOshiri()}
-      <Wrapping></Wrapping>
+      <Wrapping oshiriSize={oshiriSize}></Wrapping>
     </div>
   );
 };
