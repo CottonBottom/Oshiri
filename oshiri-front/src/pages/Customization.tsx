@@ -68,7 +68,7 @@ const Customization: React.FC<Props> = (props: Props) => {
         <Oshiri oshiriSize={oshiriSize} oshiriSkin={oshiriSkin}></Oshiri>
         <div className="main-settings">
           <input
-            className="main-settings__name-input"
+            className="text-input"
             maxLength={50}
             placeholder={t("name")}
           ></input>

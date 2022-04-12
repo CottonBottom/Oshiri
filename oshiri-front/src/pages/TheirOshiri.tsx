@@ -14,7 +14,7 @@ type Props = {};
 const TheirOshiri: React.FC<Props> = (props: Props) => {
   const oshiriSize = oshiriSizeDigitToScale(5);
   const oshiriSkin = skinTones[1];
-  const oshiriName = "MyOshiri";
+  const oshiriName = "TheirOshiri";
   const wrappingName = "Description of current worn Wrapping";
 
   const totalOSH = "9999";

@@ -1,0 +1,83 @@
+.modal {
+  padding: 48px 24px 32px 24px;
+  min-width: 320px;
+  width: 100%;
+  max-width: 500px;
+  min-height: 250px;
+  max-height: 500px;
+  box-shadow: $long-shadow;
+  border-radius: 10px;
+  background: $gradient-secondary-light;
+  border: 1px solid $secondary;
+  position: relative;
+}
+.modal-title {
+  margin-bottom: 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-contents {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  padding: 0px;
+  border: none;
+  background: none;
+  .material-icons {
+    font-size: 32px;
+    color: $secondary;
+  }
+}
+
+.modal ::-webkit-scrollbar {
+  width: 4px;
+}
+.modal ::-webkit-scrollbar-thumb {
+  border-radius: 100px;
+  background: #e0e0e0;
+}
+.modal ::-webkit-scrollbar-track {
+  background: none;
+}
+.modal-container {
+  z-index: 100;
+  width: 100%;
+  top: 0px;
+  position: fixed;
+  padding: 32px 24px;
+  left: 0px;
+  justify-content: center;
+  height: 100vh;
+  display: flex;
+  background: $overlay;
+  align-items: center;
+}
+.modal-container--fade-in {
+  animation: fadeIn 200ms ease-in;
+}
+.modal-container--fade-out {
+  animation: fadeOut 200ms ease-out forwards;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes fadeOut {
+  100% {
+    opacity: 0;
+  }
+}

@@ -9,8 +9,8 @@ const AppContainer = () => {
   return (
     <div className={i18n.language === "jp" ? "japanese-fonts" : ""}>
       {/* <Customization /> */}
-      {/* <MyOshiri /> */}
-      <TheirOshiri />
+      <MyOshiri />
+      {/* <TheirOshiri /> */}
     </div>
   );
 };
