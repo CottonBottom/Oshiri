@@ -34,6 +34,8 @@ i18n
           sendConsent: "Send Consent",
           OSH: "OSH",
           Consent: "Consent",
+          //TheirOshiri
+          spendConsent: "Spend Consent",
         },
       },
       jp: {

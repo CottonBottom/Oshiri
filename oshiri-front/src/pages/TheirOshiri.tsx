@@ -11,7 +11,7 @@ import { oshiriSizeDigitToScale } from "../utils/conversions";
 
 type Props = {};
 
-const MyOshiri: React.FC<Props> = (props: Props) => {
+const TheirOshiri: React.FC<Props> = (props: Props) => {
   const oshiriSize = oshiriSizeDigitToScale(5);
   const oshiriSkin = skinTones[1];
   const oshiriName = "MyOshiri";
@@ -30,16 +30,7 @@ const MyOshiri: React.FC<Props> = (props: Props) => {
         <div className="main-display">
           <div className="main-display__name">{oshiriName}</div>
           <div className="main-display__wrapping">{wrappingName}</div>
-          <div className="main-display__options">
-            <IconButton icon="inventory" onClick={() => console.log("Clicked")}>
-              {t("drawer")}
-            </IconButton>
-            <IconButton
-              icon="change_circle"
-              onClick={() => console.log("Clicked")}
-            >
-              {t("change")}
-            </IconButton>
+          <div className="main-display__options main-display__options--their-oshiri">
             <IconButton icon="help" onClick={() => console.log("Clicked")}>
               {t("tutorial")}
             </IconButton>
@@ -47,7 +38,7 @@ const MyOshiri: React.FC<Props> = (props: Props) => {
         </div>
       </div>
       <div className="main-actions-area">
-        <div className="main-actions-container">
+        <div className="main-actions-container main-actions-container--their-oshiri">
           <div className="main-actions__set">
             <Button
               type="primary"
@@ -55,21 +46,7 @@ const MyOshiri: React.FC<Props> = (props: Props) => {
                 console.log("Get Wrappings");
               }}
             >
-              {t("getWrappings")}
-            </Button>
-            <div className="main-actions__value-container">
-              <div className="main-actions__value">{totalOSH}</div>
-              <div className="main-actions__currency">{t("OSH")}</div>
-            </div>
-          </div>
-          <div className="main-actions__set">
-            <Button
-              type="primary"
-              onClick={() => {
-                console.log("Get Wrappings");
-              }}
-            >
-              {t("sendConsent")}
+              {t("spendConsent")}
             </Button>
             <div className="main-actions__value-container">
               <div className="main-actions__value">{totalConsent}</div>
@@ -82,4 +59,4 @@ const MyOshiri: React.FC<Props> = (props: Props) => {
   );
 };
 
-export default MyOshiri;
+export default TheirOshiri;

@@ -121,6 +121,10 @@
   margin: 16px 0px 0px 0px;
 }
 
+.main-display__options--their-oshiri {
+  justify-content: flex-end;
+}
+
 .main-actions-area {
   display: flex;
   align-items: center;
@@ -130,12 +134,18 @@
   background: $aux;
   bottom: 0;
 }
+
 .main-actions-container {
   display: flex;
   width: 100%;
   max-width: 500px;
   justify-content: space-between;
+  align-items: center;
   padding: 16px 24px;
+}
+
+.main-actions-container--their-oshiri {
+  justify-content: center;
 }
 
 .main-actions__set {
