@@ -37,7 +37,7 @@ const Modal: React.FC<Props> = ({ setIsOpen, isOpen, children }: Props) => {
             <button className="modal__close" onClick={() => setIsOpen(false)}>
               <span className="material-icons">cancel</span>
             </button>
-            <div className="modal-contents">{children}</div>
+            <div className="modal__contents">{children}</div>
           </div>
         </div>
       )}

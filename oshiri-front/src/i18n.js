@@ -34,6 +34,13 @@ i18n
           sendConsent: "Send Consent",
           OSH: "OSH",
           Consent: "Consent",
+          inputAddress: "Input the address you want to send consent",
+          sendConsentList1:
+            "1 of your consent will be sent to the account above",
+          sendConsentList2:
+            "Please be sure the account has a Oshiri registered and has a Wrapping NFT",
+          sendConsentList3:
+            "The recipient account will be able to smack your Oshiri and you both will receive OSH",
           //TheirOshiri
           spendConsent: "Spend Consent",
         },

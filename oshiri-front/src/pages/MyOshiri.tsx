@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 //import { HexColorPicker } from "react-colorful";
-import OptionButton from "../components/buttons/OptionButton";
 import { skinTones } from "../utils/constants";
 import Button from "../components/buttons/Button";
 import { useTranslation } from "react-i18next";
@@ -14,6 +13,7 @@ type Props = {};
 
 const MyOshiri: React.FC<Props> = (props: Props) => {
   const [sendConsentModal, setSendConsentModal] = useState<boolean>(false);
+  const [walletToSendConsent, setWalletToSendConsent] = useState<string>("");
 
   const oshiriSize = oshiriSizeDigitToScale(5);
   const oshiriSkin = skinTones[1];
@@ -28,24 +28,30 @@ const MyOshiri: React.FC<Props> = (props: Props) => {
   return (
     <>
       <Modal isOpen={sendConsentModal} setIsOpen={setSendConsentModal}>
-        <div className="modal-title">
-          <h1>Input</h1>
+        <div className="title">
+          <h1>{t("inputAddress")}</h1>
         </div>
         <input
-          className="text-input"
-          maxLength={50}
-          placeholder={"x0000000000000"}
+          className="text-input text-input--small"
+          maxLength={42}
+          placeholder={"0x0000000000000000000000000000000000000000"}
           type="text"
+          value={walletToSendConsent}
+          onChange={(e) => {
+            setWalletToSendConsent(e.target.value);
+          }}
         />
-        <ul>
-          <li>one</li>
-          <li>two</li>
-          <li>three</li>
-        </ul>
+        <div className="list">
+          <ul>
+            <li>{t("sendConsentList1")}</li>
+            <li>{t("sendConsentList2")}</li>
+            <li>{t("sendConsentList3")}</li>
+          </ul>
+        </div>
         <Button
           type="primary"
-          onClick={() => console.log("Send Consent")}
-          isDisabled
+          onClick={() => setSendConsentModal(false)}
+          isDisabled={walletToSendConsent.length !== 42}
         >
           Send Consent
         </Button>

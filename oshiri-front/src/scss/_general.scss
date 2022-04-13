@@ -48,3 +48,29 @@ h1 {
     opacity: 1;
   }
 }
+
+.text-input--small {
+  font-size: 20px;
+  line-height: 27px;
+}
+
+.title {
+  margin-bottom: 20px;
+  width: 100%;
+  display: flex;
+  h1 {
+    text-align: center;
+    color: $background-scale-3;
+  }
+}
+
+.list {
+  margin-bottom: 32px;
+  width: 100%;
+  ul {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 25px;
+    margin-left: 20px;
+  }
+}
