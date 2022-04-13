@@ -5,6 +5,10 @@
   overflow: auto;
 }
 
+.main-background--only-text {
+  background: $aux-dark;
+}
+
 .main-container {
   margin: auto;
   display: flex;
@@ -16,6 +20,7 @@
 }
 
 /** Entrance */
+.main-container--only-text,
 .main-container--entrance {
   height: 100%;
 }
@@ -32,6 +37,20 @@
   width: 100%;
   img {
     width: 100%;
+  }
+  margin-bottom: 24px;
+}
+
+/** Only Text **/
+.only-text {
+  margin-bottom: 24px;
+  text-align: center;
+  p {
+    font-style: italic;
+    font-weight: 800;
+    font-size: 18px;
+    line-height: 25px;
+    color: white;
   }
 }
 

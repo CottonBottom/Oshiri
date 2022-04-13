@@ -19,6 +19,16 @@ i18n
     resources: {
       en: {
         translation: {
+          //Entrance
+          enter: "Enter",
+          enterTitle: "You must be over 18 years old to enter this page",
+          enterList1: "Explicit Message 1",
+          enterList2: "Explicit Message 2",
+          enterList3: "Explicit Message 3",
+          //Only Text
+          messageStory:
+            "Oshiri Story Introduction Oshiri Story Introduction Oshiri Story Introduction...",
+          next: "Next",
           //Customization
           name: "Name",
           skinTone: "Skin Tone",

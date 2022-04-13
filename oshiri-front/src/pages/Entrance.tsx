@@ -19,17 +19,17 @@ const Entrance: React.FC<Props> = (props: Props) => {
               <img src={logo} alt="oshiri-logo" />
             </div>
             <div className="title">
-              <h1>{t("inputAddress")}</h1>
+              <h1>{t("enterTitle")}</h1>
             </div>
             <div className="list">
               <ul>
-                <li>{t("sendConsentList1")}</li>
-                <li>{t("sendConsentList2")}</li>
-                <li>{t("sendConsentList3")}</li>
+                <li>{t("enterList1")}</li>
+                <li>{t("enterList2")}</li>
+                <li>{t("enterList3")}</li>
               </ul>
             </div>
-            <Button type="primary" onClick={() => console.log("COntinue")}>
-              Send Consent
+            <Button type="secondary" onClick={() => console.log("COntinue")}>
+              {t("enter")}
             </Button>
           </div>
         </div>

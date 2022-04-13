@@ -8,6 +8,7 @@ import Oshiri from "../components/Oshiri";
 import IconButton from "../components/buttons/IconButton";
 import { oshiriSizeDigitToScale } from "../utils/conversions";
 import Modal from "../components/Modal";
+import SendConsent from "./modals/SendConsent";
 
 type Props = {};
 
@@ -27,35 +28,14 @@ const MyOshiri: React.FC<Props> = (props: Props) => {
 
   return (
     <>
-      <Modal isOpen={sendConsentModal} setIsOpen={setSendConsentModal}>
-        <div className="title">
-          <h1>{t("inputAddress")}</h1>
-        </div>
-        <input
-          className="text-input text-input--small"
-          maxLength={42}
-          placeholder={"0x0000000000000000000000000000000000000000"}
-          type="text"
-          value={walletToSendConsent}
-          onChange={(e) => {
-            setWalletToSendConsent(e.target.value);
-          }}
-        />
-        <div className="list">
-          <ul>
-            <li>{t("sendConsentList1")}</li>
-            <li>{t("sendConsentList2")}</li>
-            <li>{t("sendConsentList3")}</li>
-          </ul>
-        </div>
-        <Button
-          type="primary"
-          onClick={() => setSendConsentModal(false)}
-          isDisabled={walletToSendConsent.length !== 42}
-        >
-          Send Consent
-        </Button>
-      </Modal>
+      <SendConsent
+        sendConsentModal={sendConsentModal}
+        setSendConsentModal={setSendConsentModal}
+        walletToSendConsent={walletToSendConsent}
+        setWalletToSendConsent={setWalletToSendConsent}
+        onSendConsent={() => setSendConsentModal(false)}
+      />
+      {/* TODO: Modals */}
       <div className="main-background">
         <div className="main-container">
           <ChangeLanguage />
