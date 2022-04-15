@@ -23,7 +23,7 @@ const SendConsent: React.FC<Props> = ({
   return (
     <Modal isOpen={sendConsentModal} setIsOpen={setSendConsentModal}>
       <div className="title">
-        <h1>{t("inputAddress")}</h1>
+        <h1>{t("sendConsentTitle")}</h1>
       </div>
       <input
         className="text-input text-input--small"
@@ -42,13 +42,15 @@ const SendConsent: React.FC<Props> = ({
           <li>{t("sendConsentList3")}</li>
         </ul>
       </div>
-      <Button
-        type="primary"
-        onClick={onSendConsent}
-        isDisabled={walletToSendConsent.length !== 42}
-      >
-        Send Consent
-      </Button>
+      <div className="modal-button-area">
+        <Button
+          type="secondary"
+          onClick={onSendConsent}
+          isDisabled={walletToSendConsent.length !== 42}
+        >
+          Send Consent
+        </Button>
+      </div>
     </Modal>
   );
 };

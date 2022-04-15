@@ -19,12 +19,15 @@ i18n
     resources: {
       en: {
         translation: {
+          //Shared
+          confirm: "Confirm",
           //Entrance
           enter: "Enter",
           enterTitle: "You must be over 18 years old to enter this page",
           enterList1: "Explicit Message 1",
           enterList2: "Explicit Message 2",
           enterList3: "Explicit Message 3",
+          connectWalletTitle: "You need to connect your wallet to continue",
           //Only Text
           messageStory:
             "Oshiri Story Introduction Oshiri Story Introduction Oshiri Story Introduction...",
@@ -44,13 +47,22 @@ i18n
           sendConsent: "Send Consent",
           OSH: "OSH",
           Consent: "Consent",
-          inputAddress: "Input the address you want to send consent",
+          sendConsentTitle: "Input the address you want to send consent",
           sendConsentList1:
             "1 of your consent will be sent to the account above",
           sendConsentList2:
             "Please be sure the account has a Oshiri registered and has a Wrapping NFT",
           sendConsentList3:
             "The recipient account will be able to smack your Oshiri and you both will receive OSH",
+          consentSentTitle: "You have sent consent!",
+          consentSentList1:
+            "The address {{address}} now have consent to Smack your Oshiri.",
+          newDayTitle: "It’s a new day!",
+          newDayList1:
+            "You have recieved Consent, go ahead and share it with someone...",
+          gotWrappingTitle: "You got a new Wrapping!",
+          gotWrappingList1: " has been transfered to your wallet",
+          gotWrappingList2: "You can change your Wrapping on Drawer",
           //TheirOshiri
           spendConsent: "Spend Consent",
         },

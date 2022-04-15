@@ -7,13 +7,18 @@ import ChangeLanguage from "../components/ChangeLanguage";
 import Oshiri from "../components/Oshiri";
 import IconButton from "../components/buttons/IconButton";
 import { oshiriSizeDigitToScale } from "../utils/conversions";
-import Modal from "../components/Modal";
 import SendConsent from "./modals/SendConsent";
+import NewDay from "./modals/NewDay";
+import GotWrapping from "./modals/GotWrapping";
+import ConsentSent from "./modals/ConsentSent";
 
 type Props = {};
 
 const MyOshiri: React.FC<Props> = (props: Props) => {
   const [sendConsentModal, setSendConsentModal] = useState<boolean>(false);
+  const [consentSentModal, setConsentSentModal] = useState<boolean>(false);
+  const [newDayModal, setNewDayModal] = useState<boolean>(false);
+  const [gotWrappingModal, setGotWrappingModal] = useState<boolean>(false);
   const [walletToSendConsent, setWalletToSendConsent] = useState<string>("");
 
   const oshiriSize = oshiriSizeDigitToScale(5);
@@ -35,6 +40,16 @@ const MyOshiri: React.FC<Props> = (props: Props) => {
         setWalletToSendConsent={setWalletToSendConsent}
         onSendConsent={() => setSendConsentModal(false)}
       />
+      <ConsentSent
+        consentSentModal={consentSentModal}
+        setConsentSentModal={setConsentSentModal}
+        walletToSendConsent={walletToSendConsent}
+      />
+      <NewDay newDayModal={newDayModal} setNewDayModal={setNewDayModal} />
+      <GotWrapping
+        gotWrappingModal={gotWrappingModal}
+        setGotWrappingModal={setGotWrappingModal}
+      ></GotWrapping>
       {/* TODO: Modals */}
       <div className="main-background">
         <div className="main-container">
@@ -65,12 +80,7 @@ const MyOshiri: React.FC<Props> = (props: Props) => {
         <div className="main-actions-area">
           <div className="main-actions-container">
             <div className="main-actions__set">
-              <Button
-                type="primary"
-                onClick={() => {
-                  console.log("Get Wrappings");
-                }}
-              >
+              <Button type="primary" onClick={() => setGotWrappingModal(true)}>
                 {t("getWrappings")}
               </Button>
               <div className="main-actions__value-container">
