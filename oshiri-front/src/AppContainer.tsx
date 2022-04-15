@@ -8,11 +8,15 @@ import OnlyText from "./pages/OnlyText";
 
 const AppContainer = () => {
   const { i18n } = useTranslation();
+  //! Next: Main flow and connecting to smart contracts
+  //TODO: add Context for global state (info from conracts)
+  //TODO: add Router for page transition
+
   return (
     <div className={i18n.language === "jp" ? "japanese-fonts" : ""}>
+      <Entrance />
       {/* <Customization /> */}
-      <MyOshiri />
-      {/* <Entrance /> */}
+      {/* <MyOshiri /> */}
       {/* <OnlyText /> */}
       {/* <TheirOshiri /> */}
     </div>
