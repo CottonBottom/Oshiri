@@ -63,6 +63,9 @@ i18n
           gotWrappingTitle: "You got a new Wrapping!",
           gotWrappingList1: " has been transfered to your wallet",
           gotWrappingList2: "You can change your Wrapping on Drawer",
+          changeStatsTitle: "Do you want to change your Oshiri stats?",
+          changeStatsList1:
+            "You may change your skin tone, size and name for a fee of {{fee}}, you will pay at the end",
           //TheirOshiri
           spendConsent: "Spend Consent",
         },

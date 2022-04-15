@@ -11,6 +11,7 @@ import SendConsent from "./modals/SendConsent";
 import NewDay from "./modals/NewDay";
 import GotWrapping from "./modals/GotWrapping";
 import ConsentSent from "./modals/ConsentSent";
+import ChangeStats from "./modals/ChangeStats";
 
 type Props = {};
 
@@ -19,6 +20,8 @@ const MyOshiri: React.FC<Props> = (props: Props) => {
   const [consentSentModal, setConsentSentModal] = useState<boolean>(false);
   const [newDayModal, setNewDayModal] = useState<boolean>(false);
   const [gotWrappingModal, setGotWrappingModal] = useState<boolean>(false);
+  const [changeStatsModal, setChangeStatsModal] = useState<boolean>(false);
+
   const [walletToSendConsent, setWalletToSendConsent] = useState<string>("");
 
   const oshiriSize = oshiriSizeDigitToScale(5);
@@ -46,6 +49,11 @@ const MyOshiri: React.FC<Props> = (props: Props) => {
         walletToSendConsent={walletToSendConsent}
       />
       <NewDay newDayModal={newDayModal} setNewDayModal={setNewDayModal} />
+      <ChangeStats
+        changeStatsModal={changeStatsModal}
+        setChangeStatsModal={setChangeStatsModal}
+        changeStatsFee={"001"}
+      ></ChangeStats>
       <GotWrapping
         gotWrappingModal={gotWrappingModal}
         setGotWrappingModal={setGotWrappingModal}
@@ -67,7 +75,7 @@ const MyOshiri: React.FC<Props> = (props: Props) => {
               </IconButton>
               <IconButton
                 icon="change_circle"
-                onClick={() => console.log("Clicked")}
+                onClick={() => setChangeStatsModal(true)}
               >
                 {t("change")}
               </IconButton>
