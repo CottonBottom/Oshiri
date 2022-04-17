@@ -6,11 +6,13 @@ import Modal from "../../components/Modal";
 type Props = {
   connectWalletModal: boolean;
   setConnectWalletModal: React.Dispatch<React.SetStateAction<boolean>>;
+  confirm: () => void;
 };
 
 const ConnectWallet: React.FC<Props> = ({
   connectWalletModal,
   setConnectWalletModal,
+  confirm,
 }: Props) => {
   const { t } = useTranslation();
 
@@ -20,7 +22,7 @@ const ConnectWallet: React.FC<Props> = ({
         <h1>{t("connectWalletTitle")}</h1>
       </div>
       <div className="modal-button-area">
-        <Button type="secondary" onClick={() => setConnectWalletModal(false)}>
+        <Button type="secondary" onClick={() => confirm()}>
           {t("confirm")}
         </Button>
       </div>

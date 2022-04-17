@@ -4,18 +4,45 @@ import ChangeLanguage from "../components/ChangeLanguage";
 import Button from "../components/buttons/Button";
 import logo from "../assets/images/logo.png";
 import ConnectWallet from "./modals/ConnectWallet";
+import { useNavigate } from "react-router-dom";
 
-type Props = {};
+type Props = {
+  connectWallet: () => void;
+  walletConnected: boolean;
+};
 
-const Entrance: React.FC<Props> = (props: Props) => {
+const Entrance: React.FC<Props> = ({
+  connectWallet,
+  walletConnected,
+}: Props) => {
   const [connectWalletModal, setConnectWalletModal] = useState<boolean>(false);
+  const navigate = useNavigate();
   const { t } = useTranslation();
+
+  console.log("THE WALLET CONNECTED?", walletConnected);
+
+  const onEnter = () => {
+    if (walletConnected) {
+      navigate("myoshiri");
+    } else {
+      setConnectWalletModal(true);
+    }
+  };
+
+  const onConfirm = () => {
+    if (walletConnected) {
+      navigate("myoshiri");
+    } else {
+      connectWallet();
+    }
+  };
 
   return (
     <>
       <ConnectWallet
         connectWalletModal={connectWalletModal}
         setConnectWalletModal={setConnectWalletModal}
+        confirm={onConfirm}
       />
       <div className="main-background">
         <div className="main-container main-container--entrance">
@@ -34,10 +61,7 @@ const Entrance: React.FC<Props> = (props: Props) => {
                 <li>{t("enterList3")}</li>
               </ul>
             </div>
-            <Button
-              type="secondary"
-              onClick={() => setConnectWalletModal(true)}
-            >
+            <Button type="secondary" onClick={() => onEnter()}>
               {t("enter")}
             </Button>
           </div>
