@@ -13,9 +13,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 const AppContainer = () => {
   const { i18n } = useTranslation();
-  //! Next: Main flow and connecting to smart contracts
-  //TODO: add Context for global state (info from conracts)
-  //TODO: add Router for page transition
+
+  //! Next: Introductory flow => run contracts and register wallet
 
   const [connectedWallet, setConnectedWallet] = useState<string>("");
 
