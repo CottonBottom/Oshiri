@@ -5,11 +5,12 @@ import MyOshiri from "./pages/MyOshiri";
 import TheirOshiri from "./pages/TheirOshiri";
 import Entrance from "./pages/Entrance";
 import OnlyText from "./pages/OnlyText";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 //Web3
 import { ethers } from "ethers";
 import Web3Modal from "web3modal";
-
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import OshiriContract from "./artifacts/contracts/Oshiri.sol/Oshiri.json";
+import { oshiriaddress } from "./config";
 
 const AppContainer = () => {
   const { i18n } = useTranslation();
@@ -17,6 +18,7 @@ const AppContainer = () => {
   //! Next: Introductory flow => run contracts and register wallet
 
   const [connectedWallet, setConnectedWallet] = useState<string>("");
+  const [oshiriStats, setOshiriStats] = useState<string>("");
 
   const web3Modal = new Web3Modal({
     // network: "mainnet", // optional
@@ -47,6 +49,26 @@ const AppContainer = () => {
     }
   };
 
+  const getOshiri = async () => {
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+
+    const oshiri = new ethers.Contract(
+      oshiriaddress,
+      OshiriContract.abi,
+      provider
+    );
+
+    try {
+      const oshiriStats = await oshiri.getMyOshiri();
+      setOshiriStats(oshiriStats);
+    } catch (error) {
+      console.error(error);
+      setOshiriStats("");
+      console.log("HELLO");
+    }
+  };
   //! Think: how to anage the urls for others oshiri???
 
   return (
@@ -66,7 +88,12 @@ const AppContainer = () => {
             <>
               <Route path="customization" element={<Customization />} />
               <Route path="story" element={<OnlyText />} />
-              <Route path="myoshiri" element={<MyOshiri />} />
+              <Route
+                path="myoshiri"
+                element={
+                  <MyOshiri getOshiri={getOshiri} oshiriStats={oshiriStats} />
+                }
+              />
               <Route path="oshiri" element={<TheirOshiri />} />
             </>
           )}

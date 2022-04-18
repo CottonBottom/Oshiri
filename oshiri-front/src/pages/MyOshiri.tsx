@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 //import { HexColorPicker } from "react-colorful";
 import { skinTones } from "../utils/constants";
 import Button from "../components/buttons/Button";
@@ -13,9 +13,12 @@ import GotWrapping from "./modals/GotWrapping";
 import ConsentSent from "./modals/ConsentSent";
 import ChangeStats from "./modals/ChangeStats";
 
-type Props = {};
+type Props = {
+  getOshiri: () => void;
+  oshiriStats: string;
+};
 
-const MyOshiri: React.FC<Props> = (props: Props) => {
+const MyOshiri: React.FC<Props> = ({ oshiriStats, getOshiri }: Props) => {
   const [sendConsentModal, setSendConsentModal] = useState<boolean>(false);
   const [consentSentModal, setConsentSentModal] = useState<boolean>(false);
   const [newDayModal, setNewDayModal] = useState<boolean>(false);
@@ -23,6 +26,10 @@ const MyOshiri: React.FC<Props> = (props: Props) => {
   const [changeStatsModal, setChangeStatsModal] = useState<boolean>(false);
 
   const [walletToSendConsent, setWalletToSendConsent] = useState<string>("");
+
+  useEffect(() => {
+    getOshiri();
+  }, []);
 
   const oshiriSize = oshiriSizeDigitToScale(5);
   const oshiriSkin = skinTones[1];

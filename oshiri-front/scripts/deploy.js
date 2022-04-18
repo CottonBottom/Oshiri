@@ -25,6 +25,9 @@ async function main() {
   await oshiriWrappings.setOshiriGameAddress(oshiri.address);
 
   console.log("Deployed Contracts");
+  console.log("Oshiri deployed to:", oshiri.address);
+  console.log("OshiriWrappings deployed to:", oshiriWrappings.address);
+  console.log("OshiriCurrency deployed to:", oshiriCurrency.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
