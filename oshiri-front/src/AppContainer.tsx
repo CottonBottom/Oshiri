@@ -11,6 +11,7 @@ import { ethers } from "ethers";
 import Web3Modal from "web3modal";
 import OshiriContract from "./artifacts/contracts/Oshiri.sol/Oshiri.json";
 import { oshiriaddress } from "./config";
+import { Stories } from "./utils/constants";
 
 const AppContainer = () => {
   const { i18n } = useTranslation();
@@ -19,6 +20,8 @@ const AppContainer = () => {
 
   const [connectedWallet, setConnectedWallet] = useState<string>("");
   const [oshiriStats, setOshiriStats] = useState<string>("");
+  const [storyStage, setStoryStage] = useState<Stories>(Stories.none);
+  const [customizating, setCustomizating] = useState<boolean>(false);
 
   const web3Modal = new Web3Modal({
     // network: "mainnet", // optional
@@ -26,9 +29,7 @@ const AppContainer = () => {
     // providerOptions, // required
   });
 
-  useEffect(() => {
-    console.log("THE WALLET", connectedWallet);
-  }, [connectedWallet]);
+  console.log("THE WALLET", connectedWallet);
 
   useEffect(() => {
     (async () => {
@@ -36,6 +37,16 @@ const AppContainer = () => {
         await connectWallet();
     })();
   }, []);
+
+  useEffect(() => {
+    if (!oshiriStats) {
+      setStoryStage(Stories.oshiriIntro);
+    } else {
+      setStoryStage(Stories.none);
+    }
+  }, [oshiriStats]);
+
+  //TODO: Add Context to mantain the global state
 
   const connectWallet = async () => {
     try {
@@ -59,17 +70,15 @@ const AppContainer = () => {
       OshiriContract.abi,
       provider
     );
-
     try {
       const oshiriStats = await oshiri.getMyOshiri();
       setOshiriStats(oshiriStats);
     } catch (error) {
       console.error(error);
       setOshiriStats("");
-      console.log("HELLO");
     }
   };
-  //! Think: how to anage the urls for others oshiri???
+  //! Think: how to manage the urls for others oshiri???
 
   return (
     <div className={i18n.language === "jp" ? "japanese-fonts" : ""}>
@@ -81,20 +90,39 @@ const AppContainer = () => {
               <Entrance
                 connectWallet={connectWallet}
                 walletConnected={connectedWallet ? true : false}
+                oshiriStats={oshiriStats}
               />
             }
           />
           {connectedWallet && (
             <>
+              {storyStage !== Stories.none && (
+                <Route
+                  path="story"
+                  element={
+                    <OnlyText
+                      storyStage={storyStage}
+                      setStoryStage={setStoryStage}
+                      setCustomizating={setCustomizating}
+                    />
+                  }
+                />
+              )}
               <Route path="customization" element={<Customization />} />
-              <Route path="story" element={<OnlyText />} />
-              <Route
-                path="myoshiri"
-                element={
-                  <MyOshiri getOshiri={getOshiri} oshiriStats={oshiriStats} />
-                }
-              />
-              <Route path="oshiri" element={<TheirOshiri />} />
+              {oshiriStats && (
+                <>
+                  <Route
+                    path="myoshiri"
+                    element={
+                      <MyOshiri
+                        getOshiri={getOshiri}
+                        oshiriStats={oshiriStats}
+                      />
+                    }
+                  />
+                  <Route path="oshiri" element={<TheirOshiri />} />
+                </>
+              )}
             </>
           )}
           <Route path="*" element={<Navigate to="/" replace />} />

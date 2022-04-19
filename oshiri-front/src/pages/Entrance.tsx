@@ -9,11 +9,13 @@ import { useNavigate } from "react-router-dom";
 type Props = {
   connectWallet: () => void;
   walletConnected: boolean;
+  oshiriStats: string;
 };
 
 const Entrance: React.FC<Props> = ({
   connectWallet,
   walletConnected,
+  oshiriStats,
 }: Props) => {
   const [connectWalletModal, setConnectWalletModal] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -23,7 +25,11 @@ const Entrance: React.FC<Props> = ({
 
   const onEnter = () => {
     if (walletConnected) {
-      navigate("myoshiri");
+      if (oshiriStats) {
+        navigate("myoshiri");
+      } else {
+        navigate("story");
+      }
     } else {
       setConnectWalletModal(true);
     }
@@ -31,7 +37,11 @@ const Entrance: React.FC<Props> = ({
 
   const onConfirm = () => {
     if (walletConnected) {
-      navigate("myoshiri");
+      if (oshiriStats) {
+        navigate("myoshiri");
+      } else {
+        navigate("story");
+      }
     } else {
       connectWallet();
     }

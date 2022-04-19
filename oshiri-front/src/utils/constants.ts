@@ -14,3 +14,12 @@ export const tailTones = [
   "plum",
   "peachpuff",
 ];
+
+export enum Stories {
+  none,
+  //Intro
+  oshiriIntro,
+  wrappingIntro,
+  //Errors
+  noWrappingError,
+}

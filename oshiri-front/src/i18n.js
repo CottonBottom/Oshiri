@@ -29,8 +29,12 @@ i18n
           enterList3: "Explicit Message 3",
           connectWalletTitle: "You need to connect your wallet to continue",
           //Only Text
-          messageStory:
+          oshiriIntro:
             "Oshiri Story Introduction Oshiri Story Introduction Oshiri Story Introduction...",
+          wrappingIntro:
+            "You cannot have your Oshiri nude out there. Get some clothing first. Your first one is free, but for the next one on you will need to exchange OSH, Put price here XXXX",
+          noWrappingError:
+            "Seems you have lost your Wrapping somewhere and cannot access Oshiri...",
           next: "Next",
           //Customization
           name: "Name",
