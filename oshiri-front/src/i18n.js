@@ -41,7 +41,7 @@ i18n
           skinTone: "Skin Tone",
           size: "Skin Tone",
           tail: "Tail",
-          tailColor: "Skin Tone",
+          tailColor: "Tail Color",
           makeOshiri: "Make Oshiri!",
           //MyOshiri
           drawer: "Drawer",

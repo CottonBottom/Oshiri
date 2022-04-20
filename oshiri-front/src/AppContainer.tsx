@@ -21,7 +21,7 @@ const AppContainer = () => {
   const [connectedWallet, setConnectedWallet] = useState<string>("");
   const [oshiriStats, setOshiriStats] = useState<string>("");
   const [storyStage, setStoryStage] = useState<Stories>(Stories.none);
-  const [customizating, setCustomizating] = useState<boolean>(false);
+  const [customizing, setCustomizing] = useState<boolean>(false);
 
   const web3Modal = new Web3Modal({
     // network: "mainnet", // optional
@@ -45,8 +45,6 @@ const AppContainer = () => {
       setStoryStage(Stories.none);
     }
   }, [oshiriStats]);
-
-  //TODO: Add Context to mantain the global state
 
   const connectWallet = async () => {
     try {
@@ -94,6 +92,9 @@ const AppContainer = () => {
               />
             }
           />
+          {customizing && (
+            <Route path="customization" element={<Customization />} />
+          )}
           {connectedWallet && (
             <>
               {storyStage !== Stories.none && (
@@ -103,12 +104,11 @@ const AppContainer = () => {
                     <OnlyText
                       storyStage={storyStage}
                       setStoryStage={setStoryStage}
-                      setCustomizating={setCustomizating}
+                      setCustomizing={setCustomizing}
                     />
                   }
                 />
               )}
-              <Route path="customization" element={<Customization />} />
               {oshiriStats && (
                 <>
                   <Route

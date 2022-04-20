@@ -8,9 +8,10 @@ import Wrapping from "./Wrapping";
 type Props = {
   oshiriSize: string;
   oshiriSkin: string;
+  isCustomizing?: boolean;
 };
 
-const Oshiri = ({ oshiriSize, oshiriSkin }: Props) => {
+const Oshiri = ({ oshiriSize, oshiriSkin, isCustomizing }: Props) => {
   const makeOshiri = () => {
     const oshiriParts = [
       { url: base, name: "base" },
@@ -49,7 +50,7 @@ const Oshiri = ({ oshiriSize, oshiriSkin }: Props) => {
       style={{ backgroundImage: `url(${spiral})` }}
     >
       {makeOshiri()}
-      <Wrapping oshiriSize={oshiriSize}></Wrapping>
+      {!isCustomizing && <Wrapping oshiriSize={oshiriSize}></Wrapping>}
     </div>
   );
 };

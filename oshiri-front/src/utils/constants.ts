@@ -7,6 +7,8 @@ export const skinTones = [
   "#592f2a",
 ];
 
+export const tails = ["one", "two", "three", "four", "five"];
+
 export const tailTones = [
   "lightpink",
   "powderblue",
@@ -23,3 +25,14 @@ export enum Stories {
   //Errors
   noWrappingError,
 }
+
+export type OshiriStats = {
+  color: number;
+  size: number;
+  name: string;
+  tail: number;
+  tailTone: number;
+  availableConsent?: number;
+  lastDayAccessed?: number;
+  wronWrapping?: number;
+};

@@ -26,9 +26,9 @@ const Entrance: React.FC<Props> = ({
   const onEnter = () => {
     if (walletConnected) {
       if (oshiriStats) {
-        navigate("myoshiri");
+        navigate("/myoshiri");
       } else {
-        navigate("story");
+        navigate("/story");
       }
     } else {
       setConnectWalletModal(true);
@@ -38,9 +38,9 @@ const Entrance: React.FC<Props> = ({
   const onConfirm = () => {
     if (walletConnected) {
       if (oshiriStats) {
-        navigate("myoshiri");
+        navigate("/myoshiri");
       } else {
-        navigate("story");
+        navigate("/story");
       }
     } else {
       connectWallet();

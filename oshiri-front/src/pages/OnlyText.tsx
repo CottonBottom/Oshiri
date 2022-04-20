@@ -9,13 +9,13 @@ import { useNavigate } from "react-router-dom";
 type Props = {
   storyStage: Stories;
   setStoryStage: React.Dispatch<React.SetStateAction<Stories>>;
-  setCustomizating: React.Dispatch<React.SetStateAction<boolean>>;
+  setCustomizing: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const Entrance: React.FC<Props> = ({
   storyStage,
   setStoryStage,
-  setCustomizating,
+  setCustomizing,
 }: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -36,12 +36,12 @@ const Entrance: React.FC<Props> = ({
   const advanceStory = () => {
     switch (storyStage) {
       case Stories.oshiriIntro:
-        setCustomizating(true);
-        setStoryStage(Stories.wrappingIntro);
-        navigate("customization");
+        setCustomizing(true);
+        // setStoryStage(Stories.wrappingIntro);
+        navigate("/customization");
         break;
       case Stories.wrappingIntro:
-        navigate("myoshiri");
+        navigate("/myoshiri");
         setStoryStage(Stories.none);
         break;
       case Stories.noWrappingError:
