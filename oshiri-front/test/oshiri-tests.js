@@ -7,7 +7,7 @@ const getReadableOshiri = (createdOshiri) => {
   return {
     color: createdOshiri.color.toString(),
     size: createdOshiri.size.toString(),
-    string: createdOshiri.name.toString(),
+    name: createdOshiri.name.toString(),
     tail: createdOshiri.tail.toString(),
     tailColor: createdOshiri.tailColor.toString(),
     availableConsent: createdOshiri.availableConsent.toString(),

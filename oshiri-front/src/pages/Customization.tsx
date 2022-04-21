@@ -1,46 +1,44 @@
 import React, { useState } from "react";
 //import { HexColorPicker } from "react-colorful";
 import OptionButton from "../components/buttons/OptionButton";
-import { OshiriStats, skinTones, tails, tailTones } from "../utils/constants";
+import { OshiriStats, skinTones, tails, tailColors } from "../utils/constants";
 import Button from "../components/buttons/Button";
 import { useTranslation } from "react-i18next";
 import ChangeLanguage from "../components/ChangeLanguage";
 import Oshiri from "../components/Oshiri";
 import { oshiriSizeDigitToScale } from "../utils/conversions";
+import { useNavigate } from "react-router-dom";
 
-type Props = {};
+type Props = {
+  setNewOshiriStats: React.Dispatch<React.SetStateAction<OshiriStats | null>>;
+};
 
-const Customization: React.FC<Props> = (props: Props) => {
-  const defaultStats: OshiriStats = {
-    color: 1,
-    size: 1,
-    name: "",
-    tail: 0,
-    tailTone: 0,
-  };
-  const [oshiriStats, setOshiriStats] = useState<OshiriStats>(defaultStats);
-
+const Customization: React.FC<Props> = ({ setNewOshiriStats }: Props) => {
   const [oshiriSize, setOshiriSize] = useState<string>("0.95,1.0");
   const [selectedSize, setSelectedSize] = useState<string>("1");
-
   const [selectedSkin, setSelectedSkin] = useState<string>(skinTones[1]);
   const [selectedTail, setSelectedTail] = useState<string>(tails[1]);
   const [selectedTailColor, setSelectedTailColor] = useState<string>(
-    tailTones[1]
+    tailColors[1]
   );
   const [oshiriName, setOshiriName] = useState<string>("");
 
+  const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const makeOshiri = () => {
+  const makeOshiriStats = () => {
     const newOshiriStats: OshiriStats = {
       color: skinTones.indexOf(selectedSkin),
       size: parseInt(selectedSize),
       name: oshiriName,
       tail: tails.indexOf(selectedTail),
-      tailTone: tailTones.indexOf(selectedTail),
+      tailColor:
+        tails.indexOf(selectedTail) === 0
+          ? 0
+          : tailColors.indexOf(selectedTailColor),
     };
-    console.log("TODO: SEND THE OSHIRI STATS", newOshiriStats);
+    setNewOshiriStats(newOshiriStats);
+    navigate("/story");
   };
 
   const skinOptions = () => {
@@ -55,11 +53,9 @@ const Customization: React.FC<Props> = (props: Props) => {
     ));
   };
 
-  const tailOptions = () => {
+  const getTailOptions = () => {
     //TODO: thumbnails for tails
-    const totalButtons = ["black", "red", "green", "white", "salmon"];
-
-    return totalButtons.map((button) => (
+    return tails.map((button) => (
       <OptionButton
         color={button}
         isSelected={button === selectedTail}
@@ -68,9 +64,8 @@ const Customization: React.FC<Props> = (props: Props) => {
     ));
   };
 
-  const tailColors = () => {
-    const totalButtons = tailTones;
-    return totalButtons.map((button) => (
+  const getTailColors = () => {
+    return tailColors.map((button) => (
       <OptionButton
         color={button}
         isSelected={button === selectedTailColor}
@@ -118,12 +113,16 @@ const Customization: React.FC<Props> = (props: Props) => {
               ></input>
             </div>
             <h1>{t("tail")}</h1>
-            <div className="option-buttons-container">{tailOptions()}</div>
+            <div className="option-buttons-container">{getTailOptions()}</div>
             <h1>{t("tailColor")}</h1>
-            <div className="option-buttons-container">{tailColors()}</div>
+            <div className="option-buttons-container">{getTailColors()}</div>
           </div>
         </div>
-        <Button type="primary" onClick={() => makeOshiri()}>
+        <Button
+          type="primary"
+          onClick={() => makeOshiriStats()}
+          isDisabled={oshiriName === ""}
+        >
           {t("makeOshiri")}
         </Button>
       </div>

@@ -10,13 +10,13 @@ import "./OshiriWrappings.sol";
 
 contract Oshiri is ReentrancyGuard {
     //TODO: Decide price for making new Oshiri
-    uint256 public newOshiriPrice = 0.025 ether;
-    uint256 public updateOshiriPrice = 0.001 ether;
+    uint256 public newOshiriPrice = 0.003 ether;
+    uint256 public updateOshiriPrice = 0.0009 ether;
     uint256 public wrappingCost = 3;
     uint256 public yesterday;
 
-    uint256 private maxColors = 100;
-    uint256 private maxSizes = 100;
+    uint256 private maxColors = 30;
+    uint256 private maxSizes = 10;
     uint256 private maxNameLength = 50;
     uint256 private maxTails = 5;
     uint256 private maxTailColors = 10;

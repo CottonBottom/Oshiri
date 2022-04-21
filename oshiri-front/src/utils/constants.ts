@@ -7,9 +7,9 @@ export const skinTones = [
   "#592f2a",
 ];
 
-export const tails = ["one", "two", "three", "four", "five"];
+export const tails = ["black", "red", "blue", "yellow", "orange", "green"];
 
-export const tailTones = [
+export const tailColors = [
   "lightpink",
   "powderblue",
   "palegreen",
@@ -31,8 +31,8 @@ export type OshiriStats = {
   size: number;
   name: string;
   tail: number;
-  tailTone: number;
+  tailColor: number;
   availableConsent?: number;
-  lastDayAccessed?: number;
-  wronWrapping?: number;
+  lastDayAccessed?: string;
+  wornWrapping?: string;
 };

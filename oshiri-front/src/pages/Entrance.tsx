@@ -5,11 +5,12 @@ import Button from "../components/buttons/Button";
 import logo from "../assets/images/logo.png";
 import ConnectWallet from "./modals/ConnectWallet";
 import { useNavigate } from "react-router-dom";
+import { OshiriStats } from "../utils/constants";
 
 type Props = {
   connectWallet: () => void;
   walletConnected: boolean;
-  oshiriStats: string;
+  oshiriStats: OshiriStats | null;
 };
 
 const Entrance: React.FC<Props> = ({

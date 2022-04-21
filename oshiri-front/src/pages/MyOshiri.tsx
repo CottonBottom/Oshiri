@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 //import { HexColorPicker } from "react-colorful";
-import { skinTones } from "../utils/constants";
+import { OshiriStats, skinTones } from "../utils/constants";
 import Button from "../components/buttons/Button";
 import { useTranslation } from "react-i18next";
 import ChangeLanguage from "../components/ChangeLanguage";
@@ -15,7 +15,7 @@ import ChangeStats from "./modals/ChangeStats";
 
 type Props = {
   getOshiri: () => void;
-  oshiriStats: string;
+  oshiriStats: OshiriStats;
 };
 
 const MyOshiri: React.FC<Props> = ({ oshiriStats, getOshiri }: Props) => {
@@ -26,6 +26,8 @@ const MyOshiri: React.FC<Props> = ({ oshiriStats, getOshiri }: Props) => {
   const [changeStatsModal, setChangeStatsModal] = useState<boolean>(false);
 
   const [walletToSendConsent, setWalletToSendConsent] = useState<string>("");
+
+  console.log("MY OSHIRI STATS", oshiriStats);
 
   useEffect(() => {
     getOshiri();

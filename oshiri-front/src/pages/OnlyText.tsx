@@ -10,12 +10,14 @@ type Props = {
   storyStage: Stories;
   setStoryStage: React.Dispatch<React.SetStateAction<Stories>>;
   setCustomizing: React.Dispatch<React.SetStateAction<boolean>>;
+  makeOshiri: () => void;
 };
 
 const Entrance: React.FC<Props> = ({
   storyStage,
   setStoryStage,
   setCustomizing,
+  makeOshiri,
 }: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -37,12 +39,11 @@ const Entrance: React.FC<Props> = ({
     switch (storyStage) {
       case Stories.oshiriIntro:
         setCustomizing(true);
-        // setStoryStage(Stories.wrappingIntro);
         navigate("/customization");
         break;
       case Stories.wrappingIntro:
-        navigate("/myoshiri");
-        setStoryStage(Stories.none);
+        console.log("READY TO MAKE OSHIRI");
+        makeOshiri();
         break;
       case Stories.noWrappingError:
         navigate("/");
