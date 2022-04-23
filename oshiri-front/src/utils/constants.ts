@@ -1,3 +1,5 @@
+//TODO: Data structure for Wrappings
+
 export const skinTones = [
   "white",
   "#c58c85",
@@ -36,4 +38,13 @@ export type OshiriStats = {
   availableConsent?: number;
   lastDayAccessed?: string;
   wornWrapping?: string;
+};
+
+export type WrappingStats = {
+  wType: number;
+  wSubType: number;
+  wVariation: string;
+  wBaseColor: number;
+  wVariationColor: number;
+  wSerialNumber: number;
 };

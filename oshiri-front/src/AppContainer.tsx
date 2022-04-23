@@ -10,9 +10,10 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ethers } from "ethers";
 import Web3Modal from "web3modal";
 import OshiriContract from "./artifacts/contracts/Oshiri.sol/Oshiri.json";
-import { oshiriaddress } from "./config";
-import { OshiriStats, Stories } from "./utils/constants";
-import { getReadableOshiri } from "./utils/conversions";
+import OshiriWrappingsContract from "./artifacts/contracts/OshiriWrappings.sol/OshiriWrappings.json";
+import { oshiriaddress, oshiriwrappingsaddress } from "./config";
+import { OshiriStats, Stories, WrappingStats } from "./utils/constants";
+import { getReadableOshiri, getReadableWrapping } from "./utils/conversions";
 
 const AppContainer = () => {
   const { i18n } = useTranslation();
@@ -22,6 +23,10 @@ const AppContainer = () => {
   const [connectedWallet, setConnectedWallet] = useState<string>("");
   const [oshiriStats, setOshiriStats] = useState<OshiriStats | null>(null);
   const [newOshiriStats, setNewOshiriStats] = useState<OshiriStats | null>(
+    null
+  );
+
+  const [wrappingStats, setWrappingStats] = useState<WrappingStats | null>(
     null
   );
   const [storyStage, setStoryStage] = useState<Stories>(Stories.none);
@@ -49,6 +54,13 @@ const AppContainer = () => {
       setStoryStage(Stories.none);
     }
   }, [oshiriStats]);
+
+  //TODO: Test losing wrapping
+  useEffect(() => {
+    if (oshiriStats && !wrappingStats) {
+      setStoryStage(Stories.noWrappingError);
+    }
+  }, [oshiriStats, wrappingStats]);
 
   useEffect(() => {
     if (newOshiriStats) {
@@ -78,10 +90,22 @@ const AppContainer = () => {
       OshiriContract.abi,
       signer
     );
+    const oshiriWrappings = new ethers.Contract(
+      oshiriwrappingsaddress,
+      OshiriWrappingsContract.abi,
+      signer
+    );
     try {
       const oshiriStats = await oshiri.getMyOshiri();
       const readableOshiri = getReadableOshiri(oshiriStats);
+
+      const wrappingStats = await oshiriWrappings.getWrapping(
+        readableOshiri.wornWrapping
+      );
+      const readableWrapping = getReadableWrapping(wrappingStats);
+
       setOshiriStats(readableOshiri);
+      setWrappingStats(readableWrapping);
     } catch (error) {
       console.error(error);
       setOshiriStats(null);
@@ -115,8 +139,6 @@ const AppContainer = () => {
       const event = tx.events[1];
       console.log("THE EVENT FROM CREATING OSHIRI", event);
       getOshiri();
-      //TODO: Grab event??
-      //TODO: If oshiri created correctly, send to /myoshiri?
     } catch (error) {
       console.error(error);
     }
@@ -133,6 +155,7 @@ const AppContainer = () => {
                 connectWallet={connectWallet}
                 walletConnected={connectedWallet ? true : false}
                 oshiriStats={oshiriStats}
+                wrappingStats={wrappingStats}
               />
             }
           />
@@ -158,7 +181,7 @@ const AppContainer = () => {
                   }
                 />
               )}
-              {oshiriStats && (
+              {oshiriStats && wrappingStats && (
                 <>
                   <Route
                     path="myoshiri"
@@ -166,6 +189,7 @@ const AppContainer = () => {
                       <MyOshiri
                         getOshiri={getOshiri}
                         oshiriStats={oshiriStats}
+                        wrappingStats={wrappingStats}
                       />
                     }
                   />

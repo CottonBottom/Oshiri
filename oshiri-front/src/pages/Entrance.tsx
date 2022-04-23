@@ -5,18 +5,20 @@ import Button from "../components/buttons/Button";
 import logo from "../assets/images/logo.png";
 import ConnectWallet from "./modals/ConnectWallet";
 import { useNavigate } from "react-router-dom";
-import { OshiriStats } from "../utils/constants";
+import { OshiriStats, WrappingStats } from "../utils/constants";
 
 type Props = {
   connectWallet: () => void;
   walletConnected: boolean;
   oshiriStats: OshiriStats | null;
+  wrappingStats: WrappingStats | null;
 };
 
 const Entrance: React.FC<Props> = ({
   connectWallet,
   walletConnected,
   oshiriStats,
+  wrappingStats,
 }: Props) => {
   const [connectWalletModal, setConnectWalletModal] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -26,7 +28,7 @@ const Entrance: React.FC<Props> = ({
 
   const onEnter = () => {
     if (walletConnected) {
-      if (oshiriStats) {
+      if (oshiriStats && wrappingStats) {
         navigate("/myoshiri");
       } else {
         navigate("/story");
@@ -38,7 +40,7 @@ const Entrance: React.FC<Props> = ({
 
   const onConfirm = () => {
     if (walletConnected) {
-      if (oshiriStats) {
+      if (oshiriStats && wrappingStats) {
         navigate("/myoshiri");
       } else {
         navigate("/story");

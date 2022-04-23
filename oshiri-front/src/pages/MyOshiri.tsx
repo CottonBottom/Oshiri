@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 //import { HexColorPicker } from "react-colorful";
-import { OshiriStats, skinTones } from "../utils/constants";
+import { OshiriStats, skinTones, WrappingStats } from "../utils/constants";
 import Button from "../components/buttons/Button";
 import { useTranslation } from "react-i18next";
 import ChangeLanguage from "../components/ChangeLanguage";
@@ -16,9 +16,14 @@ import ChangeStats from "./modals/ChangeStats";
 type Props = {
   getOshiri: () => void;
   oshiriStats: OshiriStats;
+  wrappingStats: WrappingStats | null;
 };
 
-const MyOshiri: React.FC<Props> = ({ oshiriStats, getOshiri }: Props) => {
+const MyOshiri: React.FC<Props> = ({
+  oshiriStats,
+  wrappingStats,
+  getOshiri,
+}: Props) => {
   const [sendConsentModal, setSendConsentModal] = useState<boolean>(false);
   const [consentSentModal, setConsentSentModal] = useState<boolean>(false);
   const [newDayModal, setNewDayModal] = useState<boolean>(false);
@@ -30,6 +35,9 @@ const MyOshiri: React.FC<Props> = ({ oshiriStats, getOshiri }: Props) => {
   useEffect(() => {
     getOshiri();
   }, []);
+
+  console.log("My Oshiri Stats", oshiriStats);
+  console.log("My Wrapping Stats", wrappingStats);
 
   const oshiriSize = oshiriSizeDigitToScale(oshiriStats.size);
   const oshiriSkin = skinTones[oshiriStats.color];

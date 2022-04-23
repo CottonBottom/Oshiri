@@ -1,4 +1,4 @@
-import { OshiriStats } from "./constants";
+import { OshiriStats, WrappingStats } from "./constants";
 
 export const oshiriSizeDigitToScale = (size: number) => {
   //Max 10-> 1.10,1.05
@@ -20,5 +20,16 @@ export const getReadableOshiri = (createdOshiri: any): OshiriStats => {
     availableConsent: createdOshiri.availableConsent.toString(),
     lastDayAccessed: formattedDate,
     wornWrapping: createdOshiri.wornWrapping.toString(),
+  };
+};
+
+export const getReadableWrapping = (wrapping: any): WrappingStats => {
+  return {
+    wType: wrapping.wType.toString(),
+    wSubType: wrapping.wSubType.toString(),
+    wVariation: wrapping.wVariation.toString(),
+    wBaseColor: wrapping.wBaseColor.toString(),
+    wVariationColor: wrapping.wVariationColor.toString(),
+    wSerialNumber: wrapping.wSerialNumber.toString(),
   };
 };
