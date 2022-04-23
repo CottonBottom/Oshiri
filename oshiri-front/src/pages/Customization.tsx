@@ -42,7 +42,7 @@ const Customization: React.FC<Props> = ({ setNewOshiriStats }: Props) => {
   };
 
   const skinOptions = () => {
-    const totalButtons = skinTones;
+    const totalButtons = skinTones.filter((tone) => tone !== "white");
 
     return totalButtons.map((button) => (
       <OptionButton

@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import ChangeLanguage from "../components/ChangeLanguage";
 import Button from "../components/buttons/Button";
 import logo from "../assets/images/logo.png";
-import { Stories } from "../utils/constants";
+import { OshiriStats, Stories } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
 
 type Props = {
@@ -11,6 +11,7 @@ type Props = {
   setStoryStage: React.Dispatch<React.SetStateAction<Stories>>;
   setCustomizing: React.Dispatch<React.SetStateAction<boolean>>;
   makeOshiri: () => void;
+  oshiriStats: OshiriStats | null;
 };
 
 const Entrance: React.FC<Props> = ({
@@ -18,9 +19,16 @@ const Entrance: React.FC<Props> = ({
   setStoryStage,
   setCustomizing,
   makeOshiri,
+  oshiriStats,
 }: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (oshiriStats) {
+      navigate("/myoshiri");
+    }
+  }, [oshiriStats]);
 
   const getStoryFromStage = (stage: number) => {
     switch (stage) {

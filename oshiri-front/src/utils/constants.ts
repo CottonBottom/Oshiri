@@ -1,4 +1,5 @@
 export const skinTones = [
+  "white",
   "#c58c85",
   "#ecbcb4",
   "#d1a3a4",

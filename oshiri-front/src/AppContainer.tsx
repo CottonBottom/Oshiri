@@ -114,6 +114,7 @@ const AppContainer = () => {
       const tx = await transaction.wait();
       const event = tx.events[1];
       console.log("THE EVENT FROM CREATING OSHIRI", event);
+      getOshiri();
       //TODO: Grab event??
       //TODO: If oshiri created correctly, send to /myoshiri?
     } catch (error) {
@@ -152,6 +153,7 @@ const AppContainer = () => {
                       setStoryStage={setStoryStage}
                       setCustomizing={setCustomizing}
                       makeOshiri={makeOshiri}
+                      oshiriStats={oshiriStats}
                     />
                   }
                 />

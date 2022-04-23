@@ -27,19 +27,17 @@ const MyOshiri: React.FC<Props> = ({ oshiriStats, getOshiri }: Props) => {
 
   const [walletToSendConsent, setWalletToSendConsent] = useState<string>("");
 
-  console.log("MY OSHIRI STATS", oshiriStats);
-
   useEffect(() => {
     getOshiri();
   }, []);
 
-  const oshiriSize = oshiriSizeDigitToScale(5);
-  const oshiriSkin = skinTones[1];
-  const oshiriName = "MyOshiri";
+  const oshiriSize = oshiriSizeDigitToScale(oshiriStats.size);
+  const oshiriSkin = skinTones[oshiriStats.color];
+  const oshiriName = oshiriStats.name;
   const wrappingName = "Description of current worn Wrapping";
 
   const totalOSH = "9999";
-  const totalConsent = "99";
+  const totalConsent = oshiriStats.availableConsent;
 
   const { t } = useTranslation();
 
@@ -110,7 +108,7 @@ const MyOshiri: React.FC<Props> = ({ oshiriStats, getOshiri }: Props) => {
                 {t("sendConsent")}
               </Button>
               <div className="main-actions__value-container">
-                <div className="main-actions__value">{totalConsent}</div>
+                <div className="main-actions__value">{`0${totalConsent}`}</div>
                 <div className="main-actions__currency">{t("Consent")}</div>
               </div>
             </div>
