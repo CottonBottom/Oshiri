@@ -72,6 +72,47 @@ i18n
             "You may change your skin tone, size and name for a fee of {{fee}}, you will pay at the end",
           //TheirOshiri
           spendConsent: "Spend Consent",
+
+          /** Wrapping Names */
+          //* Chewing Gum
+          chewingGum: "Chewing Gum",
+          //
+          ball: "Ball",
+          orange: "Orange",
+          tallWaist: "Tall Waist",
+          flames: "Flames",
+          pocket: "Pocket",
+          //
+          bubble: "Bubble",
+          red: "Red",
+          pink: "Pink",
+          singleStripe: "Single Stripe",
+          doubleStripe: "Double Stripe",
+          tag: "Tag",
+          //
+          stick: "Stick",
+          black: "Black",
+          //TODO: Variations
+
+          //* Gummies
+          gummies: "Gummies",
+          //
+          //* Cotton Candy
+          cottonCandy: "Cotton Candy",
+          //
+          //* Licorice
+          licorice: "Licorice",
+          //
+          //* Chewable
+          chewable: "Chewable",
+          //
+          //* Caramel
+          caramel: "Caramel",
+          //
+          //* Shared
+          plain: "Plain",
+          blue: "Blue",
+          green: "Green",
         },
       },
       jp: {
@@ -82,6 +123,41 @@ i18n
           tail: "尻尾",
           tailColor: "尻尾の色",
           makeOshiri: "おしりを作る!",
+
+          //MyOshiri
+          drawer: "引き出し",
+          change: "変更",
+          tutorial: "説明",
+          getWrappings: "ラッピングをゲット",
+          sendConsent: "同意送信",
+          OSH: "OSH",
+          Consent: "同意",
+
+          /** Wrapping Names */
+          //* Chewing Gum
+          chewingGum: "ガム",
+          //
+          ball: "ボール",
+          orange: "オレンジ",
+          tallWaist: "トールウェイスト",
+          flames: "炎の",
+          pocket: "ポケット付き",
+          //
+          bubble: "バブル",
+          red: "赤い",
+          pink: "ピンク色の",
+          singleStripe: "シングル",
+          doubleStripe: "ダブル",
+          tag: "タグ",
+          //
+          stick: "スティック",
+          black: "黒い",
+          //TODO: Variations
+
+          //* Shared
+          plain: "プレーン",
+          blue: "青い",
+          green: "緑色の",
         },
       },
       es: {

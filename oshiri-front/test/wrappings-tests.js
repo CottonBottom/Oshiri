@@ -7,13 +7,13 @@ const getReadableWrapping = (newWrapping) => {
     subType: newWrapping.wSubType.toString(),
     variation: newWrapping.wVariation.toString(),
     baseColor: newWrapping.wBaseColor.toString(),
-    variationColor: newWrapping.wVariationColor.toString(),
+    variationColor: newWrapping.wSecondaryColor.toString(),
     serialNumber: newWrapping.wSerialNumber.toString(),
   };
 };
 
 const getSimplyfiedWrapping = (newWrapping) => {
-  return `${newWrapping.wType.toString()}-${newWrapping.wSubType.toString()}-${newWrapping.wVariation.toString()}-${newWrapping.wBaseColor.toString()}-${newWrapping.wVariationColor.toString()}-${newWrapping.wSerialNumber.toString()}`;
+  return `${newWrapping.wType.toString()}-${newWrapping.wSubType.toString()}-${newWrapping.wVariation.toString()}-${newWrapping.wBaseColor.toString()}-${newWrapping.wSecondaryColor.toString()}-${newWrapping.wSerialNumber.toString()}`;
 };
 
 describe.skip("Discover All Wrappings", function () {

@@ -16,14 +16,14 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
     uint256 private wSubTypeCurrent = 1;
     uint256 private wVariationCurrent = 1;
     uint256 private wBaseColorCurrent = 1;
-    uint256 private wVariationColorCurrent = 1;
+    uint256 private wSecondaryColorCurrent = 1;
     uint256 private wSerialNumberCurrent = 1;
 
     uint256 private maxTypes = 6;
     uint256 private maxSubTypes = 3;
     uint256 private maxVariations = 4;
     uint256 private maxBaseColors = 3;
-    uint256 private maxVariationsColors = 6;
+    uint256 private maxSecondaryColors = 6;
 
     uint256 private totalCopiesPerPair;
 
@@ -32,12 +32,12 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
         uint256 wSubType;
         uint256 wVariation;
         uint256 wBaseColor;
-        uint256 wVariationColor;
+        uint256 wSecondaryColor;
         uint256 wSerialNumber;
     }
 
     mapping(uint256 => WrappingStats) private CreatedWrappings;
-    //wType => wSubType => wVariation => wBaseColor => wVariationColor => wSerialNumber
+    //wType => wSubType => wVariation => wBaseColor => wSecondaryColor => wSerialNumber
 
     /** IERC2981 Royalties */
     struct RoyaltyInfo {
@@ -68,7 +68,7 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
             maxSubTypes *
             maxVariations *
             maxBaseColors *
-            maxVariationsColors *
+            maxSecondaryColors *
             totalCopiesPerPair;
         return total - wrappingId;
     }
@@ -149,7 +149,7 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
         maxSubTypes += addSubType;
         maxVariations += addVariation;
         maxBaseColors += addBaseColor;
-        maxVariationsColors += addVariationColor;
+        maxSecondaryColors += addVariationColor;
     }
 
     function getNextInProductionLine() private returns (WrappingStats memory) {
@@ -159,7 +159,7 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
             wSubTypeCurrent,
             wVariationCurrent,
             wBaseColorCurrent,
-            wVariationColorCurrent,
+            wSecondaryColorCurrent,
             wSerialNumberCurrent
         );
 
@@ -180,10 +180,10 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
                         wBaseColorCurrent += 1;
                     } else {
                         wBaseColorCurrent = 1;
-                        if (wVariationColorCurrent < maxVariationsColors) {
-                            wVariationColorCurrent += 1;
+                        if (wSecondaryColorCurrent < maxSecondaryColors) {
+                            wSecondaryColorCurrent += 1;
                         } else {
-                            wVariationColorCurrent = 1;
+                            wSecondaryColorCurrent = 1;
                             wSerialNumberCurrent += 1;
                         }
                     }

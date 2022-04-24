@@ -24,12 +24,13 @@ export const getReadableOshiri = (createdOshiri: any): OshiriStats => {
 };
 
 export const getReadableWrapping = (wrapping: any): WrappingStats => {
+  console.log("THE WRAPPING", wrapping);
   return {
     wType: wrapping.wType.toString(),
     wSubType: wrapping.wSubType.toString(),
     wVariation: wrapping.wVariation.toString(),
     wBaseColor: wrapping.wBaseColor.toString(),
-    wVariationColor: wrapping.wVariationColor.toString(),
+    wSecondaryColor: wrapping.wSecondaryColor.toString(),
     wSerialNumber: wrapping.wSerialNumber.toString(),
   };
 };

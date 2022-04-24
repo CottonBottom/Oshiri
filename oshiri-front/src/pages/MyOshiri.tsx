@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 //import { HexColorPicker } from "react-colorful";
-import { OshiriStats, skinTones, WrappingStats } from "../utils/constants";
+import {
+  OshiriStats,
+  skinTones,
+  WrappingStats,
+  wrappingTypes,
+} from "../utils/constants";
 import Button from "../components/buttons/Button";
 import { useTranslation } from "react-i18next";
 import ChangeLanguage from "../components/ChangeLanguage";
@@ -16,7 +21,7 @@ import ChangeStats from "./modals/ChangeStats";
 type Props = {
   getOshiri: () => void;
   oshiriStats: OshiriStats;
-  wrappingStats: WrappingStats | null;
+  wrappingStats: WrappingStats;
 };
 
 const MyOshiri: React.FC<Props> = ({
@@ -38,16 +43,50 @@ const MyOshiri: React.FC<Props> = ({
 
   console.log("My Oshiri Stats", oshiriStats);
   console.log("My Wrapping Stats", wrappingStats);
+  const { t } = useTranslation();
+
+  const getWrappingName = (stats: WrappingStats) => {
+    //! Stats randomized for testing:
+    // const stats = {
+    //   wType: Math.floor(Math.random() * (6 - 1 + 1) + 1),
+    //   wSubType: Math.floor(Math.random() * (3 - 1 + 1) + 1),
+    //   wBaseColor: Math.floor(Math.random() * (3 - 1 + 1) + 1),
+    //   wSecondaryColor: Math.floor(Math.random() * (6 - 1 + 1) + 1),
+    //   wVariation: Math.floor(Math.random() * (4 - 1 + 1) + 1),
+    // };
+
+    //All the indexes are -1, since in Solidty zero is not existent
+    const wType = t(wrappingTypes[stats.wType - 1].name);
+    const wSubType = t(
+      wrappingTypes[stats.wType - 1].wSubType[stats.wSubType - 1].name
+    );
+    const wBaseColor = t(
+      wrappingTypes[stats.wType - 1].wSubType[stats.wSubType - 1].wBaseColor[
+        stats.wBaseColor - 1
+      ].name
+    );
+    const wSecondaryColor = t(
+      wrappingTypes[stats.wType - 1].wSubType[stats.wSubType - 1]
+        .wSecondaryColor[stats.wSecondaryColor - 1].name
+    );
+    const wVariation = t(
+      wrappingTypes[stats.wType - 1].wSubType[stats.wSubType - 1].wVariation[
+        stats.wVariation
+      ]
+    );
+
+    //return `${wType} ${wSubType} ${wBaseColor} ${wSecondaryColor} ${wVariation}`;
+
+    return `${wVariation} ${wSecondaryColor} ${wBaseColor} ${wSubType} ${wType}`;
+  };
 
   const oshiriSize = oshiriSizeDigitToScale(oshiriStats.size);
   const oshiriSkin = skinTones[oshiriStats.color];
   const oshiriName = oshiriStats.name;
-  const wrappingName = "Description of current worn Wrapping";
+  const wrappingName = getWrappingName(wrappingStats);
 
   const totalOSH = "9999";
   const totalConsent = oshiriStats.availableConsent;
-
-  const { t } = useTranslation();
 
   return (
     <>
