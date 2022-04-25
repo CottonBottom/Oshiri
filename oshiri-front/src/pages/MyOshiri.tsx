@@ -17,29 +17,41 @@ import NewDay from "./modals/NewDay";
 import GotWrapping from "./modals/GotWrapping";
 import ConsentSent from "./modals/ConsentSent";
 import ChangeStats from "./modals/ChangeStats";
+import Tutorial from "../components/Tutorial";
 
 type Props = {
   getOshiri: () => void;
   oshiriStats: OshiriStats;
   wrappingStats: WrappingStats;
+  firstTime: boolean;
+  newWrappingStats?: WrappingStats;
 };
 
 const MyOshiri: React.FC<Props> = ({
   oshiriStats,
   wrappingStats,
   getOshiri,
+  firstTime,
+  newWrappingStats,
 }: Props) => {
   const [sendConsentModal, setSendConsentModal] = useState<boolean>(false);
   const [consentSentModal, setConsentSentModal] = useState<boolean>(false);
   const [newDayModal, setNewDayModal] = useState<boolean>(false);
   const [gotWrappingModal, setGotWrappingModal] = useState<boolean>(false);
   const [changeStatsModal, setChangeStatsModal] = useState<boolean>(false);
+  const [showTutorial, setShowTutorial] = useState<boolean>(false);
 
   const [walletToSendConsent, setWalletToSendConsent] = useState<string>("");
 
   useEffect(() => {
     getOshiri();
   }, []);
+
+  useEffect(() => {
+    if (firstTime) {
+      setGotWrappingModal(true);
+    }
+  }, [firstTime]);
 
   console.log("My Oshiri Stats", oshiriStats);
   console.log("My Wrapping Stats", wrappingStats);
@@ -54,7 +66,6 @@ const MyOshiri: React.FC<Props> = ({
     //   wSecondaryColor: Math.floor(Math.random() * (6 - 1 + 1) + 1),
     //   wVariation: Math.floor(Math.random() * (4 - 1 + 1) + 1),
     // };
-
     //All the indexes are -1, since in Solidty zero is not existent
     const wType = t(wrappingTypes[stats.wType - 1].name);
     const wSubType = t(
@@ -109,9 +120,14 @@ const MyOshiri: React.FC<Props> = ({
         changeStatsFee={"001"}
       ></ChangeStats>
       <GotWrapping
+        newWrappingName={getWrappingName(newWrappingStats || wrappingStats)}
         gotWrappingModal={gotWrappingModal}
         setGotWrappingModal={setGotWrappingModal}
       ></GotWrapping>
+      <Tutorial
+        showTutorial={showTutorial}
+        setShowTutorial={setShowTutorial}
+      ></Tutorial>
       {/* TODO: Modals */}
       <div className="main-background">
         <div className="main-container">
@@ -133,7 +149,7 @@ const MyOshiri: React.FC<Props> = ({
               >
                 {t("change")}
               </IconButton>
-              <IconButton icon="help" onClick={() => console.log("Clicked")}>
+              <IconButton icon="help" onClick={() => setShowTutorial(true)}>
                 {t("tutorial")}
               </IconButton>
             </div>

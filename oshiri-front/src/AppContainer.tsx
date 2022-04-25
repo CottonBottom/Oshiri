@@ -18,8 +18,6 @@ import { getReadableOshiri, getReadableWrapping } from "./utils/conversions";
 const AppContainer = () => {
   const { i18n } = useTranslation();
 
-  //! Next: Introductory flow => run contracts and register wallet
-
   const [connectedWallet, setConnectedWallet] = useState<string>("");
   const [oshiriStats, setOshiriStats] = useState<OshiriStats | null>(null);
   const [newOshiriStats, setNewOshiriStats] = useState<OshiriStats | null>(
@@ -31,6 +29,8 @@ const AppContainer = () => {
   );
   const [storyStage, setStoryStage] = useState<Stories>(Stories.none);
   const [customizing, setCustomizing] = useState<boolean>(false);
+
+  const [firstTime, setFirstTime] = useState<boolean>(false);
 
   const web3Modal = new Web3Modal({
     // network: "mainnet", // optional
@@ -56,11 +56,11 @@ const AppContainer = () => {
   }, [oshiriStats]);
 
   //TODO: Test losing wrapping
-  useEffect(() => {
-    if (oshiriStats && !wrappingStats) {
-      setStoryStage(Stories.noWrappingError);
-    }
-  }, [oshiriStats, wrappingStats]);
+  // useEffect(() => {
+  //   if (oshiriStats && !wrappingStats) {
+  //     setStoryStage(Stories.noWrappingError);
+  //   }
+  // }, [oshiriStats, wrappingStats]);
 
   useEffect(() => {
     if (newOshiriStats) {
@@ -137,7 +137,37 @@ const AppContainer = () => {
       );
       const tx = await transaction.wait();
       const event = tx.events[1];
-      console.log("THE EVENT FROM CREATING OSHIRI", event);
+      setFirstTime(true);
+      getOshiri();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const updateOshiri = async () => {
+    if (!newOshiriStats) {
+      return;
+    }
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
+    const oshiri = new ethers.Contract(
+      oshiriaddress,
+      OshiriContract.abi,
+      signer
+    );
+    const updateOshiriPrice = await oshiri.getUpdateOshiriPrice();
+    try {
+      const transaction = await oshiri.updateOshiri(
+        newOshiriStats.color,
+        newOshiriStats.size,
+        newOshiriStats.name,
+        newOshiriStats.tail,
+        newOshiriStats.tailColor,
+        { value: updateOshiriPrice.toString() }
+      );
+      const tx = await transaction.wait();
+      const event = tx.events[1];
       getOshiri();
     } catch (error) {
       console.error(error);
@@ -162,7 +192,12 @@ const AppContainer = () => {
           {customizing && (
             <Route
               path="customization"
-              element={<Customization setNewOshiriStats={setNewOshiriStats} />}
+              element={
+                <Customization
+                  setNewOshiriStats={setNewOshiriStats}
+                  oshiriStats={oshiriStats}
+                />
+              }
             />
           )}
           {connectedWallet && (
@@ -177,6 +212,7 @@ const AppContainer = () => {
                       setCustomizing={setCustomizing}
                       makeOshiri={makeOshiri}
                       oshiriStats={oshiriStats}
+                      wrappingStats={wrappingStats}
                     />
                   }
                 />
@@ -190,6 +226,7 @@ const AppContainer = () => {
                         getOshiri={getOshiri}
                         oshiriStats={oshiriStats}
                         wrappingStats={wrappingStats}
+                        firstTime={firstTime}
                       />
                     }
                   />

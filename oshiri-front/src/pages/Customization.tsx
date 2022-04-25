@@ -11,9 +11,13 @@ import { useNavigate } from "react-router-dom";
 
 type Props = {
   setNewOshiriStats: React.Dispatch<React.SetStateAction<OshiriStats | null>>;
+  oshiriStats: OshiriStats | null;
 };
 
-const Customization: React.FC<Props> = ({ setNewOshiriStats }: Props) => {
+const Customization: React.FC<Props> = ({
+  setNewOshiriStats,
+  oshiriStats,
+}: Props) => {
   const [oshiriSize, setOshiriSize] = useState<string>("0.95,1.0");
   const [selectedSize, setSelectedSize] = useState<string>("1");
   const [selectedSkin, setSelectedSkin] = useState<string>(skinTones[1]);
@@ -38,7 +42,13 @@ const Customization: React.FC<Props> = ({ setNewOshiriStats }: Props) => {
           : tailColors.indexOf(selectedTailColor),
     };
     setNewOshiriStats(newOshiriStats);
-    navigate("/story");
+
+    //TODO: Test flow
+    if (oshiriStats) {
+      navigate("/myOshiri");
+    } else {
+      navigate("/story");
+    }
   };
 
   const skinOptions = () => {

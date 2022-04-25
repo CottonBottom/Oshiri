@@ -6,12 +6,14 @@ import Modal from "../../components/Modal";
 type Props = {
   gotWrappingModal: boolean;
   setGotWrappingModal: React.Dispatch<React.SetStateAction<boolean>>;
+  newWrappingName: string;
   wrappingPreview?: string;
 };
 
 const GotWrapping: React.FC<Props> = ({
   gotWrappingModal,
   setGotWrappingModal,
+  newWrappingName,
   wrappingPreview,
 }: Props) => {
   const { t } = useTranslation();
@@ -29,7 +31,7 @@ const GotWrapping: React.FC<Props> = ({
       <div className="list">
         <ul>
           <li>
-            <mark>New Wrapping Name</mark>
+            <mark>{newWrappingName}</mark>
             {t("gotWrappingList1")}
           </li>
           <li>{t("gotWrappingList2")}</li>

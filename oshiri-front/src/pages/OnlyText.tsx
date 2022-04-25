@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import ChangeLanguage from "../components/ChangeLanguage";
 import Button from "../components/buttons/Button";
 import logo from "../assets/images/logo.png";
-import { OshiriStats, Stories } from "../utils/constants";
+import { OshiriStats, Stories, WrappingStats } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
 
 type Props = {
@@ -12,6 +12,7 @@ type Props = {
   setCustomizing: React.Dispatch<React.SetStateAction<boolean>>;
   makeOshiri: () => void;
   oshiriStats: OshiriStats | null;
+  wrappingStats: WrappingStats | null;
 };
 
 const Entrance: React.FC<Props> = ({
@@ -20,15 +21,16 @@ const Entrance: React.FC<Props> = ({
   setCustomizing,
   makeOshiri,
   oshiriStats,
+  wrappingStats,
 }: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (oshiriStats) {
+    if (oshiriStats && wrappingStats && storyStage === Stories.wrappingIntro) {
       navigate("/myoshiri");
     }
-  }, [oshiriStats]);
+  }, [oshiriStats, wrappingStats]);
 
   const getStoryFromStage = (stage: number) => {
     switch (stage) {
@@ -50,8 +52,8 @@ const Entrance: React.FC<Props> = ({
         navigate("/customization");
         break;
       case Stories.wrappingIntro:
-        console.log("READY TO MAKE OSHIRI");
         makeOshiri();
+        setStoryStage(Stories.none);
         break;
       case Stories.noWrappingError:
         navigate("/");
