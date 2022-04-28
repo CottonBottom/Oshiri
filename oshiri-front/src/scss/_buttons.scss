@@ -96,12 +96,12 @@
 }
 
 .change-language {
-  margin-bottom: 16px;
+  padding: 16px 24px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   width: 100%;
-  button {
+  button:not(:last-child) {
     margin-right: 4px;
   }
 }

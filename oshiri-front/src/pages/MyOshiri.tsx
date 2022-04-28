@@ -130,8 +130,8 @@ const MyOshiri: React.FC<Props> = ({
       ></Tutorial>
       {/* TODO: Modals */}
       <div className="main-background">
+        <ChangeLanguage />
         <div className="main-container">
-          <ChangeLanguage />
           <Oshiri oshiriSize={oshiriSize} oshiriSkin={oshiriSkin}></Oshiri>
           <div className="main-display">
             <div className="main-display__name">{oshiriName}</div>
