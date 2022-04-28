@@ -1,60 +1,92 @@
-import React, { useState } from "react";
-//import { HexColorPicker } from "react-colorful";
-import OptionButton from "../components/buttons/OptionButton";
-import { skinTones } from "../utils/constants";
+import React, { useEffect, useState } from "react";
+import { OshiriStats, skinTones, WrappingStats } from "../utils/constants";
 import Button from "../components/buttons/Button";
 import { useTranslation } from "react-i18next";
 import ChangeLanguage from "../components/ChangeLanguage";
 import Oshiri from "../components/Oshiri";
 import IconButton from "../components/buttons/IconButton";
-import { oshiriSizeDigitToScale } from "../utils/conversions";
+import { getWrappingName, oshiriSizeDigitToScale } from "../utils/conversions";
+import { useNavigate, useParams } from "react-router-dom";
 
-type Props = {};
+type Props = {
+  getOtherOshiri: (address: string) => Promise<{
+    readableOshiri: OshiriStats;
+    readableWrapping: WrappingStats;
+    walletAddress: string;
+  } | null>;
+};
 
-const TheirOshiri: React.FC<Props> = (props: Props) => {
-  const oshiriSize = oshiriSizeDigitToScale(5);
-  const oshiriSkin = skinTones[1];
-  const oshiriName = "TheirOshiri";
-  const wrappingName = "Description of current worn Wrapping";
-
-  const totalOSH = "9999";
-  const totalConsent = "99";
+const TheirOshiri: React.FC<Props> = ({ getOtherOshiri }: Props) => {
+  const [oshiriStats, setOshiriStats] = useState<OshiriStats | null>(null);
+  const [wrappingStats, setWrappingStats] = useState<WrappingStats | null>(
+    null
+  );
 
   const { t } = useTranslation();
+  const { address } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    getOtherOshiri(address || "").then((stats) => {
+      console.log("HELLO STATS", stats);
+      if (!stats) {
+        navigate("/");
+        return;
+        //TODO: if there is not oshiri with the address, send to story warning
+      }
+      if (stats.walletAddress === address) {
+        navigate("/");
+        return;
+        //TODO: if there is not oshiri with the address, send warning that its the same address
+      }
+      setOshiriStats(stats.readableOshiri);
+      setWrappingStats(stats.readableWrapping);
+    });
+  }, [address]);
+
+  const oshiriSize = oshiriSizeDigitToScale(oshiriStats ? oshiriStats.size : 1);
+  const oshiriSkin = skinTones[oshiriStats ? oshiriStats.color : 1];
+  const oshiriName = oshiriStats?.name;
+  const wrappingName = wrappingStats ? getWrappingName(wrappingStats, t) : "";
+  const availableConsent = oshiriStats?.currentConsent;
 
   return (
     <div className="main-background">
-      <div className="main-container">
-        <ChangeLanguage />
-        <Oshiri oshiriSize={oshiriSize} oshiriSkin={oshiriSkin}></Oshiri>
-        <div className="main-display">
-          <div className="main-display__name">{oshiriName}</div>
-          <div className="main-display__wrapping">{wrappingName}</div>
-          <div className="main-display__options main-display__options--their-oshiri">
-            <IconButton icon="help" onClick={() => console.log("Clicked")}>
-              {t("tutorial")}
-            </IconButton>
-          </div>
-        </div>
-      </div>
-      <div className="main-actions-area">
-        <div className="main-actions-container main-actions-container--their-oshiri">
-          <div className="main-actions__set">
-            <Button
-              type="primary"
-              onClick={() => {
-                console.log("Get Wrappings");
-              }}
-            >
-              {t("spendConsent")}
-            </Button>
-            <div className="main-actions__value-container">
-              <div className="main-actions__value">{totalConsent}</div>
-              <div className="main-actions__currency">{t("Consent")}</div>
+      <ChangeLanguage />
+      {oshiriStats && wrappingStats && (
+        <>
+          <div className="main-container">
+            <Oshiri oshiriSize={oshiriSize} oshiriSkin={oshiriSkin}></Oshiri>
+            <div className="main-display">
+              <div className="main-display__name">{oshiriName}</div>
+              <div className="main-display__wrapping">{wrappingName}</div>
+              <div className="main-display__options main-display__options--their-oshiri">
+                <IconButton icon="help" onClick={() => console.log("Clicked")}>
+                  {t("tutorial")}
+                </IconButton>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+          <div className="main-actions-area">
+            <div className="main-actions-container main-actions-container--their-oshiri">
+              <div className="main-actions__set">
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    console.log("Get Wrappings");
+                  }}
+                >
+                  {t("spendConsent")}
+                </Button>
+                <div className="main-actions__value-container">
+                  <div className="main-actions__value">{availableConsent}</div>
+                  <div className="main-actions__currency">{t("Consent")}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

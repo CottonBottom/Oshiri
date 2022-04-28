@@ -36,6 +36,8 @@ export type OshiriStats = {
   availableConsent?: number;
   lastDayAccessed?: string;
   wornWrapping?: string;
+  //For Other Oshiri
+  currentConsent?: string;
 };
 
 export type WrappingStats = {

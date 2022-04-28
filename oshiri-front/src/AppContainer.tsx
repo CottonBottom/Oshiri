@@ -13,7 +13,11 @@ import OshiriContract from "./artifacts/contracts/Oshiri.sol/Oshiri.json";
 import OshiriWrappingsContract from "./artifacts/contracts/OshiriWrappings.sol/OshiriWrappings.json";
 import { oshiriaddress, oshiriwrappingsaddress } from "./config";
 import { OshiriStats, Stories, WrappingStats } from "./utils/constants";
-import { getReadableOshiri, getReadableWrapping } from "./utils/conversions";
+import {
+  getOtherReadableOshiri,
+  getReadableOshiri,
+  getReadableWrapping,
+} from "./utils/conversions";
 
 const AppContainer = () => {
   const { i18n } = useTranslation();
@@ -174,6 +178,36 @@ const AppContainer = () => {
     }
   };
 
+  const getOtherOshiri = async (address: string) => {
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
+    const walletAddress = await signer.getAddress();
+
+    const oshiri = new ethers.Contract(
+      oshiriaddress,
+      OshiriContract.abi,
+      signer
+    );
+    const oshiriWrappings = new ethers.Contract(
+      oshiriwrappingsaddress,
+      OshiriWrappingsContract.abi,
+      signer
+    );
+    try {
+      const oshiriStats = await oshiri.getOtherOshiri(address);
+      const readableOshiri = getOtherReadableOshiri(oshiriStats);
+      const wrappingStats = await oshiriWrappings.getWrapping(
+        readableOshiri.wornWrapping
+      );
+      const readableWrapping = getReadableWrapping(wrappingStats);
+      return { readableOshiri, readableWrapping, walletAddress };
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
+
   return (
     <div className={i18n.language === "jp" ? "japanese-fonts" : ""}>
       <BrowserRouter>
@@ -191,7 +225,7 @@ const AppContainer = () => {
           />
           {customizing && (
             <Route
-              path="customization"
+              path="/customization"
               element={
                 <Customization
                   setNewOshiriStats={setNewOshiriStats}
@@ -204,7 +238,7 @@ const AppContainer = () => {
             <>
               {storyStage !== Stories.none && (
                 <Route
-                  path="story"
+                  path="/story"
                   element={
                     <OnlyText
                       storyStage={storyStage}
@@ -220,7 +254,7 @@ const AppContainer = () => {
               {oshiriStats && wrappingStats && (
                 <>
                   <Route
-                    path="myoshiri"
+                    path="/myoshiri"
                     element={
                       <MyOshiri
                         getOshiri={getOshiri}
@@ -230,12 +264,15 @@ const AppContainer = () => {
                       />
                     }
                   />
-                  <Route path="oshiri" element={<TheirOshiri />} />
                 </>
               )}
             </>
           )}
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route
+            path="/:address"
+            element={<TheirOshiri getOtherOshiri={getOtherOshiri} />}
+          />
+          {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
         </Routes>
       </BrowserRouter>
     </div>
