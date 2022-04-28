@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import left from "../assets/oshiri/left.png";
 import right from "../assets/oshiri/right.png";
 import test from "../assets/wrappings/tests/test.png";
@@ -16,12 +16,12 @@ const Wrapping = ({ oshiriSize }: Props) => {
       { url: left, name: "left" },
       { url: testvara, name: "variation" },
     ];
-    return wrappingParts.map((part) => {
+    return wrappingParts.map((part, index) => {
       const baseSrc = part.name === "variation" ? part.url : test;
       const color = part.name === "variation" ? "gray" : "#4169E1";
       const size = oshiriSize;
       return (
-        <>
+        <Fragment key={index}>
           <img
             className="oshiri-wrapping"
             src={baseSrc}
@@ -41,7 +41,7 @@ const Wrapping = ({ oshiriSize }: Props) => {
               transform: `scale(${size})`,
             }}
           />
-        </>
+        </Fragment>
       );
     });
   };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import spiral from "../assets/images/spiral.svg";
 import left from "../assets/oshiri/left.png";
 import right from "../assets/oshiri/right.png";
@@ -19,10 +19,10 @@ const Oshiri = ({ oshiriSize, oshiriSkin, isCustomizing }: Props) => {
       { url: left, name: "left" },
     ];
 
-    return oshiriParts.map((part) => {
+    return oshiriParts.map((part, index) => {
       const size = oshiriSize;
       return (
-        <>
+        <Fragment key={index}>
           <img
             className="oshiri"
             src={part.url}
@@ -40,7 +40,7 @@ const Oshiri = ({ oshiriSize, oshiriSkin, isCustomizing }: Props) => {
               transform: `scale(${size})`,
             }}
           />
-        </>
+        </Fragment>
       );
     });
   };

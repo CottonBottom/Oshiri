@@ -54,33 +54,36 @@ const Customization: React.FC<Props> = ({
   const skinOptions = () => {
     const totalButtons = skinTones.filter((tone) => tone !== "white");
 
-    return totalButtons.map((button) => (
+    return totalButtons.map((button, index) => (
       <OptionButton
         color={button}
         isSelected={button === selectedSkin}
         onClick={() => setSelectedSkin(button)}
+        key={index}
       ></OptionButton>
     ));
   };
 
   const getTailOptions = () => {
     //TODO: thumbnails for tails
-    return tails.map((button) => (
+    return tails.map((button, index) => (
       <OptionButton
         color={button}
         isSelected={button === selectedTail}
         onClick={() => setSelectedTail(button)}
+        key={index}
       ></OptionButton>
     ));
   };
 
   const getTailColors = () => {
-    return tailColors.map((button) => (
+    return tailColors.map((button, index) => (
       <OptionButton
         color={button}
         isSelected={button === selectedTailColor}
         isDisabled={selectedTail === "black"}
         onClick={() => setSelectedTailColor(button)}
+        key={index}
       ></OptionButton>
     ));
   };
@@ -93,8 +96,8 @@ const Customization: React.FC<Props> = ({
 
   return (
     <div className="main-background">
+      <ChangeLanguage />
       <div className="main-container">
-        <ChangeLanguage />
         <Oshiri
           oshiriSize={oshiriSize}
           oshiriSkin={selectedSkin}

@@ -37,7 +37,9 @@ const MyOshiri: React.FC<Props> = ({
   const [sendConsentModal, setSendConsentModal] = useState<boolean>(false);
   const [consentSentModal, setConsentSentModal] = useState<boolean>(false);
   const [newDayModal, setNewDayModal] = useState<boolean>(false);
-  const [gotWrappingModal, setGotWrappingModal] = useState<boolean>(false);
+  const [gotWrappingModal, setGotWrappingModal] = useState<boolean>(
+    firstTime || false
+  );
   const [changeStatsModal, setChangeStatsModal] = useState<boolean>(false);
   const [showTutorial, setShowTutorial] = useState<boolean>(false);
 
@@ -47,11 +49,11 @@ const MyOshiri: React.FC<Props> = ({
     getOshiri();
   }, []);
 
-  useEffect(() => {
-    if (firstTime) {
-      setGotWrappingModal(true);
-    }
-  }, [firstTime]);
+  // useEffect(() => {
+  //   if (firstTime) {
+  //     setGotWrappingModal(true);
+  //   }
+  // }, [firstTime]);
 
   console.log("My Oshiri Stats", oshiriStats);
   console.log("My Wrapping Stats", wrappingStats);

@@ -39,7 +39,7 @@ i18n
           //Customization
           name: "Name",
           skinTone: "Skin Tone",
-          size: "Skin Tone",
+          size: "Size",
           tail: "Tail",
           tailColor: "Tail Color",
           makeOshiri: "Make Oshiri!",

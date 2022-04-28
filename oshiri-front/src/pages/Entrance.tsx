@@ -58,8 +58,8 @@ const Entrance: React.FC<Props> = ({
         confirm={onConfirm}
       />
       <div className="main-background">
+        <ChangeLanguage />
         <div className="main-container main-container--entrance">
-          <ChangeLanguage />
           <div className="main-entrance">
             <div className="main-logo">
               <img src={logo} alt="oshiri-logo" />

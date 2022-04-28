@@ -67,8 +67,8 @@ const Entrance: React.FC<Props> = ({
   return (
     <>
       <div className="main-background main-background--only-text">
+        <ChangeLanguage />
         <div className="main-container main-container--only-text">
-          <ChangeLanguage />
           <div className="main-entrance">
             <div className="only-text">
               <p>{t(getStoryFromStage(storyStage))}</p>
