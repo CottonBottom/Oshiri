@@ -208,6 +208,10 @@ const AppContainer = () => {
     }
   };
 
+  //! Next:
+  //Give consent A -> B
+  //Spend Consent -> Spank Animation + UI
+
   return (
     <div className={i18n.language === "jp" ? "japanese-fonts" : ""}>
       <BrowserRouter>
