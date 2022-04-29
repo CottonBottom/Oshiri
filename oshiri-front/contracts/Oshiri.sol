@@ -232,6 +232,7 @@ contract Oshiri is ReentrancyGuard {
         );
     }
 
+    //TODO: Charge for sendConsent -> 1usd, current gas: 5usd (0.002)
     function sendConsent(address receiver) external nonReentrant {
         require(AllOshiri[msg.sender].color > 0, "Oshiri not existent");
         require(

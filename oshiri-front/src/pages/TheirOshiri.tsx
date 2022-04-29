@@ -21,6 +21,7 @@ const TheirOshiri: React.FC<Props> = ({ getOtherOshiri }: Props) => {
   const [wrappingStats, setWrappingStats] = useState<WrappingStats | null>(
     null
   );
+  const [isSmacking, setIsSmacking] = useState<boolean>(false);
 
   const { t } = useTranslation();
   const { address } = useParams();
@@ -48,7 +49,7 @@ const TheirOshiri: React.FC<Props> = ({ getOtherOshiri }: Props) => {
   const oshiriSkin = skinTones[oshiriStats ? oshiriStats.color : 1];
   const oshiriName = oshiriStats?.name;
   const wrappingName = wrappingStats ? getWrappingName(wrappingStats, t) : "";
-  const availableConsent = oshiriStats?.currentConsent;
+  const availableConsent = parseInt(oshiriStats?.currentConsent || "0");
 
   return (
     <div className="main-background">
@@ -56,7 +57,11 @@ const TheirOshiri: React.FC<Props> = ({ getOtherOshiri }: Props) => {
       {oshiriStats && wrappingStats && (
         <>
           <div className="main-container">
-            <Oshiri oshiriSize={oshiriSize} oshiriSkin={oshiriSkin}></Oshiri>
+            <Oshiri
+              oshiriSize={oshiriSize}
+              oshiriSkin={oshiriSkin}
+              isSmacking={isSmacking}
+            ></Oshiri>
             <div className="main-display">
               <div className="main-display__name">{oshiriName}</div>
               <div className="main-display__wrapping">{wrappingName}</div>
@@ -73,13 +78,18 @@ const TheirOshiri: React.FC<Props> = ({ getOtherOshiri }: Props) => {
                 <Button
                   type="primary"
                   onClick={() => {
-                    console.log("Get Wrappings");
+                    setIsSmacking(true);
                   }}
+                  isDisabled={availableConsent && !isSmacking ? false : true}
                 >
                   {t("spendConsent")}
                 </Button>
                 <div className="main-actions__value-container">
-                  <div className="main-actions__value">{availableConsent}</div>
+                  <div className="main-actions__value">
+                    {availableConsent.toString().length < 2
+                      ? `0${availableConsent}`
+                      : availableConsent}
+                  </div>
                   <div className="main-actions__currency">{t("Consent")}</div>
                 </div>
               </div>

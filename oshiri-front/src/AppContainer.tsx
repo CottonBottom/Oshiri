@@ -107,7 +107,6 @@ const AppContainer = () => {
         readableOshiri.wornWrapping
       );
       const readableWrapping = getReadableWrapping(wrappingStats);
-
       setOshiriStats(readableOshiri);
       setWrappingStats(readableWrapping);
     } catch (error) {
@@ -148,6 +147,7 @@ const AppContainer = () => {
     }
   };
 
+  //TODO
   const updateOshiri = async () => {
     if (!newOshiriStats) {
       return;
@@ -208,6 +208,24 @@ const AppContainer = () => {
     }
   };
 
+  const sendConsent = async (receiver: string) => {
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
+    const oshiri = new ethers.Contract(
+      oshiriaddress,
+      OshiriContract.abi,
+      signer
+    );
+    try {
+      const transaction = await oshiri.sendConsent(receiver);
+      const tx = await transaction.wait();
+      const event = tx.events[1];
+      getOshiri();
+    } catch (error) {
+      console.error(error);
+    }
+  };
   //! Next:
   //Give consent A -> B
   //Spend Consent -> Spank Animation + UI
@@ -265,6 +283,7 @@ const AppContainer = () => {
                         oshiriStats={oshiriStats}
                         wrappingStats={wrappingStats}
                         firstTime={firstTime}
+                        sendConsent={sendConsent}
                       />
                     }
                   />
@@ -276,7 +295,7 @@ const AppContainer = () => {
             path="/:address"
             element={<TheirOshiri getOtherOshiri={getOtherOshiri} />}
           />
-          {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
     </div>

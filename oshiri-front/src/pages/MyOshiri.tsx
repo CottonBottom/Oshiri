@@ -3,7 +3,7 @@ import {
   OshiriStats,
   skinTones,
   WrappingStats,
-  wrappingTypes,
+  //wrappingTypes,
 } from "../utils/constants";
 import Button from "../components/buttons/Button";
 import { useTranslation } from "react-i18next";
@@ -23,6 +23,7 @@ type Props = {
   oshiriStats: OshiriStats;
   wrappingStats: WrappingStats;
   firstTime: boolean;
+  sendConsent: (receiver: string) => void;
 };
 
 const MyOshiri: React.FC<Props> = ({
@@ -30,6 +31,7 @@ const MyOshiri: React.FC<Props> = ({
   wrappingStats,
   getOshiri,
   firstTime,
+  sendConsent,
 }: Props) => {
   const [sendConsentModal, setSendConsentModal] = useState<boolean>(false);
   const [consentSentModal, setConsentSentModal] = useState<boolean>(false);
@@ -58,6 +60,12 @@ const MyOshiri: React.FC<Props> = ({
   const totalOSH = "9999";
   const totalConsent = oshiriStats.availableConsent;
 
+  const onSendConsent = () => {
+    sendConsent(walletToSendConsent);
+    setSendConsentModal(false);
+    //TODO answer to response, errors/sent () return on try/catch and show modal?
+  };
+
   return (
     <>
       <SendConsent
@@ -65,7 +73,7 @@ const MyOshiri: React.FC<Props> = ({
         setSendConsentModal={setSendConsentModal}
         walletToSendConsent={walletToSendConsent}
         setWalletToSendConsent={setWalletToSendConsent}
-        onSendConsent={() => setSendConsentModal(false)}
+        onSendConsent={onSendConsent}
       />
       <ConsentSent
         consentSentModal={consentSentModal}

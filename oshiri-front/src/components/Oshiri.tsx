@@ -9,9 +9,15 @@ type Props = {
   oshiriSize: string;
   oshiriSkin: string;
   isCustomizing?: boolean;
+  isSmacking?: boolean;
 };
 
-const Oshiri = ({ oshiriSize, oshiriSkin, isCustomizing }: Props) => {
+const Oshiri = ({
+  oshiriSize,
+  oshiriSkin,
+  isCustomizing,
+  isSmacking,
+}: Props) => {
   const makeOshiri = () => {
     const oshiriParts = [
       { url: base, name: "base" },
@@ -45,13 +51,17 @@ const Oshiri = ({ oshiriSize, oshiriSkin, isCustomizing }: Props) => {
     });
   };
   return (
-    <div
-      className="oshiri-background"
-      style={{ backgroundImage: `url(${spiral})` }}
-    >
-      {makeOshiri()}
-      {!isCustomizing && <Wrapping oshiriSize={oshiriSize}></Wrapping>}
-    </div>
+    <>
+      {isSmacking && <div className="oshiri-smacking-background"></div>}
+      <div
+        className="oshiri-background"
+        style={{ backgroundImage: `url(${spiral})` }}
+      >
+        {isSmacking && <div className="oshiri-smacking-mask">Smack!</div>}
+        {makeOshiri()}
+        {!isCustomizing && <Wrapping oshiriSize={oshiriSize}></Wrapping>}
+      </div>
+    </>
   );
 };
 
