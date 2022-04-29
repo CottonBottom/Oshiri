@@ -227,7 +227,6 @@ const AppContainer = () => {
     }
   };
   //! Next:
-  //Give consent A -> B
   //Spend Consent -> Spank Animation + UI
 
   return (
