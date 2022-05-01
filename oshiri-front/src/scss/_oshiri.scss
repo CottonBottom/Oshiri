@@ -66,6 +66,17 @@
   animation: smackingTitle 1000ms ease-in-out both;
 }
 
+.smack-button {
+  top: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
 @keyframes smackingTitle {
   0% {
     opacity: 0;
@@ -100,3 +111,177 @@
 }
 
 //TODO: change fonts to em
+
+/** Smack */
+//TODO: Animation adjustments
+
+.ripple,
+.ripple-two,
+.ripple-three {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: black;
+  mix-blend-mode: soft-light;
+  z-index: 100;
+  opacity: 0;
+  position: absolute;
+}
+
+.blush {
+  width: 250px;
+  height: 250px;
+  // background: red;
+  // box-shadow: 0px 0px 20px 20px red;
+  // -moz-box-shadow: 0px 0px 20px 20px red;
+  // -webkit-box-shadow: 0px 0px 20px 20px red;
+  background-image: radial-gradient(red 0%, transparent 70%);
+  mix-blend-mode: soft-light;
+  z-index: 400;
+  opacity: 0;
+  position: absolute;
+}
+
+.ripple--left {
+  top: 170px;
+  left: 200px;
+}
+
+.ripple--right {
+  top: 170px;
+  right: 60px;
+}
+
+.blush--left {
+  top: 90px;
+  left: 120px;
+}
+
+.blush--right {
+  top: 90px;
+  right: -20px;
+}
+
+.smack {
+  .displacement {
+    animation: displacement 500ms ease-out forwards;
+  }
+
+  .blush {
+    animation: blush 2000ms ease-out forwards;
+  }
+
+  .ripple {
+    animation: ripple 200ms ease-out forwards;
+  }
+
+  .ripple-two {
+    animation: ripple-two 200ms ease-out forwards;
+    animation-delay: 100ms;
+  }
+
+  .ripple-three {
+    animation: ripple-three 200ms ease-out forwards;
+    animation-delay: 200ms;
+  }
+}
+
+@keyframes blush {
+  0% {
+    opacity: 0;
+  }
+  3% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+//Test 02
+@keyframes displacement {
+  0% {
+    transform: translate(-10px, 5px) scale(0.95, 1.05);
+  }
+  3% {
+    transform: translate(-10px, 5px) scale(0.95, 1.05);
+  }
+  6% {
+    transform: translate(5px, -10px) scale(1.05, 0.95);
+  }
+  9% {
+    transform: translate(-7px, 3px) scale(0.96, 1.04);
+  }
+  12% {
+    transform: translate(3px, -7px) scale(1.04, 0.96);
+  }
+  20% {
+    transform: translate(-5px, 2px) scale(0.97, 1.03);
+  }
+  40% {
+    transform: translate(2px, -5px) scale(1.03, 0.97);
+  }
+  60% {
+    transform: translate(-3px, 1px) scale(0.98, 1.02);
+  }
+  70% {
+    transform: translate(1px, -3px) scale(1.02, 0.98);
+  }
+  80% {
+    transform: translate(-2px, 0px) scale(0.99, 1.01);
+  }
+  90% {
+    transform: translate(0px, -2px) scale(1.01, 0.99);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1, 1);
+  }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(1);
+    opacity: 0;
+  }
+  3% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+@keyframes ripple-two {
+  0% {
+    transform: scale(1);
+    opacity: 0;
+  }
+  3% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+@keyframes ripple-three {
+  0% {
+    transform: scale(1);
+    opacity: 0;
+  }
+  3% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}

@@ -23,7 +23,9 @@ const Wrapping = ({ oshiriSize }: Props) => {
       return (
         <Fragment key={index}>
           <img
-            className="oshiri-wrapping"
+            className={`oshiri-wrapping ${
+              part.name === "base" ? "" : "displacement"
+            }`}
             src={baseSrc}
             alt=""
             style={{
@@ -33,7 +35,9 @@ const Wrapping = ({ oshiriSize }: Props) => {
             }}
           />
           <div
-            className={`oshiri-wrapping-color oshiri-color--${part.name}`}
+            className={`oshiri-wrapping-color oshiri-color--${part.name} ${
+              part.name === "base" ? "" : "displacement"
+            }`}
             style={{
               mask: `url(${part.url}) 0px 0px / cover`,
               WebkitMask: `url(${part.url}) 0px 0px / cover`,

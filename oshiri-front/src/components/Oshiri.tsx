@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import spiral from "../assets/images/spiral.svg";
 import left from "../assets/oshiri/left.png";
 import right from "../assets/oshiri/right.png";
@@ -18,19 +18,46 @@ const Oshiri = ({
   isCustomizing,
   isSmacking,
 }: Props) => {
+  const [smack, setSmack] = useState<string>("");
+
+  const onSmack = () => {
+    console.log("HELLO");
+    setSmack("smack");
+
+    //code before the pause
+    setTimeout(function () {
+      setSmack("");
+    }, 2000);
+  };
+
+  //! Next: how to adapt the animation to the custom scale???
+
   const makeOshiri = () => {
     const oshiriParts = [
       { url: base, name: "base" },
       { url: right, name: "right" },
       { url: left, name: "left" },
     ];
-
     return oshiriParts.map((part, index) => {
       const size = oshiriSize;
+      let ripplePosition = "";
+      let blushPosition = "";
+      switch (part.name) {
+        case "left":
+          ripplePosition = "ripple--left";
+          blushPosition = "blush--left";
+          break;
+        case "right":
+          ripplePosition = "ripple--right";
+          blushPosition = "blush--right";
+          break;
+        default:
+          break;
+      }
       return (
         <Fragment key={index}>
           <img
-            className="oshiri"
+            className={`oshiri ${part.name === "base" ? "" : "displacement"}`}
             src={part.url}
             alt=""
             style={{
@@ -38,14 +65,25 @@ const Oshiri = ({
             }}
           />
           <div
-            className={`oshiri-color oshiri-color--${part.name}`}
+            className={`oshiri-color oshiri-color--${part.name} ${
+              part.name === "base" ? "" : "displacement"
+            }`}
             style={{
               mask: `url(${part.url}) 0px 0px / cover`,
               WebkitMask: `url(${part.url}) 0px 0px / cover`,
               backgroundColor: oshiriSkin,
               transform: `scale(${size})`,
             }}
-          />
+          >
+            {ripplePosition && (
+              <>
+                <div className={`ripple ${ripplePosition}`}></div>
+                <div className={`ripple-two ${ripplePosition}`}></div>
+                <div className={`ripple-three ${ripplePosition}`}></div>
+                <div className={`blush ${blushPosition}`}></div>
+              </>
+            )}
+          </div>
         </Fragment>
       );
     });
@@ -58,8 +96,13 @@ const Oshiri = ({
         style={{ backgroundImage: `url(${spiral})` }}
       >
         {isSmacking && <div className="oshiri-smacking-mask">Smack!</div>}
-        {makeOshiri()}
-        {!isCustomizing && <Wrapping oshiriSize={oshiriSize}></Wrapping>}
+        <span className={`${smack}`}>
+          {makeOshiri()}
+          {/* {!isCustomizing && <Wrapping oshiriSize={oshiriSize}></Wrapping>} */}
+        </span>
+        {isSmacking && (
+          <button className="smack-button" onClick={() => onSmack()}></button>
+        )}
       </div>
     </>
   );
