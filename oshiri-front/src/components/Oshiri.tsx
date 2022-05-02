@@ -10,6 +10,7 @@ type Props = {
   oshiriSkin: string;
   isCustomizing?: boolean;
   isSmacking?: boolean;
+  smacked?: () => void;
 };
 
 const Oshiri = ({
@@ -17,20 +18,24 @@ const Oshiri = ({
   oshiriSkin,
   isCustomizing,
   isSmacking,
+  smacked,
 }: Props) => {
   const [smack, setSmack] = useState<string>("");
+  const [smacking, setSmacking] = useState<boolean>(false);
 
   const onSmack = () => {
-    console.log("HELLO");
     setSmack("smack");
-
-    //code before the pause
+    setSmacking(true);
     setTimeout(function () {
       setSmack("");
+      setSmacking(false);
+      if (smacked) {
+        smacked();
+      }
     }, 2000);
   };
 
-  //! Next: how to adapt the animation to the custom scale???
+  //TODO: Smack sound effect
 
   const makeOshiri = () => {
     const oshiriParts = [
@@ -55,14 +60,16 @@ const Oshiri = ({
           break;
       }
       return (
-        <Fragment key={index}>
+        <span
+          key={index}
+          style={{
+            transform: `scale(${size})`,
+          }}
+        >
           <img
             className={`oshiri ${part.name === "base" ? "" : "displacement"}`}
             src={part.url}
             alt=""
-            style={{
-              transform: `scale(${size})`,
-            }}
           />
           <div
             className={`oshiri-color oshiri-color--${part.name} ${
@@ -72,7 +79,7 @@ const Oshiri = ({
               mask: `url(${part.url}) 0px 0px / cover`,
               WebkitMask: `url(${part.url}) 0px 0px / cover`,
               backgroundColor: oshiriSkin,
-              transform: `scale(${size})`,
+              //transform: `scale(${size})`,
             }}
           >
             {ripplePosition && (
@@ -84,7 +91,7 @@ const Oshiri = ({
               </>
             )}
           </div>
-        </Fragment>
+        </span>
       );
     });
   };
@@ -98,10 +105,14 @@ const Oshiri = ({
         {isSmacking && <div className="oshiri-smacking-mask">Smack!</div>}
         <span className={`${smack}`}>
           {makeOshiri()}
-          {/* {!isCustomizing && <Wrapping oshiriSize={oshiriSize}></Wrapping>} */}
+          {!isCustomizing && <Wrapping oshiriSize={oshiriSize}></Wrapping>}
         </span>
         {isSmacking && (
-          <button className="smack-button" onClick={() => onSmack()}></button>
+          <button
+            className="smack-button"
+            onClick={() => onSmack()}
+            disabled={smacking}
+          ></button>
         )}
       </div>
     </>

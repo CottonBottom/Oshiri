@@ -24,6 +24,7 @@ type Props = {
   wrappingStats: WrappingStats;
   firstTime: boolean;
   sendConsent: (receiver: string) => void;
+  currencyBalance: string;
 };
 
 const MyOshiri: React.FC<Props> = ({
@@ -32,6 +33,7 @@ const MyOshiri: React.FC<Props> = ({
   getOshiri,
   firstTime,
   sendConsent,
+  currencyBalance,
 }: Props) => {
   const [sendConsentModal, setSendConsentModal] = useState<boolean>(false);
   const [consentSentModal, setConsentSentModal] = useState<boolean>(false);
@@ -57,7 +59,7 @@ const MyOshiri: React.FC<Props> = ({
   const oshiriName = oshiriStats.name;
   const wrappingName = getWrappingName(wrappingStats, t);
 
-  const totalOSH = "9999";
+  const totalOSH = currencyBalance;
   const totalConsent = oshiriStats.availableConsent;
 
   const onSendConsent = () => {

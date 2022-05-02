@@ -72,7 +72,9 @@ i18n
             "You may change your skin tone, size and name for a fee of {{fee}}, you will pay at the end",
           //TheirOshiri
           spendConsent: "Spend Consent",
-
+          smackedOshiri: "You Smacked {{oshiriName}}!",
+          smackedAwards:
+            "This Smack has awarded {{awardedCurrency}}OSH for both of you",
           /** Wrapping Names */
           //* Chewing Gum
           chewingGum: "Chewing Gum",

@@ -8,6 +8,11 @@ type Props = {
   oshiriSize: string;
 };
 
+//TODO: Fix illustrations:
+//1: Must be divided in three parts (same as Oshiri)
+//2: Buttocks must be cleaned up of overlapping elements
+//3: Variations must be divided into three parts (as neccesary)
+
 const Wrapping = ({ oshiriSize }: Props) => {
   const makeWrapping = () => {
     const wrappingParts = [
@@ -21,7 +26,12 @@ const Wrapping = ({ oshiriSize }: Props) => {
       const color = part.name === "variation" ? "gray" : "#4169E1";
       const size = oshiriSize;
       return (
-        <Fragment key={index}>
+        <span
+          key={index}
+          style={{
+            transform: `scale(${size})`,
+          }}
+        >
           <img
             className={`oshiri-wrapping ${
               part.name === "base" ? "" : "displacement"
@@ -31,7 +41,7 @@ const Wrapping = ({ oshiriSize }: Props) => {
             style={{
               mask: `url(${part.url}) 0px 0px / cover`,
               WebkitMask: `url(${part.url}) 0px 0px / cover`,
-              transform: `scale(${size})`,
+              //transform: `scale(${size})`,
             }}
           />
           <div
@@ -42,10 +52,10 @@ const Wrapping = ({ oshiriSize }: Props) => {
               mask: `url(${part.url}) 0px 0px / cover`,
               WebkitMask: `url(${part.url}) 0px 0px / cover`,
               backgroundColor: color,
-              transform: `scale(${size})`,
+              //transform: `scale(${size})`,
             }}
           />
-        </Fragment>
+        </span>
       );
     });
   };

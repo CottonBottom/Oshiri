@@ -11,7 +11,12 @@ import { ethers } from "ethers";
 import Web3Modal from "web3modal";
 import OshiriContract from "./artifacts/contracts/Oshiri.sol/Oshiri.json";
 import OshiriWrappingsContract from "./artifacts/contracts/OshiriWrappings.sol/OshiriWrappings.json";
-import { oshiriaddress, oshiriwrappingsaddress } from "./config";
+import OshiriCurrencyContract from "./artifacts/contracts/OshiriCurrency.sol/OshiriCurrency.json";
+import {
+  oshiriAddress,
+  oshiriWrappingsAddress,
+  oshiriCurrencyAddress,
+} from "./config";
 import { OshiriStats, Stories, WrappingStats } from "./utils/constants";
 import {
   getOtherReadableOshiri,
@@ -27,14 +32,14 @@ const AppContainer = () => {
   const [newOshiriStats, setNewOshiriStats] = useState<OshiriStats | null>(
     null
   );
-
   const [wrappingStats, setWrappingStats] = useState<WrappingStats | null>(
     null
   );
+  const [currencyBalance, setCurrencyBalance] = useState<string>("0");
   const [storyStage, setStoryStage] = useState<Stories>(Stories.none);
   const [customizing, setCustomizing] = useState<boolean>(false);
-
   const [firstTime, setFirstTime] = useState<boolean>(false);
+  const [awardedCurrency, setAwardedCurrency] = useState<string>("");
 
   const web3Modal = new Web3Modal({
     // network: "mainnet", // optional
@@ -89,32 +94,39 @@ const AppContainer = () => {
     const connection = await web3Modal.connect();
     const provider = new ethers.providers.Web3Provider(connection);
     const signer = provider.getSigner();
+    const walletAddress = await signer.getAddress();
     const oshiri = new ethers.Contract(
-      oshiriaddress,
+      oshiriAddress,
       OshiriContract.abi,
       signer
     );
     const oshiriWrappings = new ethers.Contract(
-      oshiriwrappingsaddress,
+      oshiriWrappingsAddress,
       OshiriWrappingsContract.abi,
+      signer
+    );
+    const oshiriCurrency = new ethers.Contract(
+      oshiriCurrencyAddress,
+      OshiriCurrencyContract.abi,
       signer
     );
     try {
       const oshiriStats = await oshiri.getMyOshiri();
       const readableOshiri = getReadableOshiri(oshiriStats);
-
       const wrappingStats = await oshiriWrappings.getWrapping(
         readableOshiri.wornWrapping
       );
       const readableWrapping = getReadableWrapping(wrappingStats);
+      const balance = await oshiriCurrency.balanceOf(walletAddress);
       setOshiriStats(readableOshiri);
       setWrappingStats(readableWrapping);
+      const newBalance = balance.toString();
+      setCurrencyBalance(newBalance);
     } catch (error) {
       console.error(error);
       setOshiriStats(null);
     }
   };
-  //! Think: how to manage the urls for others oshiri???
 
   const makeOshiri = async () => {
     if (!newOshiriStats) {
@@ -124,7 +136,7 @@ const AppContainer = () => {
     const provider = new ethers.providers.Web3Provider(connection);
     const signer = provider.getSigner();
     const oshiri = new ethers.Contract(
-      oshiriaddress,
+      oshiriAddress,
       OshiriContract.abi,
       signer
     );
@@ -156,7 +168,7 @@ const AppContainer = () => {
     const provider = new ethers.providers.Web3Provider(connection);
     const signer = provider.getSigner();
     const oshiri = new ethers.Contract(
-      oshiriaddress,
+      oshiriAddress,
       OshiriContract.abi,
       signer
     );
@@ -185,12 +197,12 @@ const AppContainer = () => {
     const walletAddress = await signer.getAddress();
 
     const oshiri = new ethers.Contract(
-      oshiriaddress,
+      oshiriAddress,
       OshiriContract.abi,
       signer
     );
     const oshiriWrappings = new ethers.Contract(
-      oshiriwrappingsaddress,
+      oshiriWrappingsAddress,
       OshiriWrappingsContract.abi,
       signer
     );
@@ -213,7 +225,7 @@ const AppContainer = () => {
     const provider = new ethers.providers.Web3Provider(connection);
     const signer = provider.getSigner();
     const oshiri = new ethers.Contract(
-      oshiriaddress,
+      oshiriAddress,
       OshiriContract.abi,
       signer
     );
@@ -226,8 +238,40 @@ const AppContainer = () => {
       console.error(error);
     }
   };
+
+  const smacked = async (consenter: string) => {
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
+    const oshiri = new ethers.Contract(
+      oshiriAddress,
+      OshiriContract.abi,
+      signer
+    );
+    const oshiriCurrency = new ethers.Contract(
+      oshiriCurrencyAddress,
+      OshiriCurrencyContract.abi,
+      signer
+    );
+    const walletAddress = await signer.getAddress();
+    try {
+      const transaction = await oshiri.smack(consenter);
+      const tx = await transaction.wait();
+      const event = tx.events[1];
+      const balance = await oshiriCurrency.balanceOf(walletAddress);
+      const newBalance = balance.toString();
+      setAwardedCurrency(newBalance);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   //! Next:
-  //Spend Consent -> Spank Animation + UI
+  //Fix: Revisar numeros de OSH: Al crear el token, no ponerle decimales?
+  //Flow: Get New Wrapping ->
+  // Pay for wrapping
+  // Generate Data
+  // Cuando se crea la imagen y se sube a ipft? todas desde antes? se suben sin color? -> Pensar...
 
   return (
     <div className={i18n.language === "jp" ? "japanese-fonts" : ""}>
@@ -283,6 +327,7 @@ const AppContainer = () => {
                         wrappingStats={wrappingStats}
                         firstTime={firstTime}
                         sendConsent={sendConsent}
+                        currencyBalance={currencyBalance}
                       />
                     }
                   />
@@ -292,7 +337,13 @@ const AppContainer = () => {
           )}
           <Route
             path="/:address"
-            element={<TheirOshiri getOtherOshiri={getOtherOshiri} />}
+            element={
+              <TheirOshiri
+                getOtherOshiri={getOtherOshiri}
+                smacked={smacked}
+                awardedCurrency={awardedCurrency}
+              />
+            }
           />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
