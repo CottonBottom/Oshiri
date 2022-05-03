@@ -193,6 +193,21 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
         return newWrapping;
     }
 
+    /** For metadata creation */
+    //Get all the available types and number of copies
+    function getAllBaseData() external view returns (WrappingStats memory) {
+        WrappingStats memory allBaseData = WrappingStats(
+            maxTypes,
+            maxSubTypes,
+            maxVariations,
+            maxBaseColors,
+            maxSecondaryColors,
+            totalCopiesPerPair
+        );
+        return allBaseData;
+    }
+
+    //TODO: Remove after testing
     function createTokenTestOnly(address receiver) external returns (uint256) {
         require(
             wSerialNumberCurrent <= totalCopiesPerPair,
