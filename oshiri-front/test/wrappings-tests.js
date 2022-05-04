@@ -7,7 +7,7 @@ const getReadableWrapping = (newWrapping) => {
     subType: newWrapping.wSubType.toString(),
     variation: newWrapping.wVariation.toString(),
     baseColor: newWrapping.wBaseColor.toString(),
-    variationColor: newWrapping.wSecondaryColor.toString(),
+    secondaryColors: newWrapping.wSecondaryColor.toString(),
     serialNumber: newWrapping.wSerialNumber.toString(),
   };
 };
@@ -142,7 +142,7 @@ const getReadableBaseData = (wrappingData) => {
     subTypes: parseInt(wrappingData.wSubType.toString()),
     variations: parseInt(wrappingData.wVariation.toString()),
     baseColors: parseInt(wrappingData.wBaseColor.toString()),
-    variationColors: parseInt(wrappingData.wSecondaryColor.toString()),
+    secondaryColors: parseInt(wrappingData.wSecondaryColor.toString()),
     serialNumbers: parseInt(wrappingData.wSerialNumber.toString()),
   };
 };
@@ -164,72 +164,428 @@ describe("Get all metadata", function () {
     );
     console.log("The allBaseData available wrappings", readableBaseData);
 
-    for (let indexType = 0; indexType < readableBaseData.types; indexType++) {
+    const allMetaData = [];
+
+    //All start from 1
+    for (let indexType = 1; indexType <= readableBaseData.types; indexType++) {
       for (
-        let indexSubType = 0;
-        indexSubType < readableBaseData.subTypes;
+        let indexSubType = 1;
+        indexSubType <= readableBaseData.subTypes;
         indexSubType++
       ) {
         for (
-          let indexVariation = 0;
-          indexVariation < readableBaseData.variations;
+          let indexVariation = 1;
+          indexVariation <= readableBaseData.variations;
           indexVariation++
         ) {
           for (
-            let indexBaseColor = 0;
-            indexBaseColor < readableBaseData.variationColors;
+            let indexBaseColor = 1;
+            indexBaseColor <= readableBaseData.baseColors;
             indexBaseColor++
           ) {
             for (
-              let indexVariationColor = 0;
-              indexVariationColor < readableBaseData.serialNumbers;
-              indexVariationColor++
+              let indexSecondaryColor = 1;
+              indexSecondaryColor <= readableBaseData.secondaryColors;
+              indexSecondaryColor++
             ) {
               const metaData = JSON.stringify({
-                type: indexType,
-                subType: indexSubType,
-                variation: indexVariation,
-                baseColor: indexBaseColor,
-                variationColor: indexVariationColor,
+                type: {
+                  name: wrappingTypes[indexType - 1].name,
+                  code: indexType,
+                },
+                subType: {
+                  name: wrappingTypes[indexType - 1].wSubType[indexSubType - 1]
+                    .name,
+                  code: indexSubType,
+                },
+                variation: {
+                  name: wrappingTypes[indexType - 1].wSubType[indexSubType - 1]
+                    .wVariation[indexVariation - 1],
+                  code: indexVariation,
+                },
+                baseColor: {
+                  name: wrappingTypes[indexType - 1].wSubType[indexSubType - 1]
+                    .wBaseColor[indexBaseColor - 1].name,
+                  code: indexBaseColor,
+                },
+                secondaryColor: {
+                  name: wrappingTypes[indexType - 1].wSubType[indexSubType - 1]
+                    .wSecondaryColor[indexSecondaryColor - 1].name,
+                  code: indexSecondaryColor,
+                },
+                image: "",
               });
-              const fileName = `${indexType}-${indexSubType}-${indexVariation}-${indexBaseColor}-${indexVariationColor}`;
-              saveMetadata(metaData, fileName);
+              allMetaData.push({
+                fileName: `${indexType}-${indexSubType}-${indexVariation}-${indexBaseColor}-${indexSecondaryColor}`,
+                data: metaData,
+              });
             }
           }
         }
       }
     }
+    allMetaData.forEach((meta, index) => {
+      //* If not loged, the file is created but the data is not added (Process is too fast?)
+      console.log("for index:", index, "data:", meta.data);
+      saveMetadata(meta.data, meta.fileName);
+    });
   });
 });
 
 /** Save the file */
 const fs = require("fs");
 
-//!Next: Make metadata for all possible combinations
-//!First make the array of objects send to saveMetadata and make stream with everything first (?)
-//!Then have it write all the json files
+//!Next:
 //Later: upload all the metadata files to IPFT (do test with 5 first)
 //Later: add the metadata when registering the nft
 
-//https://stackoverflow.com/questions/48442773/how-to-write-a-json-array-to-a-file-with-node-js-writestream
 const saveMetadata = (data, fileName) => {
-  // fs.writeFile(__dirname + `/../nftMetadata/${fileName}.json`, data, (err) => {
-  //   if (err) console.log(err);
-  //   else {
-  //     console.log("File written successfully\n");
-  //   }
-  // });
-
-  let writeStream = fs.createWriteStream("secret.txt");
-
-  // write some data with a base64 encoding
-  writeStream.write(data, "base64");
-
-  // the finish event is emitted when all data has been flushed from the stream
-  writeStream.on("finish", () => {
-    console.log("wrote all data to file");
+  fs.writeFile(__dirname + `/../nftMetadata/${fileName}.json`, data, (err) => {
+    if (err) console.log(err);
+    else {
+      console.log("File written successfully\n");
+    }
   });
-
-  // close the stream
-  writeStream.end();
 };
+
+/** Wrappings */
+//TODO: Update with latest from src/
+
+const wrappingTypes = [
+  {
+    name: "chewingGum",
+    wSubType: [
+      {
+        name: "ball",
+        wBaseColor: [
+          { name: "blue", value: "black" },
+          { name: "green", value: "black" },
+          { name: "orange", value: "black" },
+        ],
+        wSecondaryColor: [
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+        ],
+        wVariation: ["plain", "tallWaist", "flames", "pocket"],
+      },
+      {
+        name: "bubble",
+        wBaseColor: [
+          { name: "blue", value: "black" },
+          { name: "red", value: "black" },
+          { name: "pink", value: "black" },
+        ],
+        wSecondaryColor: [
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+        ],
+        wVariation: ["plain", "singleStripe", "doubleStripe", "tag"],
+      },
+      {
+        name: "stick",
+        wBaseColor: [
+          { name: "green", value: "black" },
+          { name: "blue", value: "black" },
+          { name: "black", value: "black" },
+        ],
+        wSecondaryColor: [
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+        ],
+        wVariation: ["a", "b", "c", "d"],
+      },
+    ],
+  },
+  {
+    name: "gummies",
+    wSubType: [
+      {
+        name: "nutty",
+        wBaseColor: [
+          { name: "almond", value: "black" },
+          { name: "hazelnut", value: "black" },
+          { name: "peanut", value: "black" },
+        ],
+        wSecondaryColor: [
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+        ],
+        wVariation: ["plain", "stripes", "tartan", "dots"],
+      },
+      {
+        name: "fruity",
+        wBaseColor: [
+          { name: "pineapple", value: "black" },
+          { name: "lime", value: "black" },
+          { name: "cherry", value: "black" },
+        ],
+        wSecondaryColor: [
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+        ],
+        wVariation: ["plain", "stripes", "dots", "ribbons"],
+      },
+      {
+        name: "milky",
+        wBaseColor: [
+          { name: "strawberry", value: "black" },
+          { name: "coffee", value: "black" },
+          { name: "banana", value: "black" },
+        ],
+        wSecondaryColor: [
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+        ],
+        wVariation: ["plain", "panda", "polar", "grizzly"],
+      },
+    ],
+  },
+  {
+    name: "cottonCandy",
+    wSubType: [
+      {
+        name: "pals",
+        wBaseColor: [
+          { name: "white", value: "black" },
+          { name: "pink", value: "black" },
+          { name: "blue", value: "black" },
+        ],
+        wSecondaryColor: [
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+        ],
+        wVariation: ["cat", "rabbit", "dog", "hamster"],
+      },
+      {
+        name: "patterns",
+        wBaseColor: [
+          { name: "purple", value: "black" },
+          { name: "yellow", value: "black" },
+          { name: "green", value: "black" },
+        ],
+        wSecondaryColor: [
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+        ],
+        wVariation: ["a", "b", "c", "d"],
+      },
+      {
+        name: "puffy",
+        wBaseColor: [
+          { name: "cyan", value: "black" },
+          { name: "magenta", value: "black" },
+          { name: "white", value: "black" },
+        ],
+        wSecondaryColor: [
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+        ],
+        wVariation: ["plain", "ribbons", "dots", "stripes"],
+      },
+    ],
+  },
+  {
+    name: "licorice",
+    wSubType: [
+      {
+        name: "salty",
+        wBaseColor: [
+          { name: "black", value: "black" },
+          { name: "pink", value: "black" },
+          { name: "purple", value: "black" },
+        ],
+        wSecondaryColor: [
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+        ],
+        wVariation: ["plain", "sideTied", "ribbon", "lace"],
+      },
+      {
+        name: "sweet",
+        wBaseColor: [
+          { name: "red", value: "black" },
+          { name: "black", value: "black" },
+          { name: "white", value: "black" },
+        ],
+        wSecondaryColor: [
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+        ],
+        wVariation: ["a", "b", "c", "d"],
+      },
+      {
+        name: "sour",
+        wBaseColor: [
+          { name: "red", value: "black" },
+          { name: "green", value: "black" },
+          { name: "blue", value: "black" },
+        ],
+        wSecondaryColor: [
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+        ],
+        wVariation: ["plain", "stars", "ribbon", "dots"],
+      },
+    ],
+  },
+  {
+    name: "chewable",
+    wSubType: [
+      {
+        name: "marshmallow",
+        wBaseColor: [
+          { name: "classic", value: "black" },
+          { name: "colorful", value: "black" },
+          { name: "dehydrated", value: "black" },
+        ],
+        wSecondaryColor: [
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+        ],
+        wVariation: ["a", "b", "c", "d"],
+      },
+      {
+        name: "sours",
+        wBaseColor: [
+          { name: "lemon", value: "black" },
+          { name: "cherry", value: "black" },
+          { name: "grapefruit", value: "black" },
+        ],
+        wSecondaryColor: [
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+        ],
+        wVariation: ["a", "b", "c", "d"],
+      },
+      {
+        name: "taffy",
+        wBaseColor: [
+          { name: "fruity", value: "black" },
+          { name: "molasses", value: "black" },
+          { name: "classic", value: "black" },
+        ],
+        wSecondaryColor: [
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+        ],
+        wVariation: ["a", "b", "c", "d"],
+      },
+    ],
+  },
+  {
+    name: "caramel",
+    wSubType: [
+      {
+        name: "blackTea",
+        wBaseColor: [
+          { name: "cream", value: "black" },
+          { name: "straight", value: "black" },
+          { name: "lemon", value: "black" },
+        ],
+        wSecondaryColor: [
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+        ],
+        wVariation: ["a", "b", "c", "d"],
+      },
+      {
+        name: "greenTea",
+        wBaseColor: [
+          { name: "matcha", value: "black" },
+          { name: "hojicha", value: "black" },
+          { name: "genmaicha", value: "black" },
+        ],
+        wSecondaryColor: [
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+        ],
+        wVariation: ["a", "b", "c", "d"],
+      },
+      {
+        name: "milk",
+        wBaseColor: [
+          { name: "sweet", value: "black" },
+          { name: "salty", value: "black" },
+          { name: "burnt", value: "black" },
+        ],
+        wSecondaryColor: [
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+          { name: "TODO", value: "black" },
+        ],
+        wVariation: ["a", "b", "c", "d"],
+      },
+    ],
+  },
+];
