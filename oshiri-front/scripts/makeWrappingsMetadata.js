@@ -9,8 +9,18 @@ async function main() {
   await oshiriWrappings.deployed();
   console.log("Deployed Contracts");
   console.log("OshiriWrappings deployed to:", oshiriWrappings.address);
+}
 
-  //TODO: Upload to IPFS
+const addImage = (file) => {
+  try {
+    const added = await client.add(file, {
+      progress: (prog) => console.log(`received: ${prog}`),
+    });
+    const url = `https://ipfs.infura.io/ipfs/${added.path}`;
+    setFileUrl(url);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 // We recommend this pattern to be able to use async/await everywhere
