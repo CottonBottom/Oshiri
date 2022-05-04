@@ -10,7 +10,7 @@ async function main() {
   console.log("Deployed Contracts");
   console.log("OshiriWrappings deployed to:", oshiriWrappings.address);
 
-  const allOshiriData = await oshiriWrappings.getAllBaseData();
+  //TODO: Upload to IPFS
 }
 
 // We recommend this pattern to be able to use async/await everywhere
