@@ -1,8 +1,6 @@
 import React, { Fragment, useState } from "react";
 import spiral from "../assets/images/spiral.svg";
-import left from "../assets/oshiri/left.png";
-import right from "../assets/oshiri/right.png";
-import base from "../assets/oshiri/base.png";
+import ipfsUrls from "../assets/ipfsUrls.json";
 import Wrapping from "./Wrapping";
 
 type Props = {
@@ -36,12 +34,22 @@ const Oshiri = ({
   };
 
   //TODO: Smack sound effect
+  //TODO: Corregir contacto visual entre left/right y base
 
   const makeOshiri = () => {
     const oshiriParts = [
-      { url: base, name: "base" },
-      { url: right, name: "right" },
-      { url: left, name: "left" },
+      {
+        url: ipfsUrls.oshiri.find((part) => part.name === "base")?.url,
+        name: "base",
+      },
+      {
+        url: ipfsUrls.oshiri.find((part) => part.name === "right")?.url,
+        name: "right",
+      },
+      {
+        url: ipfsUrls.oshiri.find((part) => part.name === "left")?.url,
+        name: "left",
+      },
     ];
     return oshiriParts.map((part, index) => {
       const size = oshiriSize;
@@ -60,7 +68,8 @@ const Oshiri = ({
           break;
       }
       return (
-        <span
+        <div
+          className="oshiri-container"
           key={index}
           style={{
             transform: `scale(${size})`,
@@ -91,7 +100,7 @@ const Oshiri = ({
               </>
             )}
           </div>
-        </span>
+        </div>
       );
     });
   };

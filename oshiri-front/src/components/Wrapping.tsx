@@ -1,8 +1,9 @@
 import React, { Fragment } from "react";
-import left from "../assets/oshiri/left.png";
-import right from "../assets/oshiri/right.png";
-import test from "../assets/wrappings/tests/test.png";
-import testvara from "../assets/wrappings/tests/testvara.png";
+// import left from "../assets/oshiri/left.png";
+// import right from "../assets/oshiri/right.png";
+// import test from "../assets/wrappings/tests/test.png";
+// import testvara from "../assets/wrappings/tests/testvara.png";
+import ipfsUrls from "../assets/ipfsUrls.json";
 
 type Props = {
   oshiriSize: string;
@@ -16,17 +17,33 @@ type Props = {
 const Wrapping = ({ oshiriSize }: Props) => {
   const makeWrapping = () => {
     const wrappingParts = [
-      { url: test, name: "base" },
-      { url: right, name: "right" },
-      { url: left, name: "left" },
-      { url: testvara, name: "variation" },
+      {
+        url: ipfsUrls.wrappings.find((part) => part.name === "test")?.url,
+        name: "base",
+      },
+      {
+        url: ipfsUrls.oshiri.find((part) => part.name === "right")?.url,
+        name: "right",
+      },
+      {
+        url: ipfsUrls.oshiri.find((part) => part.name === "left")?.url,
+        name: "left",
+      },
+      {
+        url: ipfsUrls.wrappings.find((part) => part.name === "testvara")?.url,
+        name: "variation",
+      },
     ];
     return wrappingParts.map((part, index) => {
-      const baseSrc = part.name === "variation" ? part.url : test;
+      const baseSrc =
+        part.name === "variation"
+          ? part.url
+          : ipfsUrls.wrappings.find((part) => part.name === "test")?.url;
       const color = part.name === "variation" ? "gray" : "#4169E1";
       const size = oshiriSize;
       return (
-        <span
+        <div
+          className="oshiri-wrapping-container"
           key={index}
           style={{
             transform: `scale(${size})`,
@@ -55,7 +72,7 @@ const Wrapping = ({ oshiriSize }: Props) => {
               //transform: `scale(${size})`,
             }}
           />
-        </span>
+        </div>
       );
     });
   };
