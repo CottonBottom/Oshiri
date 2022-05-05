@@ -268,10 +268,13 @@ const AppContainer = () => {
 
   //! Next:
   //Fix: Revisar numeros de OSH: Al crear el token, no ponerle decimales?
-  //Flow: Get New Wrapping ->
-  // Pay for wrapping
-  // Generate Data
-  // Cuando se crea la imagen y se sube a ipft? todas desde antes? se suben sin color? -> Pensar...
+  //* Preview Wrapping Before Executing Transaction
+  //* (To test, add different color to NFT 02)
+  //* On Execute:
+  //* Get binary from image generated on front
+  //* Upload to IPFS, get URL
+  //* Call creation of NFT, send URL generated
+  //* Do for getWrapping
 
   return (
     <div className={i18n.language === "jp" ? "japanese-fonts" : ""}>
