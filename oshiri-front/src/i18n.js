@@ -33,6 +33,7 @@ i18n
             "Oshiri Story Introduction Oshiri Story Introduction Oshiri Story Introduction...",
           wrappingIntro:
             "You cannot have your Oshiri nude out there. Get some clothing first. Your first one is free, but for the next one on you will need to exchange OSH, Put price here XXXX",
+          wrappingIntro2: "is the next Wrapping in production.",
           noWrappingError:
             "Seems you have lost your Wrapping somewhere and cannot access Oshiri...",
           next: "Next",

@@ -73,6 +73,18 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
         return total - wrappingId;
     }
 
+    function getNextWrappingStats() public view returns (WrappingStats memory) {
+        WrappingStats memory nextWrapping = WrappingStats(
+            wTypeCurrent,
+            wSubTypeCurrent,
+            wVariationCurrent,
+            wBaseColorCurrent,
+            wSecondaryColorCurrent,
+            wSerialNumberCurrent
+        );
+        return nextWrapping;
+    }
+
     /** */
 
     function setOshiriGameAddress(address oshiriGameAddress)

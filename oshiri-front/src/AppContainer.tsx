@@ -35,10 +35,11 @@ const AppContainer = () => {
   const [wrappingStats, setWrappingStats] = useState<WrappingStats | null>(
     null
   );
+  const [nextWrappingStats, setNextWrappingStats] =
+    useState<WrappingStats | null>(null);
   const [currencyBalance, setCurrencyBalance] = useState<string>("0");
   const [storyStage, setStoryStage] = useState<Stories>(Stories.none);
   const [customizing, setCustomizing] = useState<boolean>(false);
-  const [firstTime, setFirstTime] = useState<boolean>(false);
   const [awardedCurrency, setAwardedCurrency] = useState<string>("");
 
   const web3Modal = new Web3Modal({
@@ -152,10 +153,28 @@ const AppContainer = () => {
       );
       const tx = await transaction.wait();
       const event = tx.events[1];
-      setFirstTime(true);
       getOshiri();
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const getNextWrappingStats = async () => {
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
+    const oshiriWrappings = new ethers.Contract(
+      oshiriWrappingsAddress,
+      OshiriWrappingsContract.abi,
+      signer
+    );
+    try {
+      const nextWrapping = await oshiriWrappings.getNextWrappingStats();
+      const readableNextWrapping = getReadableWrapping(nextWrapping);
+      setNextWrappingStats(readableNextWrapping);
+    } catch (error) {
+      console.error(error);
+      return null;
     }
   };
 
@@ -313,8 +332,9 @@ const AppContainer = () => {
                       setStoryStage={setStoryStage}
                       setCustomizing={setCustomizing}
                       makeOshiri={makeOshiri}
-                      oshiriStats={oshiriStats}
-                      wrappingStats={wrappingStats}
+                      newOshiriStats={newOshiriStats}
+                      nextWrappingStats={nextWrappingStats}
+                      getNextWrappingStats={getNextWrappingStats}
                     />
                   }
                 />
@@ -328,7 +348,6 @@ const AppContainer = () => {
                         getOshiri={getOshiri}
                         oshiriStats={oshiriStats}
                         wrappingStats={wrappingStats}
-                        firstTime={firstTime}
                         sendConsent={sendConsent}
                         currencyBalance={currencyBalance}
                       />

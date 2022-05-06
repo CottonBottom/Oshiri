@@ -60,9 +60,9 @@ export const wrappingTypes = [
       {
         name: "ball",
         wBaseColor: [
-          { name: "blue", value: "black" },
-          { name: "green", value: "black" },
-          { name: "orange", value: "black" },
+          { name: "blue", value: "blue" },
+          { name: "red", value: "red" },
+          { name: "green", value: "green" },
         ],
         wSecondaryColor: [
           { name: "TODO", value: "black" },

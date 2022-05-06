@@ -13,7 +13,7 @@ import IconButton from "../components/buttons/IconButton";
 import { getWrappingName, oshiriSizeDigitToScale } from "../utils/conversions";
 import SendConsent from "./modals/SendConsent";
 import NewDay from "./modals/NewDay";
-import GotWrapping from "./modals/GotWrapping";
+import GotWrapping from "./modals/WrappingPreview";
 import ConsentSent from "./modals/ConsentSent";
 import ChangeStats from "./modals/ChangeStats";
 import Tutorial from "../components/Tutorial";
@@ -22,7 +22,6 @@ type Props = {
   getOshiri: () => void;
   oshiriStats: OshiriStats;
   wrappingStats: WrappingStats;
-  firstTime: boolean;
   sendConsent: (receiver: string) => void;
   currencyBalance: string;
 };
@@ -31,16 +30,14 @@ const MyOshiri: React.FC<Props> = ({
   oshiriStats,
   wrappingStats,
   getOshiri,
-  firstTime,
   sendConsent,
   currencyBalance,
 }: Props) => {
   const [sendConsentModal, setSendConsentModal] = useState<boolean>(false);
   const [consentSentModal, setConsentSentModal] = useState<boolean>(false);
   const [newDayModal, setNewDayModal] = useState<boolean>(false);
-  const [gotWrappingModal, setGotWrappingModal] = useState<boolean>(
-    firstTime || false
-  );
+  const [wrappingPreviewModal, setWrappingPreviewModal] =
+    useState<boolean>(false);
   const [changeStatsModal, setChangeStatsModal] = useState<boolean>(false);
   const [showTutorial, setShowTutorial] = useState<boolean>(false);
 
@@ -89,9 +86,9 @@ const MyOshiri: React.FC<Props> = ({
         changeStatsFee={"001"}
       ></ChangeStats>
       <GotWrapping
-        newWrappingName={getWrappingName(wrappingStats, t)}
-        gotWrappingModal={gotWrappingModal}
-        setGotWrappingModal={setGotWrappingModal}
+        wrappingPreviewModal={wrappingPreviewModal}
+        setWrappingPreviewModal={setWrappingPreviewModal}
+        wrappingStats={wrappingStats}
       ></GotWrapping>
       <Tutorial
         showTutorial={showTutorial}
@@ -127,7 +124,10 @@ const MyOshiri: React.FC<Props> = ({
         <div className="main-actions-area">
           <div className="main-actions-container">
             <div className="main-actions__set">
-              <Button type="primary" onClick={() => setGotWrappingModal(true)}>
+              <Button
+                type="primary"
+                onClick={() => setWrappingPreviewModal(true)}
+              >
                 {t("getWrappings")}
               </Button>
               <div className="main-actions__value-container">

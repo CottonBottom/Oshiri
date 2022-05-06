@@ -18,6 +18,32 @@
                                 supported by Chrome, Edge, Opera and Firefox */
 }
 
+.oshiri-wrapping-preview {
+  width: 300px;
+  height: 300px;
+  border-radius: 10px;
+  background: white;
+  position: relative;
+  overflow: hidden;
+  background-position: 55% 25%;
+  background-size: auto 150%;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                supported by Chrome, Edge, Opera and Firefox */
+  border: 3px solid $primary;
+}
+
+.oshiri-wrapping-preview__logo {
+  position: absolute;
+  width: 100px;
+  bottom: 10px;
+  right: 10px;
+}
+
 .oshiri-container {
   position: absolute;
   width: 100%;

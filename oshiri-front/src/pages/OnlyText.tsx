@@ -2,17 +2,21 @@ import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import ChangeLanguage from "../components/ChangeLanguage";
 import Button from "../components/buttons/Button";
-import logo from "../assets/images/logo.png";
 import { OshiriStats, Stories, WrappingStats } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
+import Wrapping from "../components/Wrapping";
+import { getWrappingName, oshiriSizeDigitToScale } from "../utils/conversions";
+import spiral from "../assets/images/spiral.svg";
+import logo from "../assets/images/logo.png";
 
 type Props = {
   storyStage: Stories;
   setStoryStage: React.Dispatch<React.SetStateAction<Stories>>;
   setCustomizing: React.Dispatch<React.SetStateAction<boolean>>;
   makeOshiri: () => void;
-  oshiriStats: OshiriStats | null;
-  wrappingStats: WrappingStats | null;
+  newOshiriStats: OshiriStats | null;
+  nextWrappingStats: WrappingStats | null;
+  getNextWrappingStats: () => void;
 };
 
 const Entrance: React.FC<Props> = ({
@@ -20,17 +24,24 @@ const Entrance: React.FC<Props> = ({
   setStoryStage,
   setCustomizing,
   makeOshiri,
-  oshiriStats,
-  wrappingStats,
+  newOshiriStats,
+  nextWrappingStats,
+  getNextWrappingStats,
 }: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
+  // useEffect(() => {
+  //   if (oshiriStats && wrappingStats && storyStage === Stories.wrappingIntro) {
+  //     navigate("/myoshiri");
+  //   }
+  // }, [oshiriStats, wrappingStats]);
+
   useEffect(() => {
-    if (oshiriStats && wrappingStats && storyStage === Stories.wrappingIntro) {
-      navigate("/myoshiri");
+    if (storyStage === Stories.wrappingIntro) {
+      getNextWrappingStats();
     }
-  }, [oshiriStats, wrappingStats]);
+  }, [storyStage]);
 
   const getStoryFromStage = (stage: number) => {
     switch (stage) {
@@ -73,6 +84,29 @@ const Entrance: React.FC<Props> = ({
             <div className="only-text">
               <p>{t(getStoryFromStage(storyStage))}</p>
             </div>
+            {storyStage === Stories.wrappingIntro &&
+              newOshiriStats &&
+              nextWrappingStats && (
+                <>
+                  <div
+                    className="oshiri-wrapping-preview"
+                    style={{ backgroundImage: `url(${spiral})` }}
+                  >
+                    <Wrapping oshiriSize={oshiriSizeDigitToScale(1)}></Wrapping>
+                    <img
+                      className="oshiri-wrapping-preview__logo"
+                      src={logo}
+                      alt="oshiri-logo"
+                    />
+                  </div>
+                  <div className="only-text only-text--bottom">
+                    <p>
+                      <mark>{getWrappingName(nextWrappingStats, t)}</mark>
+                    </p>
+                    <p>{t("wrappingIntro2")}</p>
+                  </div>
+                </>
+              )}
             <Button type="primary" onClick={() => advanceStory()}>
               {t("next")}
             </Button>

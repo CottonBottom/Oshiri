@@ -58,6 +58,16 @@
     line-height: 25px;
     color: white;
   }
+  mark {
+    font-style: italic;
+    font-weight: 800;
+    font-size: 18px;
+    line-height: 25px;
+  }
+}
+
+.only-text--bottom {
+  margin-top: 24px;
 }
 
 /** Customization */
