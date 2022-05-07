@@ -60,13 +60,13 @@ export const wrappingTypes = [
       {
         name: "ball",
         wBaseColor: [
-          { name: "blue", value: "blue" },
-          { name: "red", value: "red" },
+          { name: "blue", value: "#383ad2" },
+          { name: "red", value: "#ca3f53" },
           { name: "green", value: "green" },
         ],
         wSecondaryColor: [
-          { name: "TODO", value: "black" },
-          { name: "TODO", value: "black" },
+          { name: "TODO", value: "gray" },
+          { name: "TODO", value: "gray" },
           { name: "TODO", value: "black" },
           { name: "TODO", value: "black" },
           { name: "TODO", value: "black" },
@@ -77,9 +77,9 @@ export const wrappingTypes = [
       {
         name: "bubble",
         wBaseColor: [
-          { name: "blue", value: "black" },
-          { name: "red", value: "black" },
-          { name: "pink", value: "black" },
+          { name: "blue", value: "blue" },
+          { name: "red", value: "red" },
+          { name: "pink", value: "pink" },
         ],
         wSecondaryColor: [
           { name: "TODO", value: "black" },

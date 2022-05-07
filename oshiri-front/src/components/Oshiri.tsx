@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from "react";
 import spiral from "../assets/images/spiral.svg";
 import ipfsUrls from "../assets/ipfsUrls.json";
+import { WrappingStats } from "../utils/constants";
 import Wrapping from "./Wrapping";
 
 type Props = {
@@ -8,6 +9,7 @@ type Props = {
   oshiriSkin: string;
   isCustomizing?: boolean;
   isSmacking?: boolean;
+  wrappingStats?: WrappingStats;
   smacked?: () => void;
 };
 
@@ -16,6 +18,7 @@ const Oshiri = ({
   oshiriSkin,
   isCustomizing,
   isSmacking,
+  wrappingStats,
   smacked,
 }: Props) => {
   const [smack, setSmack] = useState<string>("");
@@ -114,7 +117,12 @@ const Oshiri = ({
         {isSmacking && <div className="oshiri-smacking-mask">Smack!</div>}
         <span className={`${smack}`}>
           {makeOshiri()}
-          {!isCustomizing && <Wrapping oshiriSize={oshiriSize}></Wrapping>}
+          {!isCustomizing && wrappingStats && (
+            <Wrapping
+              wrappingStats={wrappingStats}
+              oshiriSize={oshiriSize}
+            ></Wrapping>
+          )}
         </span>
         {isSmacking && (
           <button

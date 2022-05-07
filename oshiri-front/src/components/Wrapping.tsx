@@ -1,20 +1,35 @@
-import React, { Fragment } from "react";
-// import left from "../assets/oshiri/left.png";
-// import right from "../assets/oshiri/right.png";
-// import test from "../assets/wrappings/tests/test.png";
-// import testvara from "../assets/wrappings/tests/testvara.png";
 import ipfsUrls from "../assets/ipfsUrls.json";
+import { WrappingStats, wrappingTypes } from "../utils/constants";
 
 type Props = {
   oshiriSize: string;
+  wrappingStats: WrappingStats;
 };
 
 //TODO: Fix illustrations:
-//1: Must be divided in three parts (same as Oshiri)
-//2: Buttocks must be cleaned up of overlapping elements
-//3: Variations must be divided into three parts (as neccesary)
+//1: Must be divided in three parts (same as Oshiri)???
+//!2: Buttocks must be cleaned up of overlapping elements
+//3: Variations must be divided into three parts (as neccesary)???
 
-const Wrapping = ({ oshiriSize }: Props) => {
+const Wrapping = ({ oshiriSize, wrappingStats }: Props) => {
+  /**  TODO: Get urls with names */
+  const baseName = wrappingTypes[wrappingStats.wType - 1].name;
+  const variationName =
+    wrappingTypes[wrappingStats.wType - 1].wSubType[wrappingStats.wSubType - 1]
+      .name;
+  /** */
+  const baseColor =
+    wrappingTypes[wrappingStats.wType - 1].wSubType[wrappingStats.wSubType - 1]
+      .wBaseColor[wrappingStats.wBaseColor - 1].value;
+  const secondaryColor =
+    wrappingTypes[wrappingStats.wType - 1].wSubType[wrappingStats.wSubType - 1]
+      .wSecondaryColor[wrappingStats.wSecondaryColor - 1].value;
+
+  console.log("THE baseName", baseName);
+  console.log("THE variationName", variationName);
+  console.log("THE baseColor", baseColor);
+  console.log("THE secondaryColor", secondaryColor);
+
   const makeWrapping = () => {
     const wrappingParts = [
       {
@@ -39,7 +54,9 @@ const Wrapping = ({ oshiriSize }: Props) => {
         part.name === "variation"
           ? part.url
           : ipfsUrls.wrappings.find((part) => part.name === "test")?.url;
-      const color = part.name === "variation" ? "gray" : "#4169E1";
+
+      const color = part.name === "variation" ? secondaryColor : baseColor;
+
       const size = oshiriSize;
       return (
         <div

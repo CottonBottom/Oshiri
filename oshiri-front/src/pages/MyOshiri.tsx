@@ -98,7 +98,11 @@ const MyOshiri: React.FC<Props> = ({
       <div className="main-background">
         <ChangeLanguage />
         <div className="main-container">
-          <Oshiri oshiriSize={oshiriSize} oshiriSkin={oshiriSkin}></Oshiri>
+          <Oshiri
+            oshiriSize={oshiriSize}
+            oshiriSkin={oshiriSkin}
+            wrappingStats={wrappingStats}
+          ></Oshiri>
           <div className="main-display">
             <div className="main-display__name">{oshiriName}</div>
             <div className="main-display__wrapping">{wrappingName}</div>

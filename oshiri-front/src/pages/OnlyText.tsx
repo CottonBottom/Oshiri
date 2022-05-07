@@ -92,7 +92,10 @@ const Entrance: React.FC<Props> = ({
                     className="oshiri-wrapping-preview"
                     style={{ backgroundImage: `url(${spiral})` }}
                   >
-                    <Wrapping oshiriSize={oshiriSizeDigitToScale(1)}></Wrapping>
+                    <Wrapping
+                      oshiriSize={oshiriSizeDigitToScale(1)}
+                      wrappingStats={nextWrappingStats}
+                    ></Wrapping>
                     <img
                       className="oshiri-wrapping-preview__logo"
                       src={logo}
