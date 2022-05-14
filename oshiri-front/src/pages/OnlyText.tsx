@@ -4,10 +4,8 @@ import ChangeLanguage from "../components/ChangeLanguage";
 import Button from "../components/buttons/Button";
 import { OshiriStats, Stories, WrappingStats } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
-import Wrapping from "../components/Wrapping";
-import { getWrappingName, oshiriSizeDigitToScale } from "../utils/conversions";
-import spiral from "../assets/images/spiral.svg";
-import logo from "../assets/images/logo.png";
+import WrappingPreview from "../components/WrappingPreview";
+import { getWrappingName } from "../utils/conversions";
 
 type Props = {
   storyStage: Stories;
@@ -88,20 +86,7 @@ const Entrance: React.FC<Props> = ({
               newOshiriStats &&
               nextWrappingStats && (
                 <>
-                  <div
-                    className="oshiri-wrapping-preview"
-                    style={{ backgroundImage: `url(${spiral})` }}
-                  >
-                    <Wrapping
-                      oshiriSize={oshiriSizeDigitToScale(1)}
-                      wrappingStats={nextWrappingStats}
-                    ></Wrapping>
-                    <img
-                      className="oshiri-wrapping-preview__logo"
-                      src={logo}
-                      alt="oshiri-logo"
-                    />
-                  </div>
+                  <WrappingPreview wrappingStats={nextWrappingStats} />
                   <div className="only-text only-text--bottom">
                     <p>
                       <mark>{getWrappingName(nextWrappingStats, t)}</mark>

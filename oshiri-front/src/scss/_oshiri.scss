@@ -19,8 +19,8 @@
 }
 
 .oshiri-wrapping-preview {
-  width: 300px;
-  height: 300px;
+  width: 150px;
+  height: 150px;
   border-radius: 10px;
   background: white;
   position: relative;
@@ -35,13 +35,28 @@
   user-select: none; /* Non-prefixed version, currently
                                 supported by Chrome, Edge, Opera and Firefox */
   border: 3px solid $primary;
+  .oshiri-wrapping,
+  .oshiri-wrapping-color {
+    top: 0;
+    left: -5px;
+  }
 }
 
 .oshiri-wrapping-preview__logo {
   position: absolute;
-  width: 100px;
-  bottom: 10px;
-  right: 10px;
+  width: 50px;
+  bottom: 5px;
+  right: 5px;
+}
+
+.oshiri-wrapping-preview--large {
+  width: 300px;
+  height: 300px;
+  .oshiri-wrapping-preview__logo {
+    width: 100px;
+    bottom: 10px;
+    right: 10px;
+  }
 }
 
 .oshiri-container {

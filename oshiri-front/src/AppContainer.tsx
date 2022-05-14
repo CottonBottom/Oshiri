@@ -23,6 +23,7 @@ import {
   getReadableOshiri,
   getReadableWrapping,
 } from "./utils/conversions";
+import WrappingDisplay from "./pages/WrappingDisplay";
 
 const AppContainer = () => {
   const { i18n } = useTranslation();
@@ -367,6 +368,7 @@ const AppContainer = () => {
               />
             }
           />
+          <Route path="/wrapping/:stats" element={<WrappingDisplay />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>

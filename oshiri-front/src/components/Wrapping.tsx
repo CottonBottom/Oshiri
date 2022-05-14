@@ -25,11 +25,6 @@ const Wrapping = ({ oshiriSize, wrappingStats }: Props) => {
     wrappingTypes[wrappingStats.wType - 1].wSubType[wrappingStats.wSubType - 1]
       .wSecondaryColor[wrappingStats.wSecondaryColor - 1].value;
 
-  console.log("THE baseName", baseName);
-  console.log("THE variationName", variationName);
-  console.log("THE baseColor", baseColor);
-  console.log("THE secondaryColor", secondaryColor);
-
   const makeWrapping = () => {
     const wrappingParts = [
       {
