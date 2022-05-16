@@ -153,7 +153,8 @@ contract Oshiri is ReentrancyGuard {
         uint256 size,
         string memory name,
         uint256 tail,
-        uint256 tailColor
+        uint256 tailColor,
+        string memory nftUri
     ) external payable nonReentrant {
         OshiriStats memory oshiriStats = OshiriStats(
             color,
@@ -178,7 +179,7 @@ contract Oshiri is ReentrancyGuard {
 
         AllOshiri[msg.sender] = oshiriStats;
         oshiriCurrency.awardInitialOshiriCurrency(wrappingCost, msg.sender);
-        uint256 newWrappingId = spendToCreateWrapping(msg.sender);
+        uint256 newWrappingId = spendToCreateWrapping(msg.sender, nftUri);
         wearWrapping(newWrappingId);
         emit NewOshiriCreated(msg.sender, oshiriStats);
     }
@@ -194,7 +195,10 @@ contract Oshiri is ReentrancyGuard {
         emit wearingWrapping(msg.sender, wrappingId);
     }
 
-    function spendToCreateWrapping(address spender) internal returns (uint256) {
+    function spendToCreateWrapping(address spender, string memory nftUri)
+        internal
+        returns (uint256)
+    {
         /** Validation */
         require(
             oshiriCurrency.balanceOf(spender) >= wrappingCost,
@@ -202,7 +206,9 @@ contract Oshiri is ReentrancyGuard {
         );
         /** */
         uint256 newWrappingId = oshiriWrappings.createToken(spender);
+        oshiriWrappings.setTokenURI(newWrappingId, nftUri);
         oshiriCurrency.spendOshiriCurrency(spender, wrappingCost);
+
         emit gotWrapping(msg.sender, newWrappingId);
         return newWrappingId;
     }

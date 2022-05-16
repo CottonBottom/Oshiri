@@ -17,7 +17,12 @@ import {
   oshiriWrappingsAddress,
   oshiriCurrencyAddress,
 } from "./config";
-import { OshiriStats, Stories, WrappingStats } from "./utils/constants";
+import {
+  mainPath,
+  OshiriStats,
+  Stories,
+  WrappingStats,
+} from "./utils/constants";
 import {
   getOtherReadableOshiri,
   getReadableOshiri,
@@ -131,7 +136,7 @@ const AppContainer = () => {
   };
 
   const makeOshiri = async () => {
-    if (!newOshiriStats) {
+    if (!newOshiriStats || !nextWrappingStats) {
       return;
     }
     const connection = await web3Modal.connect();
@@ -143,6 +148,9 @@ const AppContainer = () => {
       signer
     );
     const newOshiriPrice = await oshiri.getNewOshiriPrice();
+    const wrappingUri = `${mainPath}/wrapping/${nextWrappingStats.wType}${nextWrappingStats.wSubType}${nextWrappingStats.wVariation}${nextWrappingStats.wBaseColor}${nextWrappingStats.wSecondaryColor}`;
+
+    console.log("THE WRAPPING URI", wrappingUri);
     try {
       const transaction = await oshiri.createOshiri(
         newOshiriStats.color,
@@ -150,6 +158,7 @@ const AppContainer = () => {
         newOshiriStats.name,
         newOshiriStats.tail,
         newOshiriStats.tailColor,
+        wrappingUri,
         { value: newOshiriPrice.toString() }
       );
       const tx = await transaction.wait();

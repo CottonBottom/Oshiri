@@ -37,6 +37,7 @@ i18n
           noWrappingError:
             "Seems you have lost your Wrapping somewhere and cannot access Oshiri...",
           next: "Next",
+          noWrappingFound: "No wrapping found",
           //Customization
           name: "Name",
           skinTone: "Skin Tone",

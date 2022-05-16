@@ -22,13 +22,9 @@ const WrappingDisplay = ({}: Props) => {
     const wBaseColor = parseInt(stats[3]);
     const wSecondaryColor = parseInt(stats[4]);
 
-    if (
-      wType === 0 ||
-      wSubType === 0 ||
-      wVariation === 0 ||
-      wBaseColor === 0 ||
-      wSecondaryColor === 0
-    ) {
+    console.log("wType: " + wType);
+
+    if (!wType || !wSubType || !wVariation || !wBaseColor || !wSecondaryColor) {
       return null;
     }
 
@@ -71,7 +67,7 @@ const WrappingDisplay = ({}: Props) => {
           </>
         ) : (
           <div className="only-text">
-            <p>{t("wrappingIntro2")}</p>
+            <p>{t("noWrappingFound")}</p>
           </div>
         )}
       </div>

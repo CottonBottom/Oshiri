@@ -143,10 +143,11 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
         return currentWrappingId;
     }
 
-    function setTokenURI(uint256 tokenId, string memory tokenURI)
-        external
-        onlyOwner
-    {
+    function setTokenURI(uint256 tokenId, string memory tokenURI) external {
+        require(
+            _isApprovedOrOwner(_msgSender(), tokenId),
+            "Caller is not owner nor approved"
+        );
         _setTokenURI(tokenId, tokenURI);
     }
 

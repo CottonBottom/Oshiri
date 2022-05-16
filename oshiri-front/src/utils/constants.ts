@@ -1,3 +1,5 @@
+export const mainPath = "localHost:3000";
+
 export const skinTones = [
   "white",
   "#c58c85",
