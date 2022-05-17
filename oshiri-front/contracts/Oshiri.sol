@@ -205,8 +205,7 @@ contract Oshiri is ReentrancyGuard {
             "Not enough OSH to get wrapping"
         );
         /** */
-        uint256 newWrappingId = oshiriWrappings.createToken(spender);
-        oshiriWrappings.setTokenURI(newWrappingId, nftUri);
+        uint256 newWrappingId = oshiriWrappings.createToken(spender, nftUri);
         oshiriCurrency.spendOshiriCurrency(spender, wrappingCost);
 
         emit gotWrapping(msg.sender, newWrappingId);

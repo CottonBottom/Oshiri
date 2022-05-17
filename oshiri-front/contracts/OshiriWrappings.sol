@@ -73,6 +73,16 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
         return total - wrappingId;
     }
 
+    function checkTotalWrappings() public view returns (uint256) {
+        uint256 total = maxTypes *
+            maxSubTypes *
+            maxVariations *
+            maxBaseColors *
+            maxSecondaryColors *
+            totalCopiesPerPair;
+        return total;
+    }
+
     function getNextWrappingStats() public view returns (WrappingStats memory) {
         WrappingStats memory nextWrapping = WrappingStats(
             wTypeCurrent,
@@ -127,8 +137,10 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
 
     event WrappingGenerated(WrappingStats newWrapping);
 
-    //TODO: Get data from the event -> Make JSON and upload -> get URL and setTokenURI
-    function createToken(address receiver) external returns (uint256) {
+    function createToken(address receiver, string memory tokenURI)
+        external
+        returns (uint256)
+    {
         require(msg.sender == oshiriGame, "Can only be called from Oshiri");
         require(
             wSerialNumberCurrent <= totalCopiesPerPair,
@@ -138,16 +150,16 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
         WrappingStats memory newWrapping = getNextInProductionLine();
         CreatedWrappings[wrappingId] = newWrapping;
         _mint(receiver, wrappingId);
+        _setTokenURI(wrappingId, tokenURI);
         emit WrappingGenerated(newWrapping);
         wrappingId += 1;
         return currentWrappingId;
     }
 
-    function setTokenURI(uint256 tokenId, string memory tokenURI) external {
-        require(
-            _isApprovedOrOwner(_msgSender(), tokenId),
-            "Caller is not owner nor approved"
-        );
+    function setTokenURI(uint256 tokenId, string memory tokenURI)
+        external
+        onlyOwner
+    {
         _setTokenURI(tokenId, tokenURI);
     }
 

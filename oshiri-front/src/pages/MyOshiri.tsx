@@ -17,6 +17,7 @@ import GotWrapping from "./modals/WrappingPreview";
 import ConsentSent from "./modals/ConsentSent";
 import ChangeStats from "./modals/ChangeStats";
 import Tutorial from "../components/Tutorial";
+import Drawer from "./modals/Drawer";
 
 type Props = {
   getOshiri: () => void;
@@ -24,6 +25,8 @@ type Props = {
   wrappingStats: WrappingStats;
   sendConsent: (receiver: string) => void;
   currencyBalance: string;
+  ownedWrappings: any[];
+  getAllWrappingsOwned: () => void;
 };
 
 const MyOshiri: React.FC<Props> = ({
@@ -32,6 +35,8 @@ const MyOshiri: React.FC<Props> = ({
   getOshiri,
   sendConsent,
   currencyBalance,
+  ownedWrappings,
+  getAllWrappingsOwned,
 }: Props) => {
   const [sendConsentModal, setSendConsentModal] = useState<boolean>(false);
   const [consentSentModal, setConsentSentModal] = useState<boolean>(false);
@@ -39,6 +44,7 @@ const MyOshiri: React.FC<Props> = ({
   const [wrappingPreviewModal, setWrappingPreviewModal] =
     useState<boolean>(false);
   const [changeStatsModal, setChangeStatsModal] = useState<boolean>(false);
+  const [drawerModal, setDrawerModal] = useState<boolean>(false);
   const [showTutorial, setShowTutorial] = useState<boolean>(false);
 
   const [walletToSendConsent, setWalletToSendConsent] = useState<string>("");
@@ -63,6 +69,11 @@ const MyOshiri: React.FC<Props> = ({
     sendConsent(walletToSendConsent);
     setSendConsentModal(false);
     //TODO answer to response, errors/sent () return on try/catch and show modal?
+  };
+
+  const onOpenDrawer = () => {
+    setDrawerModal(true);
+    getAllWrappingsOwned();
   };
 
   return (
@@ -90,11 +101,15 @@ const MyOshiri: React.FC<Props> = ({
         setWrappingPreviewModal={setWrappingPreviewModal}
         wrappingStats={wrappingStats}
       ></GotWrapping>
+      <Drawer
+        drawerModal={drawerModal}
+        setDrawerModal={setDrawerModal}
+        ownedWrappings={ownedWrappings}
+      ></Drawer>
       <Tutorial
         showTutorial={showTutorial}
         setShowTutorial={setShowTutorial}
       ></Tutorial>
-      {/* TODO: Modals */}
       <div className="main-background">
         <ChangeLanguage />
         <div className="main-container">
@@ -107,10 +122,7 @@ const MyOshiri: React.FC<Props> = ({
             <div className="main-display__name">{oshiriName}</div>
             <div className="main-display__wrapping">{wrappingName}</div>
             <div className="main-display__options">
-              <IconButton
-                icon="inventory"
-                onClick={() => console.log("Clicked")}
-              >
+              <IconButton icon="inventory" onClick={() => onOpenDrawer()}>
                 {t("drawer")}
               </IconButton>
               <IconButton

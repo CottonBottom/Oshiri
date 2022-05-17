@@ -47,6 +47,7 @@ const AppContainer = () => {
   const [storyStage, setStoryStage] = useState<Stories>(Stories.none);
   const [customizing, setCustomizing] = useState<boolean>(false);
   const [awardedCurrency, setAwardedCurrency] = useState<string>("");
+  const [ownedWrappings, setOwnedWrappings] = useState<any[]>([]);
 
   const web3Modal = new Web3Modal({
     // network: "mainnet", // optional
@@ -188,6 +189,32 @@ const AppContainer = () => {
     }
   };
 
+  const getAllWrappingsOwned = async () => {
+    //Get all numbers possible
+    //Loop all of them checking for the owner with the current address tokenOfOwnerByIndex
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
+    const oshiriWrappings = new ethers.Contract(
+      oshiriWrappingsAddress,
+      OshiriWrappingsContract.abi,
+      signer
+    );
+    try {
+      const totalWrappings = await oshiriWrappings.checkTotalWrappings();
+      const readableTotal = parseInt(totalWrappings.toString());
+      console.log("THE TOTAL WRAPPINGS", readableTotal);
+      //TODO: Loop and get all tokens in array
+      //TODO: Add loader?
+      // let ownedWrappings = [];
+      // for (let index = 1; index < readableTotal; index++) {
+      //   oshiriWrappings.
+      // }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   //TODO
   const updateOshiri = async () => {
     if (!newOshiriStats) {
@@ -297,13 +324,9 @@ const AppContainer = () => {
 
   //! Next:
   //Fix: Revisar numeros de OSH: Al crear el token, no ponerle decimales?
-  //* Preview Wrapping Before Executing Transaction
-  //* (To test, add different color to NFT 02)
-  //* On Execute:
-  //* Get binary from image generated on front
-  //* Upload to IPFS, get URL
-  //* Call creation of NFT, send URL generated
-  //* Do for getWrapping
+  //* Show Owned Wrappings
+  //* Be able to buy new wrapping
+  //* Be able to wear different wrapping
 
   return (
     <div className={i18n.language === "jp" ? "japanese-fonts" : ""}>
@@ -360,6 +383,8 @@ const AppContainer = () => {
                         wrappingStats={wrappingStats}
                         sendConsent={sendConsent}
                         currencyBalance={currencyBalance}
+                        ownedWrappings={ownedWrappings}
+                        getAllWrappingsOwned={getAllWrappingsOwned}
                       />
                     }
                   />

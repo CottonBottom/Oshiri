@@ -72,6 +72,7 @@ i18n
           changeStatsTitle: "Do you want to change your Oshiri stats?",
           changeStatsList1:
             "You may change your skin tone, size and name for a fee of {{fee}}, you will pay at the end",
+          drawerTitle: "Your owned Wrappings",
           //TheirOshiri
           spendConsent: "Spend Consent",
           smackedOshiri: "You Smacked {{oshiriName}}!",
