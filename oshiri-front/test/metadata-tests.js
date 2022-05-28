@@ -9,7 +9,14 @@ const fs = require("fs");
 //For Testing:
 //* Needs to run Daemon
 const ipfsUrl = "http://127.0.0.1:5001";
-const ipfsUrlReq = "https://ipfs.io";
+// Stopped working:
+// const ipfsLocalHost = "https://ipfs.io";
+
+//Opening file with local gateway for testing purposes
+const getIpfsLocalHost = (filename) => {
+  return `http://localhost:8080/ipfs/${filename}?filename=${filename}`;
+};
+
 //Real:
 //const ipfsUrl = "https://ipfs.infura.io:5001/"
 const client = create(`${ipfsUrl}/api/v0`);
@@ -79,7 +86,7 @@ const uploadToIPFS = async (filePath) => {
     const added = await client.add(imageBinary, {
       progress: (prog) => console.log(`received: ${prog}`),
     });
-    const url = `${ipfsUrlReq}/ipfs/${added.path}`;
+    const url = getIpfsLocalHost(added.path);
     return url;
   } catch (error) {
     console.log(error);

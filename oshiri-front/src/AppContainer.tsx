@@ -201,17 +201,25 @@ const AppContainer = () => {
       signer
     );
     try {
-      const totalWrappings = await oshiriWrappings.checkTotalWrappings();
-      const readableTotal = parseInt(totalWrappings.toString());
-      console.log("THE TOTAL WRAPPINGS", readableTotal);
-      //TODO: Loop and get all tokens in array
+      const totalCreatedWrappings =
+        await oshiriWrappings.checkTotalCreatedWrappings();
+      const readableTotalCreated = parseInt(totalCreatedWrappings.toString());
       //TODO: Add loader?
-      // let ownedWrappings = [];
-      // for (let index = 1; index < readableTotal; index++) {
-      //   oshiriWrappings.
-      // }
+      const signer = provider.getSigner();
+      const walletAddress = await signer.getAddress();
+      let ownedWrappings: WrappingStats[] = [];
+      for (let index = 0; index < readableTotalCreated; index++) {
+        const owner = await oshiriWrappings.ownerOf(index);
+        if (owner === walletAddress) {
+          const wrappingStats = await oshiriWrappings.getWrapping(index);
+          const readableWrapping = getReadableWrapping(wrappingStats);
+          ownedWrappings.push(readableWrapping);
+        }
+      }
+      return ownedWrappings;
     } catch (error) {
       console.error(error);
+      return null;
     }
   };
 
@@ -383,7 +391,6 @@ const AppContainer = () => {
                         wrappingStats={wrappingStats}
                         sendConsent={sendConsent}
                         currencyBalance={currencyBalance}
-                        ownedWrappings={ownedWrappings}
                         getAllWrappingsOwned={getAllWrappingsOwned}
                       />
                     }

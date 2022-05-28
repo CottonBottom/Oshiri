@@ -6,20 +6,20 @@ import { WrappingStats } from "../../utils/constants";
 import { getWrappingName } from "../../utils/conversions";
 
 type Props = {
-  wrappingPreviewModal: boolean;
-  setWrappingPreviewModal: React.Dispatch<React.SetStateAction<boolean>>;
+  wrappingGetModal: boolean;
+  setWrappingGetModal: React.Dispatch<React.SetStateAction<boolean>>;
   wrappingStats: WrappingStats;
 };
 
-const WrappingPreview: React.FC<Props> = ({
-  wrappingPreviewModal,
-  setWrappingPreviewModal,
+const WrappingGet: React.FC<Props> = ({
+  wrappingGetModal,
+  setWrappingGetModal,
   wrappingStats,
 }: Props) => {
   const { t } = useTranslation();
 
   return (
-    <Modal isOpen={wrappingPreviewModal} setIsOpen={setWrappingPreviewModal}>
+    <Modal isOpen={wrappingGetModal} setIsOpen={setWrappingGetModal}>
       <div className="title">
         <h1>{t("gotWrappingTitle")}</h1>
       </div>
@@ -51,4 +51,4 @@ const WrappingPreview: React.FC<Props> = ({
   );
 };
 
-export default WrappingPreview;
+export default WrappingGet;

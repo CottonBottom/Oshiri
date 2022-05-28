@@ -1,1 +1,26 @@
-{"oshiri":[{"name":"base","url":"https://ipfs.io/ipfs/QmanqucYsVcLvmMNYxTWBD4eDytvSwX1pxzy3DKkWNbqET"},{"name":"left","url":"https://ipfs.io/ipfs/QmWPcusNE9P8dLZqkRXWvYHjz5tS9tFPmVR5B99rA1YQhE"},{"name":"right","url":"https://ipfs.io/ipfs/QmQLUSPKZTHfyRjBJc1FqWZo1E5wVAfe37t9JsWwDjdHca"}],"wrappings":[{"name":"test","url":"https://ipfs.io/ipfs/QmebGLNUA2UfcQNb4HdFUgku1gSeZdot7thvkHtqhH7ecW"},{"name":"testvara","url":"https://ipfs.io/ipfs/QmcJfvcjKtvHbvTifXMq8WGYeb7kaBXrijnqcb3pJwyFrY"}]}
+{
+  "oshiri": [
+    {
+      "name": "base",
+      "url": "http://localhost:8080/ipfs/QmanqucYsVcLvmMNYxTWBD4eDytvSwX1pxzy3DKkWNbqET?filename=QmanqucYsVcLvmMNYxTWBD4eDytvSwX1pxzy3DKkWNbqET"
+    },
+    {
+      "name": "left",
+      "url": "http://localhost:8080/ipfs/QmWPcusNE9P8dLZqkRXWvYHjz5tS9tFPmVR5B99rA1YQhE?filename=QmWPcusNE9P8dLZqkRXWvYHjz5tS9tFPmVR5B99rA1YQhE"
+    },
+    {
+      "name": "right",
+      "url": "http://localhost:8080/ipfs/QmQLUSPKZTHfyRjBJc1FqWZo1E5wVAfe37t9JsWwDjdHca?filename=QmQLUSPKZTHfyRjBJc1FqWZo1E5wVAfe37t9JsWwDjdHca"
+    }
+  ],
+  "wrappings": [
+    {
+      "name": "test",
+      "url": "http://localhost:8080/ipfs/QmebGLNUA2UfcQNb4HdFUgku1gSeZdot7thvkHtqhH7ecW?filename=QmebGLNUA2UfcQNb4HdFUgku1gSeZdot7thvkHtqhH7ecW"
+    },
+    {
+      "name": "testvara",
+      "url": "http://localhost:8080/ipfs/QmcJfvcjKtvHbvTifXMq8WGYeb7kaBXrijnqcb3pJwyFrY?filename=QmcJfvcjKtvHbvTifXMq8WGYeb7kaBXrijnqcb3pJwyFrY"
+    }
+  ]
+}

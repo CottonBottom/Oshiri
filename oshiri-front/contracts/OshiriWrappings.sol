@@ -73,14 +73,8 @@ contract OshiriWrappings is ERC721URIStorage, IERC2981, Ownable {
         return total - wrappingId;
     }
 
-    function checkTotalWrappings() public view returns (uint256) {
-        uint256 total = maxTypes *
-            maxSubTypes *
-            maxVariations *
-            maxBaseColors *
-            maxSecondaryColors *
-            totalCopiesPerPair;
-        return total;
+    function checkTotalCreatedWrappings() public view returns (uint256) {
+        return wrappingId;
     }
 
     function getNextWrappingStats() public view returns (WrappingStats memory) {

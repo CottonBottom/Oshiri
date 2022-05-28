@@ -13,7 +13,7 @@ import IconButton from "../components/buttons/IconButton";
 import { getWrappingName, oshiriSizeDigitToScale } from "../utils/conversions";
 import SendConsent from "./modals/SendConsent";
 import NewDay from "./modals/NewDay";
-import GotWrapping from "./modals/WrappingPreview";
+import GotWrapping from "./modals/WrappingGet";
 import ConsentSent from "./modals/ConsentSent";
 import ChangeStats from "./modals/ChangeStats";
 import Tutorial from "../components/Tutorial";
@@ -25,8 +25,7 @@ type Props = {
   wrappingStats: WrappingStats;
   sendConsent: (receiver: string) => void;
   currencyBalance: string;
-  ownedWrappings: any[];
-  getAllWrappingsOwned: () => void;
+  getAllWrappingsOwned: () => Promise<WrappingStats[] | null>;
 };
 
 const MyOshiri: React.FC<Props> = ({
@@ -35,19 +34,18 @@ const MyOshiri: React.FC<Props> = ({
   getOshiri,
   sendConsent,
   currencyBalance,
-  ownedWrappings,
   getAllWrappingsOwned,
 }: Props) => {
   const [sendConsentModal, setSendConsentModal] = useState<boolean>(false);
   const [consentSentModal, setConsentSentModal] = useState<boolean>(false);
   const [newDayModal, setNewDayModal] = useState<boolean>(false);
-  const [wrappingPreviewModal, setWrappingPreviewModal] =
-    useState<boolean>(false);
+  const [wrappingGetModal, setWrappingGetModal] = useState<boolean>(false);
   const [changeStatsModal, setChangeStatsModal] = useState<boolean>(false);
   const [drawerModal, setDrawerModal] = useState<boolean>(false);
   const [showTutorial, setShowTutorial] = useState<boolean>(false);
 
   const [walletToSendConsent, setWalletToSendConsent] = useState<string>("");
+  const [wrappingsOwned, setWrappingsOwned] = useState<WrappingStats[]>([]);
 
   useEffect(() => {
     getOshiri();
@@ -73,7 +71,13 @@ const MyOshiri: React.FC<Props> = ({
 
   const onOpenDrawer = () => {
     setDrawerModal(true);
-    getAllWrappingsOwned();
+    getAllWrappingsOwned().then((ownedWrappings) => {
+      if (!ownedWrappings) {
+        console.log("error");
+        return;
+      }
+      setWrappingsOwned(ownedWrappings);
+    });
   };
 
   return (
@@ -97,14 +101,15 @@ const MyOshiri: React.FC<Props> = ({
         changeStatsFee={"001"}
       ></ChangeStats>
       <GotWrapping
-        wrappingPreviewModal={wrappingPreviewModal}
-        setWrappingPreviewModal={setWrappingPreviewModal}
+        wrappingGetModal={wrappingGetModal}
+        setWrappingGetModal={setWrappingGetModal}
         wrappingStats={wrappingStats}
       ></GotWrapping>
       <Drawer
         drawerModal={drawerModal}
         setDrawerModal={setDrawerModal}
-        ownedWrappings={ownedWrappings}
+        wrappingsOwned={wrappingsOwned}
+        wornWrapping={oshiriStats.wornWrapping}
       ></Drawer>
       <Tutorial
         showTutorial={showTutorial}
@@ -140,10 +145,7 @@ const MyOshiri: React.FC<Props> = ({
         <div className="main-actions-area">
           <div className="main-actions-container">
             <div className="main-actions__set">
-              <Button
-                type="primary"
-                onClick={() => setWrappingPreviewModal(true)}
-              >
+              <Button type="primary" onClick={() => setWrappingGetModal(true)}>
                 {t("getWrappings")}
               </Button>
               <div className="main-actions__value-container">
