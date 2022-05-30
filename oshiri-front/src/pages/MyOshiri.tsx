@@ -26,6 +26,10 @@ type Props = {
   sendConsent: (receiver: string) => void;
   currencyBalance: string;
   getAllWrappingsOwned: () => Promise<WrappingStats[] | null>;
+  getNextWrappingAndPrice: () => Promise<{
+    nextWrappingStats: WrappingStats;
+    price: string;
+  } | null>;
 };
 
 const MyOshiri: React.FC<Props> = ({
@@ -35,6 +39,7 @@ const MyOshiri: React.FC<Props> = ({
   sendConsent,
   currencyBalance,
   getAllWrappingsOwned,
+  getNextWrappingAndPrice,
 }: Props) => {
   const [sendConsentModal, setSendConsentModal] = useState<boolean>(false);
   const [consentSentModal, setConsentSentModal] = useState<boolean>(false);
@@ -46,6 +51,10 @@ const MyOshiri: React.FC<Props> = ({
 
   const [walletToSendConsent, setWalletToSendConsent] = useState<string>("");
   const [wrappingsOwned, setWrappingsOwned] = useState<WrappingStats[]>([]);
+
+  const [nextWrappingStats, setNextWrappingStats] =
+    useState<WrappingStats | null>(null);
+  const [wrappingPrice, setWrappingPrice] = useState<number | null>(null);
 
   useEffect(() => {
     getOshiri();
@@ -80,6 +89,18 @@ const MyOshiri: React.FC<Props> = ({
     });
   };
 
+  const onOpenGetWrappings = () => {
+    setWrappingGetModal(true);
+    getNextWrappingAndPrice().then((nextWrappingAndPrice) => {
+      if (!nextWrappingAndPrice) {
+        console.log("error");
+        return;
+      }
+      setNextWrappingStats(nextWrappingAndPrice.nextWrappingStats);
+      setWrappingPrice(parseInt(nextWrappingAndPrice.price));
+    });
+  };
+
   return (
     <>
       <SendConsent
@@ -103,7 +124,9 @@ const MyOshiri: React.FC<Props> = ({
       <GotWrapping
         wrappingGetModal={wrappingGetModal}
         setWrappingGetModal={setWrappingGetModal}
-        wrappingStats={wrappingStats}
+        nextWrappingStats={nextWrappingStats}
+        totalOSH={totalOSH}
+        wrappingPrice={wrappingPrice}
       ></GotWrapping>
       <Drawer
         drawerModal={drawerModal}
@@ -145,7 +168,7 @@ const MyOshiri: React.FC<Props> = ({
         <div className="main-actions-area">
           <div className="main-actions-container">
             <div className="main-actions__set">
-              <Button type="primary" onClick={() => setWrappingGetModal(true)}>
+              <Button type="primary" onClick={() => onOpenGetWrappings()}>
                 {t("getWrappings")}
               </Button>
               <div className="main-actions__value-container">

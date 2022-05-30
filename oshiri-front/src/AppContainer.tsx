@@ -223,6 +223,34 @@ const AppContainer = () => {
     }
   };
 
+  const getNextWrappingAndPrice = async () => {
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
+    const oshiriWrappings = new ethers.Contract(
+      oshiriWrappingsAddress,
+      OshiriWrappingsContract.abi,
+      signer
+    );
+    const oshiri = new ethers.Contract(
+      oshiriAddress,
+      OshiriContract.abi,
+      signer
+    );
+    try {
+      const nextWrapping = await oshiriWrappings.getNextWrappingStats();
+      const wrappingCost = await oshiri.getWrappingCost();
+      const readableNextWrapping = getReadableWrapping(nextWrapping);
+      return {
+        nextWrappingStats: readableNextWrapping,
+        price: wrappingCost.toString(),
+      };
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
+
   //TODO
   const updateOshiri = async () => {
     if (!newOshiriStats) {
@@ -392,6 +420,7 @@ const AppContainer = () => {
                         sendConsent={sendConsent}
                         currencyBalance={currencyBalance}
                         getAllWrappingsOwned={getAllWrappingsOwned}
+                        getNextWrappingAndPrice={getNextWrappingAndPrice}
                       />
                     }
                   />

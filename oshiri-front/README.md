@@ -25,4 +25,7 @@ npx hardhat help
 # TODO next:
 
 1. Get wrappings process -> Spend OSH to get a new Wrapping (give some test OSH)
+   - Visualizing next wrapping, next is to make the call and get the NFT
+   - Show the appropiate NFT list in Drawer
+   - Be able to wear different wrapping
 2. Make it able to equip the new Wrapping

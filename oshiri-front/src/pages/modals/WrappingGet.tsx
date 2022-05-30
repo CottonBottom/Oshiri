@@ -2,19 +2,24 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import Button from "../../components/buttons/Button";
 import Modal from "../../components/Modal";
+import WrappingPreview from "../../components/WrappingPreview";
 import { WrappingStats } from "../../utils/constants";
 import { getWrappingName } from "../../utils/conversions";
 
 type Props = {
   wrappingGetModal: boolean;
   setWrappingGetModal: React.Dispatch<React.SetStateAction<boolean>>;
-  wrappingStats: WrappingStats;
+  totalOSH: string;
+  nextWrappingStats: WrappingStats | null;
+  wrappingPrice: number | null;
 };
 
 const WrappingGet: React.FC<Props> = ({
   wrappingGetModal,
   setWrappingGetModal,
-  wrappingStats,
+  nextWrappingStats,
+  totalOSH,
+  wrappingPrice,
 }: Props) => {
   const { t } = useTranslation();
 
@@ -24,15 +29,16 @@ const WrappingGet: React.FC<Props> = ({
         <h1>{t("gotWrappingTitle")}</h1>
       </div>
       <div className="modal-preview-area">
-        <div className="wrapping-preview">
-          {/* <img src={wrappingPreview} alt="" /> */}
-          {/* TODO: Assemble Wrapping with data */}
-        </div>
+        {nextWrappingStats && (
+          <WrappingPreview wrappingStats={nextWrappingStats} />
+        )}
       </div>
       <div className="list">
         <ul>
           <li>
-            <mark>{getWrappingName(wrappingStats, t)}</mark>
+            {nextWrappingStats && (
+              <mark>{getWrappingName(nextWrappingStats, t)}</mark>
+            )}
             {t("gotWrappingList1")}
           </li>
           <li>{t("gotWrappingList2")}</li>
@@ -40,12 +46,15 @@ const WrappingGet: React.FC<Props> = ({
       </div>
       <div className="modal-button-area">
         {/* Check if enough OSH to enable/disable */}
-        <Button
-          type="secondary"
-          onClick={() => console.log("Execute NFT Creation")}
-        >
-          {t("confirm")}
-        </Button>
+        {wrappingPrice && (
+          <Button
+            type="primary"
+            onClick={() => console.log("Execute NFT Creation")}
+            isDisabled={parseInt(totalOSH) < wrappingPrice}
+          >
+            {t("spendOSH")}
+          </Button>
+        )}
       </div>
     </Modal>
   );

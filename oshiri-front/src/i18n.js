@@ -66,9 +66,11 @@ i18n
           newDayTitle: "It’s a new day!",
           newDayList1:
             "You have recieved Consent, go ahead and share it with someone...",
-          gotWrappingTitle: "You got a new Wrapping!",
-          gotWrappingList1: " has been transfered to your wallet",
-          gotWrappingList2: "You can change your Wrapping on Drawer",
+          gotWrappingTitle: "You will get this Wrapping!",
+          gotWrappingList1: " is the next wrapping in production",
+          gotWrappingList2:
+            "Once you spend OSH and successfully complete the transaction you will be able to wear your new wrapping",
+          spendOSH: "Spend OSH",
           changeStatsTitle: "Do you want to change your Oshiri stats?",
           changeStatsList1:
             "You may change your skin tone, size and name for a fee of {{fee}}, you will pay at the end",

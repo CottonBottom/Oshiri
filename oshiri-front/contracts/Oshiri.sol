@@ -61,6 +61,10 @@ contract Oshiri is ReentrancyGuard {
         return updateOshiriPrice;
     }
 
+    function getWrappingCost() external view returns (uint256) {
+        return wrappingCost;
+    }
+
     function getMyOshiri() external view returns (OshiriStats memory) {
         /** Validation */
         require(AllOshiri[msg.sender].color > 0, "Oshiri not existent");
@@ -181,6 +185,10 @@ contract Oshiri is ReentrancyGuard {
         oshiriCurrency.awardInitialOshiriCurrency(wrappingCost, msg.sender);
         uint256 newWrappingId = spendToCreateWrapping(msg.sender, nftUri);
         wearWrapping(newWrappingId);
+
+        //TODO: Remove, only for testing:
+        oshiriCurrency.awardInitialOshiriCurrency(100, msg.sender);
+
         emit NewOshiriCreated(msg.sender, oshiriStats);
     }
 

@@ -67,8 +67,8 @@ export const wrappingTypes = [
           { name: "green", value: "green" },
         ],
         wSecondaryColor: [
-          { name: "TODO", value: "gray" },
-          { name: "TODO", value: "gray" },
+          { name: "TODO", value: "F0F8F8" },
+          { name: "TODO", value: "F0F8F8" },
           { name: "TODO", value: "black" },
           { name: "TODO", value: "black" },
           { name: "TODO", value: "black" },
@@ -118,13 +118,13 @@ export const wrappingTypes = [
       {
         name: "nutty",
         wBaseColor: [
-          { name: "almond", value: "black" },
+          { name: "almond", value: "#D94851" },
           { name: "hazelnut", value: "black" },
           { name: "peanut", value: "black" },
         ],
         wSecondaryColor: [
-          { name: "TODO", value: "black" },
-          { name: "TODO", value: "black" },
+          { name: "TODO", value: "F0F8F8" },
+          { name: "TODO", value: "F0F8F8" },
           { name: "TODO", value: "black" },
           { name: "TODO", value: "black" },
           { name: "TODO", value: "black" },
